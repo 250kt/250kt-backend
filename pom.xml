@@ -11,8 +11,12 @@
     <groupId>fr.gofly</groupId>
     <artifactId>gofly</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>250kt-ss</name>
     <description>250kt-ss</description>
+    <modules>
+        <module>gofly-api</module>
+    </modules>
     <properties>
         <java.version>17</java.version>
     </properties>
