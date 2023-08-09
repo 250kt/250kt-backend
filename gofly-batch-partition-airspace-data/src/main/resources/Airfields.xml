@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<AdS>
+    <Ad pk="554" lk="[LF][PA]">
+        <Territoire pk="100" lk="[LF]"/>
+        <AdCode>PA</AdCode>
+        <AdAd2>non</AdAd2>
+        <AdStatut>CAP</AdStatut>
+        <AdNomComplet>PERSAN BEAUMONT</AdNomComplet>
+        <AdNomCarto>PERSAN</AdNomCarto>
+        <Wgs84>2</Wgs84>
+        <ArpLat>49.165</ArpLat>
+        <ArpLong>2.311667</ArpLong>
+        <AdRefAltFt>149</AdRefAltFt>
+        <AdGeoUnd>143</AdGeoUnd>
+        <AdMagVar>1.00</AdMagVar>
+        <MagVarDate>2020</MagVarDate>
+        <TfcIntl>non</TfcIntl>
+        <TfcNtl>oui</TfcNtl>
+        <TfcIfr>non</TfcIfr>
+        <TfcVfr>oui</TfcVfr>
+        <TfcRegulier>non</TfcRegulier>
+        <TfcNonRegulier>non</TfcNonRegulier>
+        <TfcPrive>oui</TfcPrive>
+        <Geometrie>49.165,2.311667</Geometrie>
+    </Ad>
+    <Ad pk="624" lk="[SO][OS]">
+        <Territoire pk="1400" lk="[SO]"/>
+        <AdCode>OS</AdCode>
+        <AdAd2>oui</AdAd2>
+        <AdStatut>RST</AdStatut>
+        <AdNomComplet>SAUL</AdNomComplet>
+        <AdNomCarto>SAUL</AdNomCarto>
+        <AdSituation>1 km SE SAUL (973 - GUYANE)</AdSituation>
+        <Wgs84>2</Wgs84>
+        <ArpLat>3.615</ArpLat>
+        <ArpLong>-53.203611</ArpLong>
+        <AdRefAltFt>740</AdRefAltFt>
+        <AdGeoUnd>-106</AdGeoUnd>
+        <AdMagVar>-18.40</AdMagVar>
+        <MagVarDate>2020</MagVarDate>
+        <TfcIntl>non</TfcIntl>
+        <TfcNtl>oui</TfcNtl>
+        <TfcIfr>non</TfcIfr>
+        <TfcVfr>oui</TfcVfr>
+        <TfcRegulier>oui</TfcRegulier>
+        <TfcNonRegulier>oui</TfcNonRegulier>
+        <TfcPrive>oui</TfcPrive>
+        <AdGestion>COLLECTIVITE TERRITORIALE DE GUYANE</AdGestion>
+        <AdAdresse>Direction des infrastructures, 40 Avenue Léopold Heder, 97300 CAYENNE</AdAdresse>
+        <AdTel>0594 30 06 00 / 0594 28 20 20 / 0694 38 15 67</AdTel>
+        <AdFax>0594 30 91 20</AdFax>
+        <AdAfs>SOOS</AdAfs>
+        <AdRem>CAA : Délégation territoriale / Territorial representative GUYANE #TEL : 0594 35 93 02#Aérodrome CAYENNE FELIX EBOUE, 97351 MATOURY.</AdRem>
+        <HorBiaTxt>CAYENNE H24 (voir / see GEN)</HorBiaTxt>
+        <HorMetTxt>H24</HorMetTxt>
+        <SsliaCat>2</SsliaCat>
+        <SsliaFac>VIP 2.5</SsliaFac>
+        <SsliaRem>[!]Niveau 2 :#LUN MER : 1130-1400 et 1730-2000#MAR JEU : 1130-1400 et 1830-2100#VEN : 1130-1800#DIM : 1700-1900##Niveau 1 en dehors de ces HOR.\\Level 2 :#MON WED : 1130-1400 and 1730-2000#TUE THU : 1130-1400 and 1830-2100#FRI : 1130-1800#S</SsliaRem>
+        <AireTfcRevet>Terre latérique roulée\\Lateritic rolled floor</AireTfcRevet>
+        <MetCentre>CAYENNE FELIX EBOUE</MetCentre>
+        <MetRem>TEL 0594 35 35 35 / FAX 0594 35 60 89</MetRem>
+        <Geometrie>3.615,-53.203611</Geometrie>
+        <Extension/>
+    </Ad>
+    <Ad pk="298" lk="[LF][PE]">
+        <Territoire pk="100" lk="[LF]"/>
+        <AdCode>PE</AdCode>
+        <AdAd2>non</AdAd2>
+        <AdStatut>CAP</AdStatut>
+        <AdNomComplet>MEAUX ESBLY</AdNomComplet>
+        <AdNomCarto>MEAUX</AdNomCarto>
+        <Wgs84>2</Wgs84>
+        <ArpLat>48.926944</ArpLat>
+        <ArpLong>2.833889</ArpLong>
+        <AdRefAltFt>220</AdRefAltFt>
+        <AdGeoUnd>144</AdGeoUnd>
+        <AdMagVar>1.17</AdMagVar>
+        <MagVarDate>2020</MagVarDate>
+        <TfcIntl>non</TfcIntl>
+        <TfcNtl>oui</TfcNtl>
+        <TfcIfr>non</TfcIfr>
+        <TfcVfr>oui</TfcVfr>
+        <TfcRegulier>non</TfcRegulier>
+        <TfcNonRegulier>oui</TfcNonRegulier>
+        <TfcPrive>oui</TfcPrive>
+        <HorMetTxt>H24</HorMetTxt>
+        <MetCentre>PARIS CHARLES DE GAULLE</MetCentre>
+        <MetBriefing>T</MetBriefing>
+        <MetDoc>C-PL</MetDoc>
+        <MetLangue>FR</MetLangue>
+        <MetAts>TWR</MetAts>
+        <MetRem>TEL MET (IFR) : 01 74 04 18 05.</MetRem>
+        <Geometrie>48.926944,2.833889</Geometrie>
+    </Ad>
+    <Ad pk="555" lk="[LF][PD]">
+        <Territoire pk="100" lk="[LF]"/>
+        <AdCode>PD</AdCode>
+        <AdAd2>non</AdAd2>
+        <AdStatut>CAP</AdStatut>
+        <AdNomComplet>BERNAY SAINT MARTIN</AdNomComplet>
+        <AdNomCarto>BERNAY</AdNomCarto>
+        <Wgs84>2</Wgs84>
+        <ArpLat>49.1025</ArpLat>
+        <ArpLong>0.565556</ArpLong>
+        <AdRefAltFt>555</AdRefAltFt>
+        <AdGeoUnd>148</AdGeoUnd>
+        <AdMagVar>0.46</AdMagVar>
+        <MagVarDate>2020</MagVarDate>
+        <TfcIntl>non</TfcIntl>
+        <TfcNtl>oui</TfcNtl>
+        <TfcIfr>non</TfcIfr>
+        <TfcVfr>oui</TfcVfr>
+        <TfcRegulier>non</TfcRegulier>
+        <TfcNonRegulier>non</TfcNonRegulier>
+        <TfcPrive>oui</TfcPrive>
+        <Geometrie>49.1025,0.565556</Geometrie>
+    </Ad>
+</AdS>

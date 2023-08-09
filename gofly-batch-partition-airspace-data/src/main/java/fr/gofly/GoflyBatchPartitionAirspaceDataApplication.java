@@ -1,5 +1,6 @@
 package fr.gofly;
 
+import fr.gofly.xmlParser.XmlParserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
