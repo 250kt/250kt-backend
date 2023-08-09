@@ -46,10 +46,10 @@ public class Helipad {
     @Column(name = "helipad_operator",
             nullable = true)
     @XmlElement(name = "Exploitant")
-    private float helipadOperator;
+    private String helipadOperator;
 
     @Column(name = "helipad_remark",
             nullable = true)
     @XmlElement(name = "Remarque")
-    private float helipadRemark;
+    private String helipadRemark;
 }
