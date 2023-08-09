@@ -59,7 +59,7 @@ public class Airfield {
     @Column(name = "airfield_altitude",
             nullable = true)
     @XmlElement(name = "AdRefAltFt")
-    private int airfield_altitude;
+    private int airfieldAltitude;
 
     @Column(name = "airfield_latitude",
             nullable = true)

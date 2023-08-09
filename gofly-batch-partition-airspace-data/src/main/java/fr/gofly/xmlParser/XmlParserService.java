@@ -3,7 +3,9 @@ package fr.gofly.xmlParser;
 import fr.gofly.model.Airfield;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.AirfieldRepository;
+import fr.gofly.repository.ObstacleRepository;
 import fr.gofly.xmlParser.export.AirfieldExportService;
+import fr.gofly.xmlParser.export.ObstacleExportService;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
@@ -22,11 +24,10 @@ public class XmlParserService {
     private SiaExport siaExport;
 
     @Autowired
-    private AirfieldRepository airfieldRepository;
-
-    @Autowired
     private AirfieldExportService airfieldExportService;
 
+    @Autowired
+    private ObstacleExportService obstacleExportService;
 
 
     /**
@@ -46,6 +47,7 @@ public class XmlParserService {
             siaExport = (SiaExport) jaxbUnmarshaller.unmarshal(xmlFile);
 
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
+            obstacleExportService.exportObstaclesToDatabase(siaExport);
 
         } catch (Exception e) {
             logger.error("An error occurred during the process : " + e.getMessage());

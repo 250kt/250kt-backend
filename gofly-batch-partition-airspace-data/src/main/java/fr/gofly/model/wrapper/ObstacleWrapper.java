@@ -1,5 +1,6 @@
-package fr.gofly.model;
+package fr.gofly.model.wrapper;
 
+import fr.gofly.model.Obstacle;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -7,18 +8,17 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.util.List;
 
-@XmlRootElement(name = "SiaExport")
+@XmlRootElement(name = "ObstacleS")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SiaExport {
+public class ObstacleWrapper{
+    @XmlElement(name = "Obstacle")
+    public List<Obstacle> obstacles;
 
-    @XmlElement(name = "Situation")
-    public Situation situation;
-
-    public List<Airfield> getAirfields() {
-        return situation.getAirfields().getAirfields();
+    public void setObstacles(List<Obstacle> airfields) {
+        this.obstacles = airfields;
     }
 
     public List<Obstacle> getObstacles() {
-        return situation.getObstacles().getObstacles();
+        return obstacles;
     }
 }

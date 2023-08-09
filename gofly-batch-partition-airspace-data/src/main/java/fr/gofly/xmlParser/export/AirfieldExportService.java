@@ -37,8 +37,8 @@ public class AirfieldExportService {
                 logger.warn("Airfields export : No airfields found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of Airfield to database: " + e.getMessage());
-            throw new RuntimeException("Error during export of Airfield to database: " + e.getMessage(), e);
+            logger.error("Error during export of airfield to database: " + e.getMessage());
+            throw new RuntimeException("Error during export of airfield to database: " + e.getMessage(), e);
         }finally {
             logger.info("Airfields export : FINISHED");
         }
@@ -55,8 +55,8 @@ public class AirfieldExportService {
         try {
             airfieldRepository.save(airfield);
         } catch (Exception e) {
-            logger.error("Error saving Airfield to database: " + e.getMessage());
-            throw new RuntimeException("Error saving Airfield to database: " + e.getMessage(), e);
+            logger.error("Error saving airfield to database: " + e.getMessage());
+            throw new RuntimeException("Error saving airfield to database: " + e.getMessage(), e);
         }
     }
 }
