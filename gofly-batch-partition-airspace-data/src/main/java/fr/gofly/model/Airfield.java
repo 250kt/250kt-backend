@@ -1,12 +1,10 @@
 package fr.gofly.model;
 
-import fr.gofly.adapter.YesNoToBooleanAdapter;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.RequiredArgsConstructor;
 
 @Entity
