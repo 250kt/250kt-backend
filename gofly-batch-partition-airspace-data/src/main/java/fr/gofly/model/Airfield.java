@@ -50,7 +50,6 @@ public class Airfield {
     private boolean isAirfieldAcceptVfr;
 
     @XmlElement(name = "TfcVfr")
-    @XmlJavaTypeAdapter(YesNoToBooleanAdapter.class)
     public String getAirfieldAcceptVfrString() {
         return isAirfieldAcceptVfr ? "oui" : "non";
     }

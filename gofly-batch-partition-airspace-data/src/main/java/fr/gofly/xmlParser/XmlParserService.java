@@ -25,6 +25,10 @@ public class XmlParserService {
 
     private SiaExport siaExport;
 
+    /**
+     * Parses the XML file and exports airfields to the database.
+     * This method is automatically executed after the Spring bean is constructed.
+     */
     @PostConstruct
     public void parseXMLFile(){
         try{
@@ -47,6 +51,10 @@ public class XmlParserService {
         }
     }
 
+    /**
+     * Exports airfields to the database based on the parsed XML data.
+     * This method is called internally by parseXMLFile().
+     */
     private void exportAirfieldsToDatabase() {
         try{
             logger.info("Airfields export : STARTED");
@@ -72,6 +80,12 @@ public class XmlParserService {
         }
     }
 
+    /**
+     * Saves an airfield to the database.
+     *
+     * @param airfield The airfield object to be saved.
+     * @throws RuntimeException If an error occurs during the database operation.
+     */
     private void saveAirfieldToDatabase(Airfield airfield) {
         try {
             airfieldRepository.save(airfield);
