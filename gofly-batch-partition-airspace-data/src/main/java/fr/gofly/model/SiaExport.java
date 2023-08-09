@@ -21,4 +21,8 @@ public class SiaExport {
     public List<Obstacle> getObstacles() {
         return situation.getObstacles().getObstacles();
     }
+
+    public List<Helipad> getHelipads() {
+        return situation.getHelipads().getHelipads();
+    }
 }

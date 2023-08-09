@@ -5,6 +5,7 @@ import fr.gofly.model.SiaExport;
 import fr.gofly.repository.AirfieldRepository;
 import fr.gofly.repository.ObstacleRepository;
 import fr.gofly.xmlParser.export.AirfieldExportService;
+import fr.gofly.xmlParser.export.HelipadExportService;
 import fr.gofly.xmlParser.export.ObstacleExportService;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;
@@ -29,6 +30,8 @@ public class XmlParserService {
     @Autowired
     private ObstacleExportService obstacleExportService;
 
+    @Autowired
+    private HelipadExportService helipadExportService;
 
     /**
      * Parses the XML file and exports airfields to the database.
@@ -48,6 +51,7 @@ public class XmlParserService {
 
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
+            helipadExportService.exportHelipadsToDatabase(siaExport);
 
         } catch (Exception e) {
             logger.error("An error occurred during the process : " + e.getMessage());
