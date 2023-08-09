@@ -24,41 +24,6 @@ public class XmlParserService {
     private Logger logger = LoggerFactory.getLogger(XmlParserService.class);
 
     private SiaExport siaExport;
-    /*public static List<Airfield> parseXml(InputStream xmlInputStream) throws Exception {
-        List<Airfield> airfields = new ArrayList<>();
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(xmlInputStream);
-
-        NodeList adNodes = document.getElementsByTagName("Ad");
-        for (int i = 0; i < adNodes.getLength(); i++) {
-            Element airfieldElement = (Element) adNodes.item(i);
-            Airfield ad = createAdFromElement(airfieldElement);
-            airfields.add(ad);
-        }
-
-        return airfields;
-    }
-
-    private static Airfield createAdFromElement(Element airfieldElement) {
-        Airfield airfield = new Airfield();
-
-        airfield.setAirfieldStatut(getElementValue(airfieldElement, "AdStatut"));
-        airfield.setAirfieldFullname(getElementValue(airfieldElement, "AdNomComplet"));
-        airfield.setAirfieldMapName(getElementValue(airfieldElement, "AdNomCarto"));
-        // Set other fields here
-
-        return airfield;
-    }
-
-    private static String getElementValue(Element parentElement, String elementName) {
-        NodeList nodeList = parentElement.getElementsByTagName(elementName);
-        if (nodeList.getLength() > 0) {
-            return nodeList.item(0).getTextContent();
-        }
-        return null;
-    }*/
 
     @PostConstruct
     public void parseXMLFile(){
@@ -101,26 +66,6 @@ public class XmlParserService {
         }
     }
 
-
-    /*public void exportAirfieldsToDatabase(){
-        System.out.println("Export airfields : STARTED");
-        List<Airfield> airfields;
-
-        try {
-            airfields = getAirfields();
-
-            if (airfields != null && airfields.size() > 0) {
-                for (Airfield airfield: airfields) {
-                    saveAirfieldToDatabase(airfield);
-                }
-            }
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        } finally {
-            System.out.println("Export airfields : FINISHED");
-        }
-    }*/
-
     private void saveAirfieldToDatabase(Airfield airfield) {
         try {
             airfieldRepository.save(airfield);
@@ -129,26 +74,4 @@ public class XmlParserService {
             throw new RuntimeException("Error saving Airfield to database: " + e.getMessage(), e);
         }
     }
-
-    /*private List<Airfield> getAirfields() {
-        File xmlFile;
-        JAXBContext jaxbContext;
-
-        try {
-            xmlFile = ResourceUtils.getFile("classpath:" + xmlFilePath);
-
-            jaxbContext = JAXBContext.newInstance(AirfieldWrapper.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-            AirfieldWrapper airfieldWrapper = (AirfieldWrapper) jaxbUnmarshaller.unmarshal(xmlFile);
-
-            if (airfieldWrapper != null && airfieldWrapper.getAirfields() != null) {
-                return airfieldWrapper.getAirfields();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return null;
-    }*/
 }
