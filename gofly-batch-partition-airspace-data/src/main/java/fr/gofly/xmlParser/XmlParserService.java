@@ -51,12 +51,18 @@ public class XmlParserService {
         try{
             logger.info("Airfields export : STARTED");
             if (siaExport != null && siaExport.getAirfields() != null) {
+                logger.info("Airfields export : " + siaExport.getAirfields().size() + " airfields found");
 
                 for (Airfield airfield: siaExport.getAirfields()) {
                     saveAirfieldToDatabase(airfield);
                 }
+
+                logger.info("Airfields export : " + airfieldRepository.countBy() + " airfields inserted");
+                if(siaExport.getAirfields().size() != airfieldRepository.countBy()){
+                    logger.warn("Airfields export : Not all airfields have been exported to the database");
+                }
             }else{
-                logger.info("Airfields export : No airfields found in the XML file.");
+                logger.warn("Airfields export : No airfields found in the XML file");
             }
         }catch (Exception e){
             logger.error("Error during export of Airfield to database: " + e.getMessage());

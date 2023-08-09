@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AirfieldRepository extends JpaRepository<Airfield, Long> {
-
+    long countBy();
 }
