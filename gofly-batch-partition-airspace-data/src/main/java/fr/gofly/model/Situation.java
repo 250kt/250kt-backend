@@ -3,6 +3,7 @@ package fr.gofly.model;
 import fr.gofly.model.wrapper.AirfieldWrapper;
 import fr.gofly.model.wrapper.HelipadWrapper;
 import fr.gofly.model.wrapper.ObstacleWrapper;
+import fr.gofly.model.wrapper.RadioWrapper;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -22,6 +23,9 @@ public class Situation {
     @XmlElement(name = "HelistationS")
     private HelipadWrapper helipads;
 
+    @XmlElement(name = "RadioNavS")
+    private RadioWrapper radios;
+
     public AirfieldWrapper getAirfields() {
         return airfields;
     }
@@ -32,5 +36,9 @@ public class Situation {
 
     public HelipadWrapper getHelipads() {
         return helipads;
+    }
+
+    public RadioWrapper getRadios() {
+        return radios;
     }
 }

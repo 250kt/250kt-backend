@@ -25,4 +25,8 @@ public class SiaExport {
     public List<Helipad> getHelipads() {
         return situation.getHelipads().getHelipads();
     }
+
+    public List<Radio> getRadios(){
+        return situation.getRadios().getRadios();
+    }
 }

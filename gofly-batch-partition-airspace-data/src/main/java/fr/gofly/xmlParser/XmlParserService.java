@@ -7,6 +7,7 @@ import fr.gofly.repository.ObstacleRepository;
 import fr.gofly.xmlParser.export.AirfieldExportService;
 import fr.gofly.xmlParser.export.HelipadExportService;
 import fr.gofly.xmlParser.export.ObstacleExportService;
+import fr.gofly.xmlParser.export.RadioExportService;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
@@ -33,6 +34,9 @@ public class XmlParserService {
     @Autowired
     private HelipadExportService helipadExportService;
 
+    @Autowired
+    private RadioExportService radioExportService;
+
     /**
      * Parses the XML file and exports airfields to the database.
      * This method is automatically executed after the Spring bean is constructed.
@@ -52,6 +56,7 @@ public class XmlParserService {
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
             helipadExportService.exportHelipadsToDatabase(siaExport);
+            radioExportService.exportRadiosToDatabase(siaExport);
 
         } catch (Exception e) {
             logger.error("An error occurred during the process : " + e.getMessage());

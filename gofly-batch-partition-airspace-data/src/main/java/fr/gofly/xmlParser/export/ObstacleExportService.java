@@ -58,7 +58,7 @@ public class ObstacleExportService {
             obstacleRepository.save(obstacle);
         } catch (Exception e) {
             logger.error("Error saving obstacle to database: " + e.getMessage());
-            throw new RuntimeException("Error saving obstacles to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
         }
     }
 }
