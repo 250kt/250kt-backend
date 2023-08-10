@@ -49,7 +49,8 @@ public class Helipad {
     private String helipadOperator;
 
     @Column(name = "helipad_remark",
-            nullable = true)
+            nullable = true,
+            length = 1000)
     @XmlElement(name = "Remarque")
     private String helipadRemark;
 }
