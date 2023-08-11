@@ -13,11 +13,12 @@ import lombok.RequiredArgsConstructor;
 @XmlRootElement(name = "Territoire")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Territory {
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "territory_id")
-    private Long territoryId;
+    private Long territoryId;*/
 
+    @Id
     @Column(name = "territory_identification_code",
             nullable = true)
     @XmlElement(name = "Territoire")
