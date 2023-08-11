@@ -4,10 +4,7 @@ import fr.gofly.model.Airfield;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.AirfieldRepository;
 import fr.gofly.repository.ObstacleRepository;
-import fr.gofly.xmlParser.export.AirfieldExportService;
-import fr.gofly.xmlParser.export.HelipadExportService;
-import fr.gofly.xmlParser.export.ObstacleExportService;
-import fr.gofly.xmlParser.export.RadioExportService;
+import fr.gofly.xmlParser.export.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
@@ -24,6 +21,9 @@ public class XmlParserService {
     private final String xmlFilePath = "import.xml";
     private Logger logger = LoggerFactory.getLogger(XmlParserService.class);
     private SiaExport siaExport;
+
+    @Autowired
+    private TerritoryExportService territoryExportService;
 
     @Autowired
     private AirfieldExportService airfieldExportService;
@@ -53,6 +53,7 @@ public class XmlParserService {
 
             siaExport = (SiaExport) jaxbUnmarshaller.unmarshal(xmlFile);
 
+            territoryExportService.exportTerritoriesToDatabase(siaExport);
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
             helipadExportService.exportHelipadsToDatabase(siaExport);

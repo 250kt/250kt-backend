@@ -1,6 +1,5 @@
 package fr.gofly.xmlParser.export;
 
-import fr.gofly.model.Obstacle;
 import fr.gofly.model.Radio;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.RadioRepository;
@@ -23,7 +22,7 @@ public class RadioExportService {
     public void exportRadiosToDatabase(SiaExport siaExport) {
         try{
             logger.info("Radios export : STARTED");
-            if (siaExport != null && siaExport.getObstacles() != null) {
+            if (siaExport != null && siaExport.getRadios() != null) {
                 logger.info("Radios export : " + siaExport.getRadios().size() + " radios found");
 
                 for (Radio radio: siaExport.getRadios()) {

@@ -29,4 +29,8 @@ public class SiaExport {
     public List<Radio> getRadios(){
         return situation.getRadios().getRadios();
     }
+
+    public List<Territory> getTerritories(){
+        return situation.getTerritories().getTerritories();
+    }
 }
