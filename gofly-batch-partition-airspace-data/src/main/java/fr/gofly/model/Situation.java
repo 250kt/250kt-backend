@@ -26,6 +26,12 @@ public class Situation {
     @XmlElement(name = "TerritoireS")
     private TerritoryWrapper territories;
 
+    @XmlElement(name = "EspaceS")
+    private AirspaceWrapper espaces;
+
+    @XmlElement(name = "FrequenceS")
+    private FrequencyWrapper frequencies;
+
     public AirfieldWrapper getAirfields() {
         return airfields;
     }
@@ -44,5 +50,13 @@ public class Situation {
 
     public TerritoryWrapper getTerritories() {
         return territories;
+    }
+
+    public AirspaceWrapper getAirspaces() {
+        return espaces;
+    }
+
+    public FrequencyWrapper getFrequencies() {
+        return frequencies;
     }
 }

@@ -37,8 +37,14 @@ public class XmlParserService {
     @Autowired
     private RadioExportService radioExportService;
 
+    @Autowired
+    private AirspaceExportService airspaceExportService;
+
+    @Autowired
+    private FrequencyExportService frequencyExportService;
+
     /**
-     * Parses the XML file and exports airfields to the database.
+     * Parses the XML file and exports objects to the database.
      * This method is automatically executed after the Spring bean is constructed.
      */
     @PostConstruct
@@ -54,6 +60,8 @@ public class XmlParserService {
             siaExport = (SiaExport) jaxbUnmarshaller.unmarshal(xmlFile);
 
             territoryExportService.exportTerritoriesToDatabase(siaExport);
+            airspaceExportService.exportAirspacesToDatabase(siaExport);
+            frequencyExportService.exportFrequenciesToDatabase(siaExport);
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
             helipadExportService.exportHelipadsToDatabase(siaExport);

@@ -33,4 +33,12 @@ public class SiaExport {
     public List<Territory> getTerritories(){
         return situation.getTerritories().getTerritories();
     }
+
+    public List<Airspace> getAirspaces(){
+        return situation.getAirspaces().getAirspaces();
+    }
+
+    public List<Frequency> getFrequencies(){
+        return situation.getFrequencies().getFrequencies();
+    }
 }
