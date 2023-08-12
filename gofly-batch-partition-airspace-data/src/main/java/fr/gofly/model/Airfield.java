@@ -1,10 +1,7 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -13,10 +10,16 @@ import lombok.RequiredArgsConstructor;
 @XmlRootElement(name = "Ad")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Airfield {
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "airfield_id")
-    private Long airfieldId;
+    private Long airfieldId;*/
+
+    @Id
+    @Column(name = "airfield_id",
+            nullable = false)
+    @XmlAttribute(name = "pk")
+    private String airfieldId;
 
     @Column(name = "airfield_statut",
             nullable = true)
