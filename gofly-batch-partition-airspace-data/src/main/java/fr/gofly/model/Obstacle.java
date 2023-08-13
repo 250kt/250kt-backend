@@ -1,10 +1,7 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -14,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Obstacle {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "obstacle_id")
+    @XmlAttribute(name = "pk")
     private Long obstacleId;
 
     @Column(name = "obstacle_latitude",

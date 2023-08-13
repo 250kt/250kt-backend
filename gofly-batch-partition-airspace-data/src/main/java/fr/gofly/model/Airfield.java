@@ -10,11 +10,6 @@ import lombok.RequiredArgsConstructor;
 @XmlRootElement(name = "Ad")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Airfield {
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "airfield_id")
-    private Long airfieldId;*/
-
     @Id
     @Column(name = "airfield_id",
             nullable = false)
