@@ -1,7 +1,7 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.*;
+    import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -15,6 +15,11 @@ public class Airfield {
             nullable = false)
     @XmlAttribute(name = "pk")
     private String airfieldId;
+
+    @ManyToOne
+    @JoinColumn(name = "territory_id")
+    @XmlElement(name = "Territoire")
+    private Territory territory;
 
     @Column(name = "airfield_statut",
             nullable = true)

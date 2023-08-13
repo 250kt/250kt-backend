@@ -59,8 +59,8 @@ public class XmlParserService {
 
             siaExport = (SiaExport) jaxbUnmarshaller.unmarshal(xmlFile);
 
-            airfieldExportService.exportAirfieldsToDatabase(siaExport);
             territoryExportService.exportTerritoriesToDatabase(siaExport);
+            airfieldExportService.exportAirfieldsToDatabase(siaExport);
             airspaceExportService.exportAirspacesToDatabase(siaExport);
             frequencyExportService.exportFrequenciesToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
