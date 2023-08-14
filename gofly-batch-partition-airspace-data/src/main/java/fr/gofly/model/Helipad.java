@@ -15,6 +15,11 @@ public class Helipad {
     @XmlAttribute(name = "pk")
     private Long helipadId;
 
+    @ManyToOne
+    @JoinColumn(name = "territory_id")
+    @XmlElement(name = "Territoire")
+    private Territory territory;
+
     @Column(name = "helipad_name",
             nullable = true)
     @XmlElement(name = "Nom")
