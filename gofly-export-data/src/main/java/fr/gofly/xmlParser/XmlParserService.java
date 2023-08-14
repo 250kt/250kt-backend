@@ -49,6 +49,9 @@ public class XmlParserService {
     @Autowired
     private BorderExportService borderExportService;
 
+    @Autowired
+    private BorderExportService partExportService;
+
     /**
      * Parses the XML file and exports objects to the database.
      * This method is automatically executed after the Spring bean is constructed.
@@ -67,6 +70,7 @@ public class XmlParserService {
 
             territoryExportService.exportTerritoriesToDatabase(siaExport);
             borderExportService.exportBordersToDatabase(siaExport);
+            partExportService.exportBordersToDatabase(siaExport);
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
             airspaceExportService.exportAirspacesToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);

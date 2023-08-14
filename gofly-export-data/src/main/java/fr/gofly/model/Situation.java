@@ -38,6 +38,9 @@ public class Situation {
     @XmlElement(name = "BordureS")
     private BorderWrapper borders;
 
+    @XmlElement(name = "PartieS")
+    private PartWrapper parts;
+
     public AirfieldWrapper getAirfields() {
         return airfields;
     }
@@ -72,5 +75,9 @@ public class Situation {
 
     public BorderWrapper getBorders() {
         return borders;
+    }
+
+    public PartWrapper getParts() {
+        return parts;
     }
 }

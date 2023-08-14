@@ -49,4 +49,8 @@ public class SiaExport {
     public List<Border> getBorders(){
         return situation.getBorders().getBorders();
     }
+
+    public List<Part> getParts(){
+        return situation.getParts().getParts();
+    }
 }

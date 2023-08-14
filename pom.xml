@@ -19,7 +19,7 @@
     <modules>
         <module>gofly-commons</module>
         <module>gofly-api</module>
-        <module>gofly-batch-partition-airspace-data</module>
+        <module>gofly-export-data</module>
     </modules>
     <dependencies>
         <dependency>

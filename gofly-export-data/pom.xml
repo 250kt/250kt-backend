@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>fr.gofly</groupId>
-    <artifactId>gofly-batch-partition-airspace-data</artifactId>
+    <artifactId>gofly-export-data</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
         <java.version>17</java.version>
