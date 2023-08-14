@@ -15,6 +15,11 @@ public class Obstacle {
     @XmlAttribute(name = "pk")
     private Long obstacleId;
 
+    @ManyToOne
+    @JoinColumn(name = "territory_id")
+    @XmlElement(name = "Territoire")
+    private Territory territory;
+
     @Column(name = "obstacle_latitude",
             nullable = true)
     @XmlElement(name = "Latitude")
