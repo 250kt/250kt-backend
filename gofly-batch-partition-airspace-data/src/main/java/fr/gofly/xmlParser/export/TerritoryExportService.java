@@ -56,7 +56,7 @@ public class TerritoryExportService {
             territoryRepository.save(territory);
         } catch (Exception e) {
             logger.error("Error saving territory to database: " + e.getMessage());
-            throw new RuntimeException("Error saving territory to database: " + e.getMessage(), e);
+            //throw new RuntimeException("Error saving territory to database: " + e.getMessage(), e);
         }
     }
 }

@@ -55,7 +55,7 @@ public class ServiceExportService {
             serviceRepository.save(service);
         } catch (Exception e) {
             logger.error("Error saving service to database: " + e.getMessage());
-            throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
+            //throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
         }
     }
 }

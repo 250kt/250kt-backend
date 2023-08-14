@@ -56,7 +56,7 @@ public class AirfieldExportService {
             airfieldRepository.save(airfield);
         } catch (Exception e) {
             logger.error("Error saving airfield to database: " + e.getMessage());
-            throw new RuntimeException("Error saving airfield to database: " + e.getMessage(), e);
+            //throw new RuntimeException("Error saving airfield to database: " + e.getMessage(), e);
         }
     }
 }

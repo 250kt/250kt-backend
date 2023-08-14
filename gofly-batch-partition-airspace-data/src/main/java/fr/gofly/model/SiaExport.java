@@ -45,4 +45,8 @@ public class SiaExport {
     public List<Service> getServices(){
         return situation.getServices().getServices();
     }
+
+    public List<Border> getBorders(){
+        return situation.getBorders().getBorders();
+    }
 }

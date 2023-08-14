@@ -56,7 +56,7 @@ public class AirspaceExportService {
             airspaceRepository.save(airspace);
         } catch (Exception e) {
             logger.error("Error saving airspace to database: " + e.getMessage());
-            throw new RuntimeException("Error saving airspace to database: " + e.getMessage(), e);
+            //throw new RuntimeException("Error saving airspace to database: " + e.getMessage(), e);
         }
     }
 }

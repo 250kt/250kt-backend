@@ -35,6 +35,9 @@ public class Situation {
     @XmlElement(name = "ServiceS")
     private ServiceWrapper services;
 
+    @XmlElement(name = "BordureS")
+    private BorderWrapper borders;
+
     public AirfieldWrapper getAirfields() {
         return airfields;
     }
@@ -65,5 +68,9 @@ public class Situation {
 
     public ServiceWrapper getServices() {
         return services;
+    }
+
+    public BorderWrapper getBorders() {
+        return borders;
     }
 }

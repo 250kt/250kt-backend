@@ -56,7 +56,7 @@ public class HelipadExportService {
             helipadRepository.save(helipad);
         } catch (Exception e) {
             logger.error("Error saving helipad to database: " + e.getMessage());
-            throw new RuntimeException("Error saving helipad to database: " + e.getMessage(), e);
+            //throw new RuntimeException("Error saving helipad to database: " + e.getMessage(), e);
         }
     }
 }
