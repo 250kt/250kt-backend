@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name="radio")
 @RequiredArgsConstructor
@@ -14,6 +16,11 @@ public class Radio {
     @Column(name = "radio_id")
     @XmlAttribute(name = "pk")
     private int radioId;
+
+    @ManyToOne
+    @JoinColumn(name = "airfield_id")
+    @XmlElement(name = "Ad")
+    private Airfield airfield;
 
     @Column(name = "radio_frequency",
             nullable = true)
