@@ -1,9 +1,6 @@
 package fr.gofly.xmlParser;
 
-import fr.gofly.model.Airfield;
 import fr.gofly.model.SiaExport;
-import fr.gofly.repository.AirfieldRepository;
-import fr.gofly.repository.ObstacleRepository;
 import fr.gofly.xmlParser.export.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;

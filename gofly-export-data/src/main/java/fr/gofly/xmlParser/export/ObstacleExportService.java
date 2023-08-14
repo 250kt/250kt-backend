@@ -1,9 +1,7 @@
 package fr.gofly.xmlParser.export;
 
-import fr.gofly.model.Airfield;
 import fr.gofly.model.Obstacle;
 import fr.gofly.model.SiaExport;
-import fr.gofly.repository.AirfieldRepository;
 import fr.gofly.repository.ObstacleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
