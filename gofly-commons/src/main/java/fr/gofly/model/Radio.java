@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table(name="radio")
 @RequiredArgsConstructor

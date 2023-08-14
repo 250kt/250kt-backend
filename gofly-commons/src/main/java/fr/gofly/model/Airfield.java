@@ -1,7 +1,7 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-    import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
