@@ -18,7 +18,7 @@ public class ObstacleExportService {
     private final Logger logger = LoggerFactory.getLogger(ObstacleExportService.class);
 
     /**
-     * Exports obstacle to the database based on the parsed XML data.
+     * Exports obstacles to the database based on the parsed XML data.
      * This method is called internally by parseXMLFile().
      */
     public void exportObstaclesToDatabase(SiaExport siaExport) {
@@ -47,10 +47,10 @@ public class ObstacleExportService {
     }
 
     /**
-     * Saves an airfield to the database.
+     * Saves an obstacle to the database.
      * This method is called internally by exportObstaclesToDatabase().
      *
-     * @param obstacle The airfield object to be saved.
+     * @param obstacle The obstacle object to be saved.
      * @throws RuntimeException If an error occurs during the database operation.
      */
     private void saveObstacleToDatabase(Obstacle obstacle) {

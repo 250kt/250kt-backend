@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Obstacle {
     @Id
-    @Column(name = "obstacle_id")
+    @Column(name = "obstacle_id",
+            nullable = false)
     @XmlAttribute(name = "pk")
     private int obstacleId;
 

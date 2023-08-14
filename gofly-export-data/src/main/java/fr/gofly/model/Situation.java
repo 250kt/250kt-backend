@@ -41,6 +41,10 @@ public class Situation {
     @XmlElement(name = "PartieS")
     private PartWrapper parts;
 
+    @XmlElement(name = "PhareS")
+    private LighthouseWrapper lighthouses;
+
+
     public AirfieldWrapper getAirfields() {
         return airfields;
     }
@@ -79,5 +83,9 @@ public class Situation {
 
     public PartWrapper getParts() {
         return parts;
+    }
+
+    public LighthouseWrapper getLighthouses() {
+        return lighthouses;
     }
 }

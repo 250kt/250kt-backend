@@ -53,4 +53,8 @@ public class SiaExport {
     public List<Part> getParts(){
         return situation.getParts().getParts();
     }
+
+    public List<Lighthouse> getLighthouses(){
+        return situation.getLighthouses().getLighthouses();
+    }
 }
