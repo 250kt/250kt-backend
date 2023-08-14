@@ -43,6 +43,9 @@ public class XmlParserService {
     @Autowired
     private FrequencyExportService frequencyExportService;
 
+    @Autowired
+    private ServiceExportService serviceExportService;
+
     /**
      * Parses the XML file and exports objects to the database.
      * This method is automatically executed after the Spring bean is constructed.
@@ -62,10 +65,11 @@ public class XmlParserService {
             territoryExportService.exportTerritoriesToDatabase(siaExport);
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
             airspaceExportService.exportAirspacesToDatabase(siaExport);
-            frequencyExportService.exportFrequenciesToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
             helipadExportService.exportHelipadsToDatabase(siaExport);
             radioExportService.exportRadiosToDatabase(siaExport);
+            serviceExportService.exportServicesToDatabase(siaExport);
+            frequencyExportService.exportFrequenciesToDatabase(siaExport);
 
         } catch (Exception e) {
             logger.error("An error occurred during the process : " + e.getMessage());

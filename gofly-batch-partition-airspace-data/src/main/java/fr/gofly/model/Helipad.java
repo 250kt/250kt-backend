@@ -13,7 +13,7 @@ public class Helipad {
     @Id
     @Column(name = "helipad_id")
     @XmlAttribute(name = "pk")
-    private Long helipadId;
+    private int helipadId;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")

@@ -13,7 +13,12 @@ public class Frequency {
     @Id
     @Column(name = "frequency_id")
     @XmlAttribute(name = "pk")
-    private Long frequencyId;
+    private int frequencyId;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    @XmlElement(name = "Service")
+    private Service service;
 
     @Column(name = "frequency_frequency",
             nullable = true)

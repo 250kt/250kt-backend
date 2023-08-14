@@ -13,7 +13,7 @@ public class Obstacle {
     @Id
     @Column(name = "obstacle_id")
     @XmlAttribute(name = "pk")
-    private Long obstacleId;
+    private int obstacleId;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")

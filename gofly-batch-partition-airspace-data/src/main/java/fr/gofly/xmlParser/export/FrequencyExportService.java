@@ -56,7 +56,7 @@ public class FrequencyExportService {
             frequencyRepository.save(frequency);
         } catch (Exception e) {
             logger.error("Error saving frequency to database: " + e.getMessage());
-            throw new RuntimeException("Error saving frequency to database: " + e.getMessage(), e);
+            //throw new RuntimeException("Error saving frequency to database: " + e.getMessage(), e);
         }
     }
 }

@@ -13,7 +13,7 @@ public class Radio {
     @Id
     @Column(name = "radio_id")
     @XmlAttribute(name = "pk")
-    private Long radioId;
+    private int radioId;
 
     @Column(name = "radio_frequency",
             nullable = true)

@@ -13,7 +13,7 @@ public class Airspace {
     @Id
     @Column(name = "airspace_id")
     @XmlAttribute(name = "pk")
-    private Long airspaceId;
+    private int airspaceId;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")

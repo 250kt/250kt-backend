@@ -32,6 +32,9 @@ public class Situation {
     @XmlElement(name = "FrequenceS")
     private FrequencyWrapper frequencies;
 
+    @XmlElement(name = "ServiceS")
+    private ServiceWrapper services;
+
     public AirfieldWrapper getAirfields() {
         return airfields;
     }
@@ -58,5 +61,9 @@ public class Situation {
 
     public FrequencyWrapper getFrequencies() {
         return frequencies;
+    }
+
+    public ServiceWrapper getServices() {
+        return services;
     }
 }

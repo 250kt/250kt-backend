@@ -45,7 +45,7 @@ public class RadioExportService {
     }
 
     /**
-     * Saves a radios to the database.
+     * Saves a radio to the database.
      * This method is called internally by exportRadiosToDatabase().
      *
      * @param radio The radios object to be saved.

@@ -41,4 +41,8 @@ public class SiaExport {
     public List<Frequency> getFrequencies(){
         return situation.getFrequencies().getFrequencies();
     }
+
+    public List<Service> getServices(){
+        return situation.getServices().getServices();
+    }
 }

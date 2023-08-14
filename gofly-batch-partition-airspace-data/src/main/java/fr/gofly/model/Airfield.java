@@ -14,7 +14,7 @@ public class Airfield {
     @Column(name = "airfield_id",
             nullable = false)
     @XmlAttribute(name = "pk")
-    private String airfieldId;
+    private int airfieldId;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
