@@ -41,9 +41,4 @@ public class Part {
             length = 10485760)
     @XmlElement(name = "Geometrie")
     private String partGeometry;
-
-    @Column(name = "part_outline",
-            length = 10485760)
-    @XmlElement(name = "Contour")
-    private String partOutline;
 }

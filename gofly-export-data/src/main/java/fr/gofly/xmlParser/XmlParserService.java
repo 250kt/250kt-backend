@@ -50,7 +50,7 @@ public class XmlParserService {
     private BorderExportService borderExportService;
 
     @Autowired
-    private BorderExportService partExportService;
+    private PartExportService partExportService;
 
     /**
      * Parses the XML file and exports objects to the database.
@@ -70,9 +70,9 @@ public class XmlParserService {
 
             territoryExportService.exportTerritoriesToDatabase(siaExport);
             borderExportService.exportBordersToDatabase(siaExport);
-            partExportService.exportBordersToDatabase(siaExport);
-            airfieldExportService.exportAirfieldsToDatabase(siaExport);
             airspaceExportService.exportAirspacesToDatabase(siaExport);
+            partExportService.exportPartsToDatabase(siaExport);
+            airfieldExportService.exportAirfieldsToDatabase(siaExport);
             obstacleExportService.exportObstaclesToDatabase(siaExport);
             helipadExportService.exportHelipadsToDatabase(siaExport);
             radioExportService.exportRadiosToDatabase(siaExport);
