@@ -15,6 +15,11 @@ public class Airspace {
     @XmlAttribute(name = "pk")
     private Long airspaceId;
 
+    @ManyToOne
+    @JoinColumn(name = "territory_id")
+    @XmlElement(name = "Territoire")
+    private Territory territory;
+
     @Column(name = "airspace_name")
     @XmlElement(name = "Nom")
     private String airspaceName;
