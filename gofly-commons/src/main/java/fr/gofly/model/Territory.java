@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name="territory")
+@Table(name="territories")
 @RequiredArgsConstructor
 @XmlRootElement(name = "Territoire")
 @XmlAccessorType(XmlAccessType.PROPERTY)

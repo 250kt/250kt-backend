@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="part")
+@Table(name="parts")
 @RequiredArgsConstructor
 @XmlRootElement(name = "PartieS")
 @XmlAccessorType(XmlAccessType.PROPERTY)

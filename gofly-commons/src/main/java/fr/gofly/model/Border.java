@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="border")
+@Table(name="borders")
 @RequiredArgsConstructor
 @XmlRootElement(name = "Bordure")
 @XmlAccessorType(XmlAccessType.PROPERTY)

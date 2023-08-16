@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="radio")
+@Table(name="radios")
 @RequiredArgsConstructor
 @XmlRootElement(name = "RadioNav")
 @XmlAccessorType(XmlAccessType.PROPERTY)
