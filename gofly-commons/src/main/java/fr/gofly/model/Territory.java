@@ -17,8 +17,7 @@ public class Territory {
     @XmlAttribute(name = "pk")
     private int territoryId;
 
-    @Column(name = "territory_identification_code",
-            nullable = true)
+    @Column(name = "territory_identification_code")
     @XmlElement(name = "Territoire")
     private String territoryIdentificationCode;
 

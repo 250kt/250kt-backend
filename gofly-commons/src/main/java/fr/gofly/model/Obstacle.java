@@ -21,33 +21,27 @@ public class Obstacle {
     @XmlElement(name = "Territoire")
     private Territory territory;
 
-    @Column(name = "obstacle_latitude",
-            nullable = true)
+    @Column(name = "obstacle_latitude")
     @XmlElement(name = "Latitude")
     private float obstacleLatitude;
 
-    @Column(name = "obstacle_longitude",
-            nullable = true)
+    @Column(name = "obstacle_longitude")
     @XmlElement(name = "Longitude")
     private float obstacleLongitude;
 
-    @Column(name = "obstacle_altitude",
-            nullable = true)
+    @Column(name = "obstacle_altitude")
     @XmlElement(name = "AmslFt")
     private float obstacleAltitude;
 
-    @Column(name = "obstacle_height",
-            nullable = true)
+    @Column(name = "obstacle_height")
     @XmlElement(name = "AglFt")
     private float obstacleHeight;
 
-    @Column(name = "obstacle_type",
-            nullable = true)
+    @Column(name = "obstacle_type")
     @XmlElement(name = "TypeObst")
     private String obstacleType;
 
-    @Column(name = "obstacle_count",
-            nullable = true)
+    @Column(name = "obstacle_count")
     @XmlElement(name = "Combien")
     private int obstacleCount;
 }

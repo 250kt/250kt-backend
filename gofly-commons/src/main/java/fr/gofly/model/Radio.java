@@ -20,23 +20,19 @@ public class Radio {
     @XmlElement(name = "Ad")
     private Airfield airfield;
 
-    @Column(name = "radio_frequency",
-            nullable = true)
+    @Column(name = "radio_frequency")
     @XmlElement(name = "Frequence")
     private String radioFrequency;
 
-    @Column(name = "radio_phraseo_name",
-            nullable = true)
+    @Column(name = "radio_phraseo_name")
     @XmlElement(name = "NomPhraseo")
     private String radioPhraseoName;
 
-    @Column(name = "radio_altitude",
-            nullable = true)
+    @Column(name = "radio_altitude")
     @XmlElement(name = "LatDme")
     private float radioLatitude;
 
-    @Column(name = "radio_longitude",
-            nullable = true)
+    @Column(name = "radio_longitude")
     @XmlElement(name = "LongDme")
     private float radioLongitude;
 }
