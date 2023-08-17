@@ -39,6 +39,5 @@ public class Navlog {
     private Aircraft aircraft;
 
     @OneToMany(mappedBy = "navlog")
-    private List<Branch> branches;
-
+    private List<Step> steps;
 }
