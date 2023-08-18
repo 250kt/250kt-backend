@@ -2,6 +2,7 @@ package fr.gofly.model;
 
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @XmlRootElement(name = "Territoire")
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@Getter
 public class Territory {
     @Id
     @Column(name = "territory_id")
