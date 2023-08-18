@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="part")
+@Table(name="parts")
 @RequiredArgsConstructor
 @XmlRootElement(name = "PartieS")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -20,18 +20,15 @@ public class Part {
     @XmlElement(name = "Espace")
     private Airspace airspace;
 
-    @Column(name = "part_name",
-            nullable = true)
+    @Column(name = "part_name")
     @XmlElement(name = "NomPartie")
     private String partName;
 
-    @Column(name = "part_number",
-            nullable = true)
+    @Column(name = "part_number")
     @XmlElement(name = "NumeroPartie")
     private int partNumber;
 
-    @Column(name = "part_common_name",
-            nullable = true)
+    @Column(name = "part_common_name")
     @XmlElement(name = "NomUsuel")
     private String partCommonName;
 

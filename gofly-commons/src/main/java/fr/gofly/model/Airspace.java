@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="airspace")
+@Table(name="airspaces")
 @RequiredArgsConstructor
 @XmlRootElement(name = "Espace")
 @XmlAccessorType(XmlAccessType.PROPERTY)

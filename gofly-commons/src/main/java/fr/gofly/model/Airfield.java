@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="airfield")
+@Table(name="airfields")
 @RequiredArgsConstructor
 @XmlRootElement(name = "Ad")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -21,33 +21,31 @@ public class Airfield {
     @XmlElement(name = "Territoire")
     private Territory territory;
 
-    @Column(name = "airfield_statut",
-            nullable = true)
+    @Column(name = "airfield_code")
+    @XmlElement(name = "AdCode")
+    private String airfieldCode;
+
+    @Column(name = "airfield_statut")
     @XmlElement(name = "AdStatut")
     private String airfieldStatut;
 
-    @Column(name = "airfield_fullname",
-            nullable = true)
+    @Column(name = "airfield_fullname")
     @XmlElement(name = "AdNomComplet")
     private String airfieldFullname;
 
-    @Column(name = "airfield_map_name",
-            nullable = true)
+    @Column(name = "airfield_map_name")
     @XmlElement(name = "AdNomCarto")
     private String airfieldMapName;
 
-    @Column(name = "airfield_situation",
-            nullable = true)
+    @Column(name = "airfield_situation")
     @XmlElement(name = "AdSituation")
     private String airfieldSituation;
 
-    @Column(name = "airfield_phone_number",
-            nullable = true)
+    @Column(name = "airfield_phone_number")
     @XmlElement(name = "AdTel")
     private String airfieldPhoneNumber;
 
-    @Column(name = "airfield_accept_Vfr",
-            nullable = true)
+    @Column(name = "airfield_accept_Vfr")
     private boolean isAirfieldAcceptVfr;
 
     @XmlElement(name = "TfcVfr")
@@ -59,18 +57,15 @@ public class Airfield {
         isAirfieldAcceptVfr = "oui".equalsIgnoreCase(value);
     }
 
-    @Column(name = "airfield_altitude",
-            nullable = true)
+    @Column(name = "airfield_altitude")
     @XmlElement(name = "AdRefAltFt")
     private int airfieldAltitude;
 
-    @Column(name = "airfield_latitude",
-            nullable = true)
+    @Column(name = "airfield_latitude")
     @XmlElement(name = "ArpLat")
     private float airfieldLatitude;
 
-    @Column(name = "airfield_longitude",
-            nullable = true)
+    @Column(name = "airfield_longitude")
     @XmlElement(name = "ArpLong")
     private float airfieldLongitude;
 }

@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="lighthouse")
+@Table(name="lighthouses")
 @RequiredArgsConstructor
 @XmlRootElement(name = "PhareS")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -21,33 +21,27 @@ public class Lighthouse {
     @XmlElement(name = "Territoire")
     private Territory territory;
 
-    @Column(name = "lighhouse_latitude",
-            nullable = true)
+    @Column(name = "lighhouse_latitude")
     @XmlElement(name = "Latitude")
     private float lighthouseLatitude;
 
-    @Column(name = "lighhouse_longitude",
-            nullable = true)
+    @Column(name = "lighhouse_longitude")
     @XmlElement(name = "Longitude")
     private float lighthouseLongitude;
 
-    @Column(name = "lighhouse_number_name",
-            nullable = true)
+    @Column(name = "lighhouse_number_name")
     @XmlElement(name = "NumeroNom")
     private float lighthouseNumberName;
 
-    @Column(name = "lighhouse_type",
-            nullable = true)
+    @Column(name = "lighhouse_type")
     @XmlElement(name = "Type")
     private String lighthouseType;
 
-    @Column(name = "lighhouse_situation",
-            nullable = true)
+    @Column(name = "lighhouse_situation")
     @XmlElement(name = "Situation")
     private String lighthouseSituation;
 
     @Column(name = "lighhouse_remark",
-            nullable = true,
             length = 1000)
     @XmlElement(name = "Remarque")
     private String lighthouseRemark;

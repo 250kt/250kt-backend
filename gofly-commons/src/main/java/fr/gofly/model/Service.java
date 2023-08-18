@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="service")
+@Table(name="services")
 @RequiredArgsConstructor
 @XmlRootElement(name = "Service")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -30,18 +30,15 @@ public class Service {
     @XmlElement(name = "Service")
     private String serviceType;
 
-    @Column(name = "service_indicative_field",
-            nullable = true)
+    @Column(name = "service_indicative_field")
     @XmlElement(name = "IndicLieu")
     private String serviceIndicativeField;
 
-    @Column(name = "service_indicative_service",
-            nullable = true)
+    @Column(name = "service_indicative_service")
     @XmlElement(name = "IndicService")
     private String serviceIndicativeService;
 
-    @Column(name = "service_language",
-            nullable = true)
+    @Column(name = "service_language")
     @XmlElement(name = "Langue")
     private String serviceLanguage;
 }

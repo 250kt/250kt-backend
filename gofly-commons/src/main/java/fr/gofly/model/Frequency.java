@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @Entity
-@Table(name="frequency")
+@Table(name="frequencies")
 @RequiredArgsConstructor
 @XmlRootElement(name = "FrequenceS")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -20,13 +20,11 @@ public class Frequency {
     @XmlElement(name = "Service")
     private Service service;
 
-    @Column(name = "frequency_frequency",
-            nullable = true)
+    @Column(name = "frequency_frequency")
     @XmlElement(name = "Frequence")
     private float frequency;
 
-    @Column(name = "frequency_operating_hour_code",
-            nullable = true)
+    @Column(name = "frequency_operating_hour_code")
     @XmlElement(name = "HorCode")
     private String frequencyOperatingHourCode;
 
@@ -36,7 +34,6 @@ public class Frequency {
     private String frequencyOperatingHourText;*/
 
     @Column(name = "frequency_remark",
-            nullable = true,
             length = 1000)
     @XmlElement(name = "Remarque")
     private String frequencyRemark;
