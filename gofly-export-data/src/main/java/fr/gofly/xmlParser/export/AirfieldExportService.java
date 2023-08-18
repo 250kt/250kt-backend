@@ -53,10 +53,23 @@ public class AirfieldExportService {
      */
     private void saveAirfieldToDatabase(Airfield airfield) {
         try {
-            airfieldRepository.save(airfield);
+            if(respectConditions(airfield))
+                airfieldRepository.save(airfield);
         } catch (Exception e) {
             logger.error("Error saving airfield to database: " + e.getMessage());
             //throw new RuntimeException("Error saving airfield to database: " + e.getMessage(), e);
         }
     }
+
+    /**
+     * Checks if the given airfield respects certain conditions.
+     *
+     * @param airfield The airfield to be checked.
+     * @return {@code true} if the airfield meets the conditions, {@code false} otherwise.
+     */
+    private boolean respectConditions(Airfield airfield){
+        // Exclude airfields with the "AUTRES" category
+        return airfield.getTerritory().getTerritoryId() != 9999;
+    }
+
 }
