@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gofly-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gofly-api
+  template:
+    metadata:
+      labels:
+        app: gofly-api
+    spec:
+      containers:
+        - name: gofly-api
+          image: europe-west9-docker.pkg.dev/avian-foundry-384513/docker/gofly-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: db-credentials
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: db-credentials

@@ -8,11 +8,21 @@ spring:
 spring:
   config:
     activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://10.92.96.3:5432/gofly
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+---
+spring:
+  config:
+    activate:
       on-profile: local
   datasource:
     url: jdbc:postgresql://localhost:5432/gofly
-    username: gofly
-    password: gofly
+    username: ${DB_USERNAME}
+    password: ${DB_USERNAME}
 
 ---
 spring:

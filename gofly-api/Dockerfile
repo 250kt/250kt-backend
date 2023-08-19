@@ -1,8 +1,9 @@
-FROM adoptopenjdk:17-jdk-temurin-alpine
-
+FROM openjdk:17-alpine
+RUN echo $(pwd)
+RUN echo $(ls)
+RUN mkdir /app
+COPY /target/gofly-api-0.0.1-SNAPSHOT.jar /app/gofly-api.jar
 WORKDIR /app
-
-COPY target/gofly-api-0.0.1-SNAPSHOT.jar gofly-api.jar
 
 ENTRYPOINT ["java", "-jar", "gofly-api.jar"]
 
