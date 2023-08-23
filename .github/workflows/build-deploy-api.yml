@@ -2,10 +2,6 @@ name: Build, push to Artifact Registry and deploy in GKE
 
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'The branch'
-        required: true
 
 env:
   REGION: ${{ vars.REGION }}
