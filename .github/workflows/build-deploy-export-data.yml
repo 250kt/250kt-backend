@@ -2,7 +2,6 @@ name: Build Export data , push to Artifact Registry and deploy in GKE
 
 on:
   workflow_dispatch:
-  push:
 
 env:
   REGION: ${{ vars.REGION }}
