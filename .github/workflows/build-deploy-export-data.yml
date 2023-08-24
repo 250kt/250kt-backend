@@ -1,7 +1,8 @@
-name: Build API, push to Artifact Registry and deploy in GKE
+name: Build Export data , push to Artifact Registry and deploy in GKE
 
 on:
   workflow_dispatch:
+  push:
 
 env:
   REGION: ${{ vars.REGION }}
@@ -41,16 +42,16 @@ jobs:
           cache: maven
 
       - name: Build with maven
-        run: mvn clean package -pl ./gofly-api -am
+        run: mvn clean package -pl ./gofly-export-data -am
 
       - id: docker-push-tagged
         name: Tag Docker image and push to Artifact Registry
         uses: docker/build-push-action@v2
         with:
-          context: ./gofly-api
+          context: ./gofly-export-data
           push: true
           tags: |
-            europe-west9-docker.pkg.dev/avian-foundry-384513/docker/gofly-api:latest
+            europe-west9-docker.pkg.dev/avian-foundry-384513/docker/gofly-export-data:latest
 
       - name: Set up GKE credentials
         uses: google-github-actions/get-gke-credentials@v0
@@ -64,4 +65,4 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install gofly-api ./gofly-api/deploy -n gofly-dev
+          helm upgrade --install gofly-export-data ./gofly-export-data/deploy -n gofly-dev
