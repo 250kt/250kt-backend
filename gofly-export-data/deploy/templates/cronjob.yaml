@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: gofly-export-data-cronjob
+spec:
+  schedule: "* 18 * * THU"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: gofly-export-data
+              image: europe-west9-docker.pkg.dev/avian-foundry-384513/docker/gofly-export-data:latest
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: dev
+                - name: DB_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: username
+                      name: db-credentials
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: db-credentials
+          restartPolicy: OnFailure
+
