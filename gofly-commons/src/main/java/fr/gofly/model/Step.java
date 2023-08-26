@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "stepes")
+@Table(name = "steps")
 @SequenceGenerator(name = "sequence_step_generator", sequenceName = "sequence_step", allocationSize = 10)
 @Getter
 @Setter

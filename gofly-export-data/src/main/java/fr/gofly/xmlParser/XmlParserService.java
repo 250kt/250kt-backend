@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import java.io.File;
+import java.net.URL;
 
 @Service
 public class XmlParserService {
-
-    private final String xmlFilePath = "import.xml";
     private Logger logger = LoggerFactory.getLogger(XmlParserService.class);
     private SiaExport siaExport;
 
@@ -61,7 +60,11 @@ public class XmlParserService {
         try {
             logger.info("XML Parser : STARTED");
 
-            File xmlFile = ResourceUtils.getFile("classpath:" + xmlFilePath);
+            ClassLoader classLoader = getClass().getClassLoader();
+            String xmlFilePath = "import.xml";
+            URL resourceUrl = classLoader.getResource(xmlFilePath);
+
+            File xmlFile = new File(resourceUrl.toURI());
 
             JAXBContext jaxbContext = JAXBContext.newInstance(SiaExport.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
