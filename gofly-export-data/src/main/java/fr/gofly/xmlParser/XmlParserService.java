@@ -8,10 +8,16 @@ import jakarta.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.ResourceUtils;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class XmlParserService {
@@ -60,16 +66,16 @@ public class XmlParserService {
         try {
             logger.info("XML Parser : STARTED");
 
-            ClassLoader classLoader = getClass().getClassLoader();
-            String xmlFilePath = "import.xml";
-            URL resourceUrl = classLoader.getResource(xmlFilePath);
-
-            File xmlFile = new File(resourceUrl.toURI());
+            Resource resource = new ClassPathResource("import.xml");
+            File tempFile = File.createTempFile("import", ".xml");
+            try (InputStream inputStream = resource.getInputStream()) {
+                Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
 
             JAXBContext jaxbContext = JAXBContext.newInstance(SiaExport.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-            siaExport = (SiaExport) jaxbUnmarshaller.unmarshal(xmlFile);
+            siaExport = (SiaExport) jaxbUnmarshaller.unmarshal(tempFile);
 
             territoryExportService.exportTerritoriesToDatabase(siaExport);
             borderExportService.exportBordersToDatabase(siaExport);
@@ -83,6 +89,7 @@ public class XmlParserService {
             serviceExportService.exportServicesToDatabase(siaExport);
             frequencyExportService.exportFrequenciesToDatabase(siaExport);
 
+            FileSystemUtils.deleteRecursively(tempFile);
         } catch (Exception e) {
             logger.error("An error occurred during the process : " + e.getMessage());
             throw new RuntimeException("An error occurred during the process : " + e.getMessage(), e);
