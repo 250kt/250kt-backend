@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name="users")
@@ -17,8 +19,8 @@ public class User {
     @Id
     @Column(name = "user_id",
             nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    @UuidGenerator
+    private String userId;
 
     @Column(name = "user_firstname",
             nullable = false)
@@ -32,8 +34,10 @@ public class User {
             nullable = false)
     private String userPassword;
 
+
     @Column(name = "user_email",
-            nullable = false)
+            nullable = false,
+            unique=true)
     private String userEmail;
 
     @Enumerated(EnumType.STRING)
