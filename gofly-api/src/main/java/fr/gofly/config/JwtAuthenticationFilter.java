@@ -1,5 +1,6 @@
 package fr.gofly.config;
 
+import fr.gofly.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -44,8 +46,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(usernameOrEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){// ... and verify if the user is already connected
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(usernameOrEmail);
+            var isTokenValid = tokenRepository.findByTokenHex(jwt)
+                    .map(t -> !t.isTokenRevoked() && !t.isTokenExpired())
+                    .orElse(false);
 
-            if(jwtService.isTokenValid(jwt, userDetails)){
+            if(jwtService.isTokenValid(jwt, userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

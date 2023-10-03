@@ -1,5 +1,6 @@
 package fr.gofly.model;
 
+import fr.gofly.model.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -49,6 +50,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private Set<Aircraft> aircraft;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
