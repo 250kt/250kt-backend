@@ -1,16 +1,15 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Data
 @Entity
 @Table(name = "stepes")
 @SequenceGenerator(name = "sequence_step_generator", sequenceName = "sequence_step", allocationSize = 10)
-@Getter
-@Setter
-@RequiredArgsConstructor
 public class Step {
 
     @Id

@@ -1,15 +1,14 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Data
 @Entity
 @Table(name = "turning_points")
-@Getter
-@Setter
-@RequiredArgsConstructor
 public class TurningPoint {
     @Id
     @Column(name = "turning_point_id")

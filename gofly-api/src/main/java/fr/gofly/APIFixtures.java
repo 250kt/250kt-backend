@@ -23,9 +23,8 @@ public class APIFixtures implements CommandLineRunner {
         user.setUserEmail("valentin.delobel@outlook.fr");
         user.setUserPassword("T€st31400*");
         user.setUserRole(Role.ADMIN);
-        user.setUserFirstName("Valentin");
-        user.setUserLastName("Delobel");
+        user.setUserName("AureSkum");
 
-        //userRepository.save(user);
+        // userRepository.save(user);
     }
 }

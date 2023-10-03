@@ -1,17 +1,16 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "navlogs")
-@RequiredArgsConstructor
-@Getter
-@Setter
 public class Navlog {
     @Id
     @Column(name = "navlog_id")

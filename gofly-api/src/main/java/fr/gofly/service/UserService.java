@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Service class responsible for handling user-related operations.
+ */
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -19,6 +22,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Creates a new user.
+     *
+     * @param newUser The user object to be created.
+     * @return The newly created user.
+     * @throws UserAlreadyExistsException If a user with the same email address already exists.
+     */
     public User createUser(User newUser) {
         if (userRepository.findByUserEmail(newUser.getUserEmail()).isPresent()) {
             throw new UserAlreadyExistsException(newUser.getUserEmail());
@@ -27,6 +37,14 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    /**
+     * Updates an existing user with the provided data.
+     *
+     * @param newUser The updated user data.
+     * @param userId  The unique identifier of the user to be updated.
+     * @return The updated user.
+     * @throws UserAlreadyExistsException If a user with the same email already exists.
+     */
     public User putUser(User newUser, String userId){
         //We retrieve the current user to compare if the email is the same in order to avoid error 500 UserAlreadyExistsException
         Optional<User> currentUser = userRepository.findByUserId(userId);
@@ -62,6 +80,11 @@ public class UserService {
                 });
     }
 
+    /**
+     * Deletes a user by their unique identifier.
+     *
+     * @param userId The unique identifier of the user to be deleted.
+     */
     @Transactional
     public void DeleteUser(String userId) {
         userRepository.deleteByUserId(userId);
