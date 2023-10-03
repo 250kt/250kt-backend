@@ -37,14 +37,27 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByUserEmail(request.getEmail())
-                .orElseThrow();
+        User user;
+
+        if(request.getEmail() == null){
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+            user = userRepository.findByUserName(request.getUsername())
+                    .orElseThrow();
+        }else{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+            user = userRepository.findByUserEmail(request.getEmail())
+                    .orElseThrow();
+        }
 
         var jwtToken = jwtService.generateToken(user);
 

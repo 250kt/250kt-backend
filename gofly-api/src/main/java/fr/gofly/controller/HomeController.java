@@ -9,7 +9,7 @@ import java.security.Principal;
 @RestController
 public class HomeController {
 
-    @GetMapping("/home")
+    @GetMapping("/api/home")
     public ResponseEntity<String> home() {
         return ResponseEntity.ok("hello");
     }
