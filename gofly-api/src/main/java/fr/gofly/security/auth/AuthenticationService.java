@@ -1,7 +1,7 @@
-package fr.gofly.auth;
+package fr.gofly.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.gofly.config.JwtService;
+import fr.gofly.security.config.JwtService;
 import fr.gofly.model.Role;
 import fr.gofly.model.User;
 import fr.gofly.model.token.Token;
@@ -28,8 +28,13 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     *
+     * @param request the {@link RegisterRequest}
+     * @return {@link AuthenticationResponse}
+     */
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
+        User user = User.builder()
                 .userName(request.getUsername())
                 .userEmail(request.getEmail())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
@@ -37,10 +42,10 @@ public class AuthenticationService {
                 .userEmailConfirmed(false)
                 .build();
 
-        var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        User savedUser = userRepository.save(user);
+        String jwtToken = jwtService.generateToken(user);
 
-        var refreshToken = jwtService.generateRefreshToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
 
         return AuthenticationResponse.builder()
@@ -49,6 +54,11 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     *
+     * @param request the {@link AuthenticationRequest}
+     * @return {@link AuthenticationResponse}
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         User user;
 
@@ -85,6 +95,10 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     *
+     * @param user {@link User}
+     */
     private void revokeAllUserTokens(User user){
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserId());
         if(validUserTokens.isEmpty()){
@@ -97,6 +111,11 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
+    /**
+     *
+     * @param savedUser {@link User}
+     * @param jwtToken the jwt token
+     */
     private void saveUserToken(User savedUser, String jwtToken) {
         var token = Token.builder()
                 .user(savedUser)
@@ -108,6 +127,12 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
+    /**
+     *
+     * @param request {@link HttpServletResponse}
+     * @param response {@link HttpServletResponse}
+     * @throws IOException
+     */
     public void refreshToken(HttpServletResponse request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;

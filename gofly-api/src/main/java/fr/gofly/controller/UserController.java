@@ -3,28 +3,21 @@ package fr.gofly.controller;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
 import fr.gofly.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import fr.gofly.exception.entity.user.UserNotFoundException;
+
+import java.util.Optional;
 
 /**
  * Controller for user-related operations.
  */
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
-
-    /**
-     * Constructor for the UserController.
-     *
-     * @param userRepository The user repository.
-     * @param userService    The user service.
-     */
-    public UserController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
-        this.userService = userService;
-    }
 
     /**
      * Create a new user.
@@ -57,9 +50,9 @@ public class UserController {
      * @param userId  The identifier of the user to update.
      * @return The updated user.
      */
-    @PutMapping("/users/{userId}")
-    User replaceUser(@RequestBody User newUser, @PathVariable String userId) {
-        return userService.putUser(newUser, userId);
+    @PutMapping("/users")
+    Optional<User> replaceUser(@RequestBody User newUser) {
+        return userService.putUser(newUser);
     }
 
     /**

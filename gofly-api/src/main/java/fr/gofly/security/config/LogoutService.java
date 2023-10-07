@@ -1,4 +1,4 @@
-package fr.gofly.config;
+package fr.gofly.security.config;
 
 import fr.gofly.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
     private final TokenRepository tokenRepository;
 
+    /**
+     *
+     * @param request {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @param authentication {@link Authentication}
+     */
     @Override
     public void logout(
             HttpServletRequest request,

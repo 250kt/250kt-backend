@@ -1,4 +1,4 @@
-package fr.gofly.config;
+package fr.gofly.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +20,12 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
+    /**
+     *
+     * @param http {@link HttpSecurity}
+     * @return {@link SecurityFilterChain}
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

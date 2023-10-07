@@ -1,4 +1,4 @@
-package fr.gofly.auth;
+package fr.gofly.security.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

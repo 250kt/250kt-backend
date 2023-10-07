@@ -1,4 +1,4 @@
-package fr.gofly.config;
+package fr.gofly.security.config;
 
 import fr.gofly.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

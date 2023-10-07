@@ -4,6 +4,7 @@ import fr.gofly.exception.entity.user.UserAlreadyExistsException;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,10 @@ import java.util.Optional;
  * Service class responsible for handling user-related operations.
  */
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
+    
     /**
      * Creates a new user.
      *
@@ -40,44 +37,31 @@ public class UserService {
     /**
      * Updates an existing user with the provided data.
      *
-     * @param newUser The updated user data.
-     * @param userId  The unique identifier of the user to be updated.
+     * @param user The updated user data.
      * @return The updated user.
      * @throws UserAlreadyExistsException If a user with the same email already exists.
      */
-    public User putUser(User newUser, String userId){
+    public Optional<User> putUser(User user){
         //We retrieve the current user to compare if the email is the same in order to avoid error 500 UserAlreadyExistsException
-        Optional<User> currentUser = userRepository.findByUserId(userId);
-        String currentUserEmail = currentUser.get().getUserEmail();
+        Optional<User> currentUserDbOptional = userRepository.findByUserId(user.getUserId());
 
-        //If the email hasn't changed
-        if(Objects.equals(newUser.getUserEmail(), currentUserEmail)){
-            return userRepository.findByUserId(userId)
-                    .map(user -> {
-                        user.setUserPassword(newUser.getUserPassword());
-                        return userRepository.save(user);
-                    })
-                    .orElseGet(() -> {
-                        newUser.setUserId(userId);
-                        return userRepository.save(newUser);
-                    });
+        //If user exist in database
+        if(currentUserDbOptional.isPresent()){
+            Optional<User> userFindByEmail = userRepository.findByUserEmail(user.getUserEmail());
+
+            //If the user with the email passed exist
+            if(userFindByEmail.isPresent()){
+                //If the userFindByEmail is the same as the user given
+                if(Objects.equals(userFindByEmail.get().getUserId(), user.getUserId())){
+                    return Optional.of(userRepository.save(user));
+                }else{
+                    throw new UserAlreadyExistsException(user.getUserEmail());
+                }
+            }
+            return Optional.of(userRepository.save(user));
         }
+        return Optional.empty();
 
-        //If the email has changed and the email already exist in database -> UserAlreadyExistsException
-        if (userRepository.findByUserEmail(newUser.getUserEmail()).isPresent()) {
-            throw new UserAlreadyExistsException(newUser.getUserEmail());
-        }
-
-        return userRepository.findByUserId(userId)
-                .map(user -> {
-                    user.setUserEmail(newUser.getUserEmail());
-                    user.setUserPassword(newUser.getUserPassword());
-                    return userRepository.save(user);
-                })
-                .orElseGet(() -> {
-                    newUser.setUserId(userId);
-                    return userRepository.save(newUser);
-                });
     }
 
     /**

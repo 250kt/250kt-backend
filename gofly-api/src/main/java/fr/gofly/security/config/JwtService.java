@@ -1,4 +1,4 @@
-package fr.gofly.config;
+package fr.gofly.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package fr.gofly.auth;
+package fr.gofly.security.auth;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
