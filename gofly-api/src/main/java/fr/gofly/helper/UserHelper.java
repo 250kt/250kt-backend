@@ -16,7 +16,7 @@ public class UserHelper {
      * @return true if the user is the owner of the account
      */
     public boolean isOwner(User user, String userId) {
-        return Objects.equals(user.getId(), user.getId());
+        return Objects.equals(user.getId(), userId);
     }
 
     /**

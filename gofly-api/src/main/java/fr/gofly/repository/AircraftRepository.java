@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.Set;
 
-public interface AircraftRepository extends JpaRepository<Aircraft, Long> {
+public interface AircraftRepository extends JpaRepository<Aircraft, Integer> {
 
-    Optional<Set<Aircraft>> findAllByUser(User user);
+    Set<Aircraft> findAllByUser(User user);
+
 }
