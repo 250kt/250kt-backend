@@ -24,21 +24,47 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private Long refreshExpiration;
 
+    /**
+     * Extracts the username or email from a JWT token.
+     *
+     * @param token The JWT token.
+     * @return The username or email extracted from the token.
+     */
     public String extractUsernameOrEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    /**
+     * Extracts a specific claim from a JWT token.
+     *
+     * @param token           The JWT token.
+     * @param claimsResolver  A function to resolve the desired claim.
+     * @return The resolved claim from the token.
+     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * Generates a JWT token for a user with userDetails.
+     *
+     * @param userDetails     The user's details.
+     * @return The generated JWT token.
+     */
     public String generateToken(
             UserDetails userDetails
     ){
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    /**
+     * Generates a JWT token with additional claims for a user.
+     *
+     * @param extractClaims  Additional claims to be included in the token.
+     * @param userDetails     The user's details.
+     * @return The generated JWT token.
+     */
     public String generateToken(
             Map<String, Object> extractClaims,
             UserDetails userDetails
@@ -46,11 +72,18 @@ public class JwtService {
         return buildToken(extractClaims, userDetails, jwtExpiration);
     }
 
+    /**
+     * Generates a refresh token for a user.
+     *
+     * @param userDetails The user's details.
+     * @return The generated refresh token.
+     */
     public String generateRefreshToken(
             UserDetails userDetails
     ){
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
+
 
     private String buildToken(
             Map<String, Object> extractClaims,
@@ -67,6 +100,13 @@ public class JwtService {
                 .compact();
     }
 
+    /**
+     * Validates if a JWT token is still valid for a specific user.
+     *
+     * @param token      The JWT token.
+     * @param userDetails The user's details.
+     * @return `true` if the token is valid for the user, otherwise `false`.
+     */
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsernameOrEmail(token);
 
@@ -77,6 +117,12 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
+    /**
+     * Extracts all claims from a JWT token.
+     *
+     * @param token The JWT token.
+     * @return All claims extracted from the token.
+     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }

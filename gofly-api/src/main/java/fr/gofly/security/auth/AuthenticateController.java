@@ -16,6 +16,12 @@ import java.io.IOException;
 public class AuthenticateController {
     private final AuthenticationService authenticationService;
 
+    /**
+     * Endpoint for user registration.
+     *
+     * @param request The registration information provided by the user.
+     * @return An HTTP response containing the registration operation result.
+     */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
         @RequestBody RegisterRequest request
@@ -23,6 +29,12 @@ public class AuthenticateController {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
+    /**
+     * Endpoint for user authentication.
+     *
+     * @param request The authentication information provided by the user.
+     * @return An HTTP response containing the authentication operation result.
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody AuthenticationRequest request
@@ -30,6 +42,13 @@ public class AuthenticateController {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
+    /**
+     * Endpoint for refreshing the authentication token.
+     *
+     * @param request The original HTTP request.
+     * @param response The HTTP response to be returned with the new authentication token.
+     * @throws IOException In case of an error during token refresh handling.
+     */
     @PostMapping("/refresh-token")
     public void refreshToken(
             HttpServletResponse request,

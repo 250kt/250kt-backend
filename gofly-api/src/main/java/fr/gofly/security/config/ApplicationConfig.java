@@ -19,6 +19,11 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
+    /**
+     * Custom UserDetailsService to load user details.
+     *
+     * @return UserDetailsService implementation based on the provided username or email.
+     */
     @Bean
     public UserDetailsService userDetailsService(){
         return usernameOrEmail -> {
@@ -32,6 +37,11 @@ public class ApplicationConfig {
         };
     }
 
+    /**
+     * Custom AuthenticationProvider for database-based authentication.
+     *
+     * @return AuthenticationProvider configured with custom UserDetailsService and password encoder.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -41,11 +51,23 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    /**
+     * Custom AuthenticationManager configuration.
+     *
+     * @param config AuthenticationConfiguration for retrieving the authentication manager.
+     * @return AuthenticationManager for handling authentication requests.
+     * @throws Exception If there is an error configuring the authentication manager.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Password encoder for securely hashing passwords.
+     *
+     * @return PasswordEncoder implementation, using BCrypt hashing.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

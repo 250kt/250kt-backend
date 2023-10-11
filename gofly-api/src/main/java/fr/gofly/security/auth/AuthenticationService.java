@@ -29,11 +29,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     /**
+     * Register a new user.
      *
-     * @param request the {@link RegisterRequest}
-     * @return {@link AuthenticationResponse}
+     * @param request The registration request.
+     * @return AuthenticationResponse with access and refresh tokens.
      */
     public AuthenticationResponse register(RegisterRequest request) {
+        // Create a new user and encode the password.
         User user = User.builder()
                 .userName(request.getUsername())
                 .userEmail(request.getEmail())
@@ -43,9 +45,12 @@ public class AuthenticationService {
                 .build();
 
         User savedUser = userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
 
+        // Generate JWT and refresh tokens for the user.
+        String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
+
+        // Save the tokens and return the response.
         saveUserToken(savedUser, jwtToken);
 
         return AuthenticationResponse.builder()
@@ -55,13 +60,15 @@ public class AuthenticationService {
     }
 
     /**
+     * Authenticate a user.
      *
-     * @param request the {@link AuthenticationRequest}
-     * @return {@link AuthenticationResponse}
+     * @param request The authentication request.
+     * @return AuthenticationResponse with access and refresh tokens.
      */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         User user;
 
+        // Authenticate the user based on provided credentials.
         if(request.getEmail() == null){
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -82,11 +89,15 @@ public class AuthenticationService {
                     .orElseThrow();
         }
 
+        // Generate new JWT and refresh tokens for the user.
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
+        // Revoke old tokens and save the new tokens.
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+
+        // Save the tokens and return the response.
         saveUserToken(user, refreshToken);
 
         return AuthenticationResponse.builder()
@@ -96,14 +107,16 @@ public class AuthenticationService {
     }
 
     /**
+     * Revoke all valid user tokens.
      *
-     * @param user {@link User}
+     * @param user The user for whom tokens need to be revoked.
      */
     private void revokeAllUserTokens(User user){
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserId());
         if(validUserTokens.isEmpty()){
             return;
         }
+        // Mark all valid tokens as expired and revoked.
         validUserTokens.forEach(t -> {
             t.setTokenExpired(true);
             t.setTokenRevoked(true);
@@ -112,9 +125,10 @@ public class AuthenticationService {
     }
 
     /**
+     * Save a token for a user.
      *
-     * @param savedUser {@link User}
-     * @param jwtToken the jwt token
+     * @param savedUser The user for whom the token is saved.
+     * @param jwtToken The JWT token.
      */
     private void saveUserToken(User savedUser, String jwtToken) {
         var token = Token.builder()
@@ -128,10 +142,11 @@ public class AuthenticationService {
     }
 
     /**
+     * Refresh the authentication token.
      *
-     * @param request {@link HttpServletResponse}
-     * @param response {@link HttpServletResponse}
-     * @throws IOException
+     * @param request  The original HTTP request.
+     * @param response The HTTP response to return with a new authentication token.
+     * @throws IOException In case of an error during token refresh handling.
      */
     public void refreshToken(HttpServletResponse request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -142,6 +157,7 @@ public class AuthenticationService {
             return;
         }
 
+        // Extract and validate the refresh token.
         refreshToken = authHeader.substring(7); // substring after "Bearer "
 
         usernameOrEmail = jwtService.extractUsernameOrEmail(refreshToken);
@@ -155,7 +171,9 @@ public class AuthenticationService {
                     .orElse(false);
 
             if(jwtService.isTokenValid(refreshToken, user) && isTokenValid){
+                // Generate a new access token for the user.
                 var accessToken = jwtService.generateToken(user);
+                // Revoke old tokens, save the new token, and return the updated token response.
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 var authResponse = AuthenticationResponse.builder()

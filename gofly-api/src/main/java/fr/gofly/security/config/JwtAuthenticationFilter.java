@@ -25,12 +25,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenRepository tokenRepository;
 
     /**
+     * This method filters incoming HTTP requests and checks for a valid JWT token in the Authorization header.
+     * If a valid token is found, it authenticates the user and sets the security context.
      *
-     * @param request {@link HttpServletRequest}
-     * @param response {@link HttpServletResponse}
-     * @param filterChain {@link FilterChain}
-     * @throws ServletException
-     * @throws IOException
+     * @param request      The HTTP request.
+     * @param response     The HTTP response.
+     * @param filterChain  The filter chain to continue processing the request.
+     * @throws ServletException If an error occurs during request processing.
+     * @throws IOException      If an I/O error occurs.
      */
     @Override
     protected void doFilterInternal(

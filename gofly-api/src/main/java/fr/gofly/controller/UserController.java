@@ -47,7 +47,6 @@ public class UserController {
      * Replace an existing user's information with new data.
      *
      * @param newUser The new user information.
-     * @param userId  The identifier of the user to update.
      * @return The updated user.
      */
     @PutMapping("/users")
