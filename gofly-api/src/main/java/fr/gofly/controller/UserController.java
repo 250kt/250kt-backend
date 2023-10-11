@@ -13,7 +13,7 @@ import java.util.Optional;
  * Controller for user-related operations.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
@@ -25,7 +25,7 @@ public class UserController {
      * @param newUser The user information to create.
      * @return The created user.
      */
-    @PostMapping("/users")
+    @PostMapping()
     public User newUser(@RequestBody User newUser){
         return userService.createUser(newUser);
     }
@@ -37,7 +37,7 @@ public class UserController {
      * @return The user corresponding to the identifier.
      * @throws UserNotFoundException If no matching user is found.
      */
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     User one(@PathVariable String userId){
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
@@ -49,7 +49,7 @@ public class UserController {
      * @param newUser The new user information.
      * @return The updated user.
      */
-    @PutMapping("/users")
+    @PutMapping()
     Optional<User> replaceUser(@RequestBody User newUser) {
         return userService.putUser(newUser);
     }
@@ -59,7 +59,7 @@ public class UserController {
      *
      * @param userId The identifier of the user to delete.
      */
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     void deleteUser(@PathVariable String userId) {
         userService.DeleteUser(userId);
     }
