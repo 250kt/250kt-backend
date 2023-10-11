@@ -1,5 +1,6 @@
 package fr.gofly.security.config;
 
+import fr.gofly.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -53,7 +54,7 @@ public class JwtService {
      * @return The generated JWT token.
      */
     public String generateToken(
-            UserDetails userDetails
+            User userDetails
     ){
         return generateToken(new HashMap<>(), userDetails);
     }
@@ -67,7 +68,7 @@ public class JwtService {
      */
     public String generateToken(
             Map<String, Object> extractClaims,
-            UserDetails userDetails
+            User userDetails
     ){
         return buildToken(extractClaims, userDetails, jwtExpiration);
     }
@@ -79,7 +80,7 @@ public class JwtService {
      * @return The generated refresh token.
      */
     public String generateRefreshToken(
-            UserDetails userDetails
+            User userDetails
     ){
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
@@ -87,12 +88,12 @@ public class JwtService {
 
     private String buildToken(
             Map<String, Object> extractClaims,
-            UserDetails userDetails,
+            User userDetails,
             long expiration
     ){
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .setClaims(extractClaims)
+                .claim("roles", userDetails.getAuthorities())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
