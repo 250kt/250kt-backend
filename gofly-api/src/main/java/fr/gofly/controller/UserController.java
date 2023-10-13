@@ -4,8 +4,10 @@ import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
 import fr.gofly.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import fr.gofly.exception.entity.user.UserNotFoundException;
 
 import java.util.Optional;
 
@@ -26,32 +28,32 @@ public class UserController {
      * @return The created user.
      */
     @PostMapping()
-    public User newUser(@RequestBody User newUser){
-        return userService.createUser(newUser);
+    public ResponseEntity<User> createUser(@RequestBody User newUser){
+        Optional<User> userOptional = userService.createUser(newUser);
+        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
-
     /**
      * Get a user by their identifier (userId).
      *
      * @param userId The identifier of the user to retrieve.
      * @return The user corresponding to the identifier.
-     * @throws UserNotFoundException If no matching user is found.
      */
     @GetMapping("/{userId}")
-    User one(@PathVariable String userId){
-        return userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+    ResponseEntity<User> getUser(@PathVariable String userId){
+        Optional<User> userOptional = userRepository.findByUserId(userId);
+        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
-     * Replace an existing user's information with new data.
+     * Update an existing user's information with new data.
      *
      * @param newUser The new user information.
      * @return The updated user.
      */
     @PutMapping()
-    Optional<User> replaceUser(@RequestBody User newUser) {
-        return userService.putUser(newUser);
+    ResponseEntity<User> updateUser(@RequestBody User newUser) {
+        Optional<User> userOptional = userService.putUser(newUser);
+        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     /**
@@ -60,7 +62,7 @@ public class UserController {
      * @param userId The identifier of the user to delete.
      */
     @DeleteMapping("/{userId}")
-    void deleteUser(@PathVariable String userId) {
-        userService.DeleteUser(userId);
+    ResponseEntity<User> deleteUser(@PathVariable String userId, @RequestBody User userRequest) {
+        return userService.deleteUser(userId, userRequest) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

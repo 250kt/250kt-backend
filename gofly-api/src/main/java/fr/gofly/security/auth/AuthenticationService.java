@@ -13,10 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,6 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -34,12 +34,32 @@ public class AuthenticationService {
      * @param request The registration request.
      * @return AuthenticationResponse with access and refresh tokens.
      */
-    public AuthenticationResponse register(RegisterRequest request) {
+    public Optional<AuthenticationResponse> register(RegisterRequest request) {
+        //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
+        String emailRegex = "^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$";
+        Pattern emailPattern = Pattern.compile(emailRegex);
+
+        if(!emailPattern.matcher(request.getEmail()).matches())
+            return Optional.empty();
+
+
+        String usernameRegex = "^[A-Za-z][A-Za-z0-9_]{2,29}$";
+        Pattern usernamePattern = Pattern.compile(usernameRegex);
+
+        if(!usernamePattern.matcher(request.getUsername()).matches())
+            return Optional.empty();
+
+        if(request.getPassword().length() == 0)
+            return Optional.empty();
+
+        if (userRepository.findByUserEmail(request.getEmail()).isPresent())
+            return Optional.empty();
+
         // Create a new user and encode the password.
         User user = User.builder()
                 .userName(request.getUsername())
                 .userEmail(request.getEmail())
-                .userPassword(passwordEncoder.encode(request.getPassword()))
+                .userPassword(request.getPassword())
                 .userRole(Role.BUDDING_PILOT)
                 .userEmailConfirmed(false)
                 .build();
@@ -53,10 +73,10 @@ public class AuthenticationService {
         // Save the tokens and return the response.
         saveUserToken(savedUser, jwtToken);
 
-        return AuthenticationResponse.builder()
+        return Optional.of(AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .build();
+                .build());
     }
 
     /**
@@ -65,8 +85,8 @@ public class AuthenticationService {
      * @param request The authentication request.
      * @return AuthenticationResponse with access and refresh tokens.
      */
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        User user;
+    public Optional<AuthenticationResponse> authenticate(AuthenticationRequest request) {
+        Optional<User> user;
 
         // Authenticate the user based on provided credentials.
         if(request.getEmail() == null){
@@ -76,8 +96,7 @@ public class AuthenticationService {
                             request.getPassword()
                     )
             );
-            user = userRepository.findByUserName(request.getUsername())
-                    .orElseThrow();
+            user = userRepository.findByUserName(request.getUsername());
         }else{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -85,25 +104,27 @@ public class AuthenticationService {
                             request.getPassword()
                     )
             );
-            user = userRepository.findByUserEmail(request.getEmail())
-                    .orElseThrow();
+            user = userRepository.findByUserEmail(request.getEmail());
         }
 
+        if(user.isEmpty())
+            return Optional.empty();
+
         // Generate new JWT and refresh tokens for the user.
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var jwtToken = jwtService.generateToken(user.get());
+        var refreshToken = jwtService.generateRefreshToken(user.get());
 
         // Revoke old tokens and save the new tokens.
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        revokeAllUserTokens(user.get());
+        saveUserToken(user.get(), jwtToken);
 
         // Save the tokens and return the response.
-        saveUserToken(user, refreshToken);
+        saveUserToken(user.get(), refreshToken);
 
-        return AuthenticationResponse.builder()
+        return Optional.of(AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .build();
+                .build());
     }
 
     /**

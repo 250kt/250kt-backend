@@ -1,6 +1,7 @@
 package fr.gofly.service;
 
-import fr.gofly.exception.entity.user.UserAlreadyExistsException;
+import fr.gofly.helper.UserHelper;
+import fr.gofly.model.Role;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Service class responsible for handling user-related operations.
@@ -18,20 +20,37 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    
+
+    private final UserHelper userHelper;
+
     /**
      * Creates a new user.
      *
      * @param newUser The user object to be created.
      * @return The newly created user.
-     * @throws UserAlreadyExistsException If a user with the same email address already exists.
      */
-    public User createUser(User newUser) {
-        if (userRepository.findByUserEmail(newUser.getUserEmail()).isPresent()) {
-            throw new UserAlreadyExistsException(newUser.getUserEmail());
-        }
+    public Optional<User> createUser(User newUser) {
+        //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
+        String emailRegex = "^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$";
+        Pattern emailPattern = Pattern.compile(emailRegex);
 
-        return userRepository.save(newUser);
+        if(!emailPattern.matcher(newUser.getUserEmail()).matches())
+            return Optional.empty();
+
+
+        String usernameRegex = "^[A-Za-z][A-Za-z0-9_]{2,29}$";
+        Pattern usernamePattern = Pattern.compile(usernameRegex);
+
+        if(!usernamePattern.matcher(newUser.getUsername()).matches())
+            return Optional.empty();
+
+        if(newUser.getPassword().length() == 0)
+            return Optional.empty();
+
+        if (userRepository.findByUserEmail(newUser.getUserEmail()).isPresent())
+            return Optional.empty();
+
+        return Optional.of(userRepository.save(newUser));
     }
 
     /**
@@ -39,9 +58,10 @@ public class UserService {
      *
      * @param user The updated user data.
      * @return The updated user.
-     * @throws UserAlreadyExistsException If a user with the same email already exists.
      */
     public Optional<User> putUser(User user){
+        //TODO : vérifier que celui qui fait la demande est propriétaire du compte
+
         //We retrieve the current user to compare if the email is the same in order to avoid error 500 UserAlreadyExistsException
         Optional<User> currentUserDbOptional = userRepository.findByUserId(user.getUserId());
 
@@ -51,12 +71,10 @@ public class UserService {
 
             //If the user with the email passed exist
             if(userFindByEmail.isPresent()){
-                //If the userFindByEmail is the same as the user given
-                if(Objects.equals(userFindByEmail.get().getUserId(), user.getUserId())){
-                    return Optional.of(userRepository.save(user));
-                }else{
-                    throw new UserAlreadyExistsException(user.getUserEmail());
-                }
+                //If the userFindByEmail is not the same as the user given
+                if(!Objects.equals(userFindByEmail.get().getUserId(), user.getUserId()))
+                    return Optional.empty();
+                return Optional.of(userRepository.save(user));
             }
             return Optional.of(userRepository.save(user));
         }
@@ -67,10 +85,14 @@ public class UserService {
     /**
      * Deletes a user by their unique identifier.
      *
-     * @param userId The unique identifier of the user to be deleted.
+     * @param user The user that will be deleted.
      */
     @Transactional
-    public void DeleteUser(String userId) {
-        userRepository.deleteByUserId(userId);
+    public boolean deleteUser(String userId, User user) {
+        if(user.getUserRole() == Role.ADMIN || userHelper.isUserAccountOwnedByUser(user, userId)){
+            userRepository.deleteByUserId(userId);
+            return true;
+        }
+        return false;
     }
 }
