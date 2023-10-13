@@ -60,8 +60,6 @@ public class UserService {
      * @return The updated user.
      */
     public Optional<User> putUser(User user){
-        //TODO : vérifier que celui qui fait la demande est propriétaire du compte
-
         //We retrieve the current user to compare if the email is the same in order to avoid error 500 UserAlreadyExistsException
         Optional<User> currentUserDbOptional = userRepository.findByUserId(user.getUserId());
 
