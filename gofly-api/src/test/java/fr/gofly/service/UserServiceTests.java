@@ -32,8 +32,10 @@ public class UserServiceTests {
                 .userName("test")
                 .userPassword("testPassword")
                 .build();
+
         when(userRepository.findByUserEmail(any())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(user);
+
         assertEquals(Optional.of(user), userService.createUser(user));
     }
 
@@ -45,7 +47,9 @@ public class UserServiceTests {
                 .userName("test")
                 .userPassword("testPassword")
                 .build();
+
         when(userRepository.findByUserEmail(any())).thenReturn(Optional.of(user));
+
         assertEquals(Optional.empty(), userService.createUser(user));
     }
 
@@ -54,7 +58,9 @@ public class UserServiceTests {
         User user = User.builder()
                 .userId("id")
                 .build();
+
         when(userRepository.findByUserId(any())).thenReturn(Optional.empty());
+
         assertEquals(Optional.empty(), userService.putUser(user));
     }
 
@@ -64,9 +70,11 @@ public class UserServiceTests {
                 .userId("id")
                 .userEmail("test@250kt.com")
                 .build();
+
         when(userRepository.findByUserId(any())).thenReturn(Optional.of(user));
         when(userRepository.findByUserEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
+
         assertEquals(Optional.of(user), userService.putUser(user));
     }
 
@@ -77,12 +85,9 @@ public class UserServiceTests {
                 .userEmail("test@250kt.com")
                 .build();
 
-        User userRequest = User.builder()
-                .userId("idTest")
-                .build();
-
         when(userRepository.findByUserId(any())).thenReturn(Optional.of(user));
         when(userRepository.findByUserEmail(any())).thenReturn(Optional.of(new User()));
+
         assertEquals(Optional.empty(), userService.putUser(user));
     }
 
@@ -92,9 +97,11 @@ public class UserServiceTests {
                 .userId("id")
                 .userEmail("test@250kt.com")
                 .build();
+
         when(userRepository.findByUserId(any())).thenReturn(Optional.of(user));
         when(userRepository.findByUserEmail(any())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(user);
+
         assertEquals(Optional.of(user), userService.putUser(user));
     }
 }

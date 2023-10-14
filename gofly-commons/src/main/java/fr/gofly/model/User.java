@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -44,9 +45,9 @@ public class User implements UserDetails {
     private Boolean userEmailConfirmed = false;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role",
+    @Column(name = "user_roles",
             nullable = false)
-    private Role userRole;
+    private List<Role> userRoles;
 
     @OneToMany(mappedBy = "user")
     private Set<Aircraft> aircraft;
@@ -56,7 +57,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRole.name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : userRoles) {
+            // Convert each Role to a SimpleGrantedAuthority
+            authorities.add(new SimpleGrantedAuthority(role.name()));
+        }
+        return authorities;
     }
 
     @Override

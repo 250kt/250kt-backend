@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,7 @@ public class AuthenticationServiceTests {
     private AuthenticationManager authenticationManager;
 
     @Test
-    void test_ShouldReturnAuthenticationResponse_WhenRegister(){
+    void testRegister_ShouldReturnAuthenticationResponse(){
         RegisterRequest request = RegisterRequest.builder()
                 .username("test")
                 .email("test@250kt.com")
@@ -54,16 +55,15 @@ public class AuthenticationServiceTests {
                 .build();
 
         when(tokenRepository.save(any(Token.class))).thenReturn(new Token());
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(new User());
         when(jwtService.generateToken(any(User.class))).thenReturn("token");
         when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refreshToken");
 
         Optional<AuthenticationResponse> response = authenticationService.register(request);
 
-        if(response.isPresent()){
-            assertEquals("token", response.get().getAccessToken());
-            assertEquals("refreshToken", response.get().getRefreshToken());
-        }
+        assertTrue(response.isPresent());
+        assertEquals("token", response.get().getAccessToken());
+        assertEquals("refreshToken", response.get().getRefreshToken());
     }
 
     @Test
@@ -80,10 +80,9 @@ public class AuthenticationServiceTests {
 
         Optional<AuthenticationResponse> response = authenticationService.authenticate(request);
 
-        if(response.isPresent()){
-            assertEquals("token", response.get().getAccessToken());
-            assertEquals("refreshToken", response.get().getRefreshToken());
-        }
+        assertTrue(response.isPresent());
+        assertEquals("token", response.get().getAccessToken());
+        assertEquals("refreshToken", response.get().getRefreshToken());
     }
 
     @Test
@@ -99,9 +98,9 @@ public class AuthenticationServiceTests {
         when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refreshToken");
 
         Optional<AuthenticationResponse> response = authenticationService.authenticate(request);
-        if(response.isPresent()){
-            assertEquals("token", response.get().getAccessToken());
-            assertEquals("refreshToken", response.get().getRefreshToken());
-        }
+
+        assertTrue(response.isPresent());
+        assertEquals("token", response.get().getAccessToken());
+        assertEquals("refreshToken", response.get().getRefreshToken());
     }
 }

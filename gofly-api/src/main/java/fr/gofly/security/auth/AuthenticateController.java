@@ -37,7 +37,7 @@ public class AuthenticateController {
      * @return An HTTP response containing the authentication operation result.
      */
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
         Optional<AuthenticationResponse> responseEntity = authenticationService.authenticate(request);
         return responseEntity.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

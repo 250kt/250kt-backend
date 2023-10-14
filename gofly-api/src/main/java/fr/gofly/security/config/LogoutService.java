@@ -1,5 +1,6 @@
 package fr.gofly.security.config;
 
+import fr.gofly.model.token.Token;
 import fr.gofly.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +36,12 @@ public class LogoutService implements LogoutHandler {
         }
 
         jwt = authHeader.substring(7); // substring after "Bearer "
-        var storedToken = tokenRepository.findByTokenHex(jwt)
-                .orElse(null);
+        Optional<Token> storedToken = tokenRepository.findByTokenHex(jwt);
 
-        if(storedToken != null){
-            storedToken.setTokenExpired(true);
-            storedToken.setTokenRevoked(true);
-            tokenRepository.save(storedToken);
+        if(storedToken.isPresent()){
+            storedToken.get().setTokenExpired(true);
+            storedToken.get().setTokenRevoked(true);
+            tokenRepository.save(storedToken.get());
         }
 
     }

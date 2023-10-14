@@ -13,9 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -25,6 +28,7 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -59,16 +63,16 @@ public class AuthenticationService {
         User user = User.builder()
                 .userName(request.getUsername())
                 .userEmail(request.getEmail())
-                .userPassword(request.getPassword())
-                .userRole(Role.BUDDING_PILOT)
+                .userPassword(passwordEncoder.encode(request.getPassword()))
+                .userRoles(Collections.singletonList(Role.BUDDING_PILOT))
                 .userEmailConfirmed(false)
                 .build();
 
         User savedUser = userRepository.save(user);
 
         // Generate JWT and refresh tokens for the user.
-        String jwtToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        String jwtToken = jwtService.generateToken(savedUser);
+        String refreshToken = jwtService.generateRefreshToken(savedUser);
 
         // Save the tokens and return the response.
         saveUserToken(savedUser, jwtToken);
@@ -111,8 +115,8 @@ public class AuthenticationService {
             return Optional.empty();
 
         // Generate new JWT and refresh tokens for the user.
-        var jwtToken = jwtService.generateToken(user.get());
-        var refreshToken = jwtService.generateRefreshToken(user.get());
+        String jwtToken = jwtService.generateToken(user.get());
+        String refreshToken = jwtService.generateRefreshToken(user.get());
 
         // Revoke old tokens and save the new tokens.
         revokeAllUserTokens(user.get());
@@ -133,7 +137,7 @@ public class AuthenticationService {
      * @param user The user for whom tokens need to be revoked.
      */
     private void revokeAllUserTokens(User user){
-        var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserId());
+        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserId());
         if(validUserTokens.isEmpty()){
             return;
         }
@@ -152,7 +156,7 @@ public class AuthenticationService {
      * @param jwtToken The JWT token.
      */
     private void saveUserToken(User savedUser, String jwtToken) {
-        var token = Token.builder()
+        Token token = Token.builder()
                 .user(savedUser)
                 .tokenHex(jwtToken)
                 .tokenType(TokenType.BEARER)
@@ -184,20 +188,20 @@ public class AuthenticationService {
         usernameOrEmail = jwtService.extractUsernameOrEmail(refreshToken);
 
         if(usernameOrEmail != null){
-            var user = this.userRepository.findByUserName(usernameOrEmail)
+            User user = userRepository.findByUserName(usernameOrEmail)
                     .orElseThrow();
 
-            var isTokenValid = tokenRepository.findByTokenHex(refreshToken)
+            boolean isTokenValid = tokenRepository.findByTokenHex(refreshToken)
                     .map(t -> !t.isTokenRevoked() && !t.isTokenExpired())
                     .orElse(false);
 
             if(jwtService.isTokenValid(refreshToken, user) && isTokenValid){
                 // Generate a new access token for the user.
-                var accessToken = jwtService.generateToken(user);
+                String accessToken = jwtService.generateToken(user);
                 // Revoke old tokens, save the new token, and return the updated token response.
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
-                var authResponse = AuthenticationResponse.builder()
+                AuthenticationResponse authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();

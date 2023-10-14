@@ -36,6 +36,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/auth/**").permitAll()
                     //For all the others, everybody need to be authenticated with a JWT token
                     .requestMatchers("/api/home").hasAuthority(Role.BUDDING_PILOT.toString())
+                    .requestMatchers("/api/users").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
