@@ -34,10 +34,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                     //Everybody are able to access to the application patterns bellow
                     .requestMatchers("/api/auth/**").permitAll()
-                    //For all the others, everybody need to be authenticated with a JWT token
-                    .requestMatchers("/api/home").hasAuthority(Role.BUDDING_PILOT.toString())
+                    //.requestMatchers("/api/home").hasAuthority(Role.BUDDING_PILOT.toString())
+                    .requestMatchers("/api/home").authenticated()
                     .requestMatchers("/api/users").permitAll()
-                    .anyRequest().authenticated()
+                    //For all the others, everybody need to be authenticated with a JWT token
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

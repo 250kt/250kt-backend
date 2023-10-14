@@ -49,10 +49,12 @@ public class User implements UserDetails {
             nullable = false)
     private List<Role> userAuthorities;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @Transient
     private Set<Aircraft> aircraft;
 
     @OneToMany(mappedBy = "user")
+    @Transient
     private List<Token> tokens;
 
     @Override
