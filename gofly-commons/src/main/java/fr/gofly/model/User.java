@@ -45,9 +45,9 @@ public class User implements UserDetails {
     private Boolean userEmailConfirmed = false;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_roles",
+    @Column(name = "user_authorities",
             nullable = false)
-    private List<Role> userRoles;
+    private List<Role> userAuthorities;
 
     @OneToMany(mappedBy = "user")
     private Set<Aircraft> aircraft;
@@ -58,10 +58,9 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : userRoles) {
-            // Convert each Role to a SimpleGrantedAuthority
+        for (Role role : userAuthorities)
             authorities.add(new SimpleGrantedAuthority(role.name()));
-        }
+
         return authorities;
     }
 

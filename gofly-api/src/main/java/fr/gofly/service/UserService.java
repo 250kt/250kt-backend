@@ -87,7 +87,7 @@ public class UserService {
      */
     @Transactional
     public boolean deleteUser(String userId, User user) {
-        if(user.getUserRoles().contains(Role.ADMIN) || userHelper.isUserAccountOwnedByUser(user, userId)){
+        if(user.getUserAuthorities().contains(Role.ADMIN) || userHelper.isUserAccountOwnedByUser(user, userId)){
             userRepository.deleteByUserId(userId);
             return true;
         }

@@ -64,7 +64,7 @@ public class AuthenticationService {
                 .userName(request.getUsername())
                 .userEmail(request.getEmail())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
-                .userRoles(Collections.singletonList(Role.BUDDING_PILOT))
+                .userAuthorities(Collections.singletonList(Role.BUDDING_PILOT))
                 .userEmailConfirmed(false)
                 .build();
 
