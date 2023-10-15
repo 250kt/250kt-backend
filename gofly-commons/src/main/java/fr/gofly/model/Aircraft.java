@@ -1,64 +1,70 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-@Data
 @Entity
-@Table(name="aircrafts")
+@Table(name = "aircrafts")
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 public class Aircraft {
     @Id
     @Column(name = "aircraft_id",
             nullable = false)
-    private int airfieldId;
+    private Integer id;
 
     @Column(name = "aircraft_registration",
             nullable = false)
-    private String aircraftRegistration;
+    private String registration;
 
     @Column(name = "aircraft_base_factor",
             nullable = false)
-    private int aircraftBaseFactor;
+    private Double baseFactor;
 
     @Column(name = "aircraft_consumption", nullable = false)
-    private int aircraftConsumption;
+    private Integer consumption;
 
     @Column(name = "aircraft_fuel_type")
-    private Fuel aircraftFuelType;
+    private Fuel fuelType;
 
     @Column(name = "aircraft_lever_arm_back_seat")
-    private double aircraftLeverArmBackSeat;
+    private Double leverArmBackSeat;
 
     @Column(name = "aircraft_lever_arm_front_seat")
-    private double aircraftLeverArmFrontSeat;
+    private Double leverArmFrontSeat;
 
     @Column(name = "aircraft_lever_arm_fuel")
-    private double aircraftLeverArmFuel;
+    private Double leverArmFuel;
 
     @Column(name = "aircraft_lever_arm_luggage")
-    private double aircraftLeverArmLuggage;
+    private Double leverArmLuggage;
 
     @Column(name = "aircraft_lever_arm_unloaded_weight")
-    private double aircraftLeverArmUnloadedWeight;
+    private Double leverArmUnloadedWeight;
 
     @Column(name = "aircraft_maximum_weight")
-    private int aircraftMaximumWeight;
+    private Integer maximumWeight;
 
     @Column(name = "aircraft_non_pumpable_fuel", nullable = false)
-    private int aircraftNonPumpableFuel;
+    private Integer nonPumpableFuel;
 
     @Column(name = "aircraft_tank_capacity",
             nullable = false)
-    private int aircraftTankCapacity;
+    private Integer tankCapacity;
 
     @Column(name = "aircraft_true_air_speed",
             nullable = false)
-    private int aircraftTrueAirSpeed;
+    private Integer trueAirSpeed;
 
     @Column(name = "aircraft_unloaded_weight")
-    private int aircraftUnloadedWeight;
+    private Integer unloadedWeight;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
