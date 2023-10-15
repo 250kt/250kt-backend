@@ -20,8 +20,6 @@ import java.util.regex.Pattern;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final UserHelper userHelper;
-
     /**
      * Creates a new user.
      *
@@ -76,20 +74,20 @@ public class UserService {
             return Optional.of(userRepository.save(user));
         }
         return Optional.empty();
-
     }
 
     /**
      * Deletes a user by their unique identifier.
      *
-     * @param user The user that will be deleted.
+     * @param userId that will be deleted.
      */
     @Transactional
-    public boolean deleteUser(String userId, User user) {
-        if(user.getAuthorities().contains(Authority.ADMIN) || userHelper.isUserAccountOwnedByUser(user, userId)){
+    public boolean deleteUser(String userId) {
+        try{
             userRepository.deleteById(userId);
             return true;
+        }catch (Exception e){
+            return false;
         }
-        return false;
     }
 }
