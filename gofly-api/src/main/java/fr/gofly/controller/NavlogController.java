@@ -1,10 +1,7 @@
 package fr.gofly.controller;
 
-import fr.gofly.helper.NavlogHelper;
-import fr.gofly.helper.UserHelper;
 import fr.gofly.model.Navlog;
 import fr.gofly.model.User;
-import fr.gofly.repository.NavlogRepository;
 import fr.gofly.service.NavlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -10,7 +10,6 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class NavlogHelper {
-    private final UserHelper userHelper;
 
     public boolean isNavlogOwnedByUser(Navlog navlog, User user){
         return Objects.equals(navlog.getUser().getId(), user.getId());
