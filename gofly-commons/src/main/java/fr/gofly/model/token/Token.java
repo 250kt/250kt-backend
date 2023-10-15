@@ -17,24 +17,24 @@ public class Token {
     @GeneratedValue
     @Column(name = "token_id",
             nullable = false)
-    private Integer tokenId;
+    private Integer id;
 
     @Column(name = "token_hex",
             nullable = false)
-    private String tokenHex;
+    private String hex;
 
     @Column(name = "token_type",
             nullable = false)
     @Enumerated(EnumType.STRING)
-    private TokenType tokenType;
+    private TokenType type;
 
     @Column(name = "token_expired",
             nullable = false)
-    private boolean tokenExpired;
+    private boolean isExpired;
 
     @Column(name = "token_revoked",
             nullable = false)
-    private boolean tokenRevoked;
+    private boolean isRevoked;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

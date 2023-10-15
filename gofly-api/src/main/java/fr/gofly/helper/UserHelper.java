@@ -15,6 +15,6 @@ public class UserHelper {
      * @return true if the aircraft owned by the user, otherwise false
      */
     public boolean isUserAccountOwnedByUser(User user, String userId) {
-        return Objects.equals(user.getUserId(), user.getUserId());
+        return Objects.equals(user.getId(), user.getId());
     }
 }

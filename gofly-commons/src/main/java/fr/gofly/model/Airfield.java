@@ -16,7 +16,7 @@ public class Airfield {
     @Column(name = "airfield_id",
             nullable = false)
     @XmlAttribute(name = "pk")
-    private int airfieldId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
@@ -25,49 +25,49 @@ public class Airfield {
 
     @Column(name = "airfield_code")
     @XmlElement(name = "AdCode")
-    private String airfieldCode;
+    private String code;
 
     @Column(name = "airfield_statut")
     @XmlElement(name = "AdStatut")
-    private String airfieldStatut;
+    private String status;
 
     @Column(name = "airfield_fullname")
     @XmlElement(name = "AdNomComplet")
-    private String airfieldFullname;
+    private String fullName;
 
     @Column(name = "airfield_map_name")
     @XmlElement(name = "AdNomCarto")
-    private String airfieldMapName;
+    private String mapName;
 
     @Column(name = "airfield_situation")
     @XmlElement(name = "AdSituation")
-    private String airfieldSituation;
+    private String situation;
 
     @Column(name = "airfield_phone_number")
     @XmlElement(name = "AdTel")
-    private String airfieldPhoneNumber;
+    private String phoneNumber;
 
     @Column(name = "airfield_accept_Vfr")
-    private boolean isAirfieldAcceptVfr;
+    private boolean isAcceptVfr;
 
     @XmlElement(name = "TfcVfr")
-    public String getAirfieldAcceptVfrString() {
-        return isAirfieldAcceptVfr ? "oui" : "non";
+    public String getAcceptVfrString() {
+        return isAcceptVfr ? "oui" : "non";
     }
 
-    public void setAirfieldAcceptVfrString(String value) {
-        isAirfieldAcceptVfr = "oui".equalsIgnoreCase(value);
+    public void setAcceptVfrString(String value) {
+        isAcceptVfr = "oui".equalsIgnoreCase(value);
     }
 
     @Column(name = "airfield_altitude")
     @XmlElement(name = "AdRefAltFt")
-    private int airfieldAltitude;
+    private int altitude;
 
     @Column(name = "airfield_latitude")
     @XmlElement(name = "ArpLat")
-    private float airfieldLatitude;
+    private float latitude;
 
     @Column(name = "airfield_longitude")
     @XmlElement(name = "ArpLong")
-    private float airfieldLongitude;
+    private float longitude;
 }

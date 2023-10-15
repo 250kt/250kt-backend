@@ -1,8 +1,8 @@
 package fr.gofly.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.gofly.model.Authority;
 import fr.gofly.security.config.JwtService;
-import fr.gofly.model.Role;
 import fr.gofly.model.User;
 import fr.gofly.model.token.Token;
 import fr.gofly.model.token.TokenType;
@@ -56,16 +56,16 @@ public class AuthenticationService {
         if(request.getPassword().length() == 0)
             return Optional.empty();
 
-        if (userRepository.findByUserEmail(request.getEmail()).isPresent())
+        if (userRepository.findByEmail(request.getEmail()).isPresent())
             return Optional.empty();
 
         // Create a new user and encode the password.
         User user = User.builder()
-                .userName(request.getUsername())
-                .userEmail(request.getEmail())
-                .userPassword(passwordEncoder.encode(request.getPassword()))
-                .userAuthorities(Collections.singletonList(Role.BUDDING_PILOT))
-                .userEmailConfirmed(false)
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .authorities(Collections.singletonList(Authority.BUDDING_PILOT))
+                .isEmailConfirmed(false)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -100,7 +100,7 @@ public class AuthenticationService {
                             request.getPassword()
                     )
             );
-            user = userRepository.findByUserName(request.getUsername());
+            user = userRepository.findByUsername(request.getUsername());
         }else{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -108,7 +108,7 @@ public class AuthenticationService {
                             request.getPassword()
                     )
             );
-            user = userRepository.findByUserEmail(request.getEmail());
+            user = userRepository.findByEmail(request.getEmail());
         }
 
         if(user.isEmpty())
@@ -137,14 +137,14 @@ public class AuthenticationService {
      * @param user The user for whom tokens need to be revoked.
      */
     private void revokeAllUserTokens(User user){
-        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserId());
+        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
         if(validUserTokens.isEmpty()){
             return;
         }
         // Mark all valid tokens as expired and revoked.
         validUserTokens.forEach(t -> {
-            t.setTokenExpired(true);
-            t.setTokenRevoked(true);
+            t.setExpired(true);
+            t.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
     }
@@ -158,10 +158,10 @@ public class AuthenticationService {
     private void saveUserToken(User savedUser, String jwtToken) {
         Token token = Token.builder()
                 .user(savedUser)
-                .tokenHex(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .tokenExpired(false)
-                .tokenRevoked(false)
+                .hex(jwtToken)
+                .type(TokenType.BEARER)
+                .isExpired(false)
+                .isRevoked(false)
                 .build();
         tokenRepository.save(token);
     }
@@ -188,11 +188,11 @@ public class AuthenticationService {
         usernameOrEmail = jwtService.extractUsernameOrEmail(refreshToken);
 
         if(usernameOrEmail != null){
-            User user = userRepository.findByUserName(usernameOrEmail)
+            User user = userRepository.findByUsername(usernameOrEmail)
                     .orElseThrow();
 
             boolean isTokenValid = tokenRepository.findByTokenHex(refreshToken)
-                    .map(t -> !t.isTokenRevoked() && !t.isTokenExpired())
+                    .map(t -> !t.isRevoked() && !t.isExpired())
                     .orElse(false);
 
             if(jwtService.isTokenValid(refreshToken, user) && isTokenValid){

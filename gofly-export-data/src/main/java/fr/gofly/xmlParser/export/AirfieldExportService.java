@@ -69,7 +69,7 @@ public class AirfieldExportService {
      */
     private boolean respectConditions(Airfield airfield){
         // Exclude airfields with the "AUTRES" category
-        return airfield.getTerritory().getTerritoryId() != 9999;
+        return airfield.getTerritory().getId() != 9999;
     }
 
 }

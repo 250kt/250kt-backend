@@ -13,7 +13,7 @@ public class Airspace {
     @Id
     @Column(name = "airspace_id")
     @XmlAttribute(name = "pk")
-    private int airspaceId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
@@ -22,9 +22,9 @@ public class Airspace {
 
     @Column(name = "airspace_name")
     @XmlElement(name = "Nom")
-    private String airspaceName;
+    private String name;
 
     @Column(name = "airspace_type")
     @XmlElement(name = "TypeEspace")
-    private String airspaceType;
+    private String type;
 }

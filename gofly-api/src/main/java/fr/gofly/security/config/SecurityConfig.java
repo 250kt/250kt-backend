@@ -1,6 +1,5 @@
 package fr.gofly.security.config;
 
-import fr.gofly.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                     //Everybody are able to access to the application patterns bellow
                     .requestMatchers("/api/auth/**").permitAll()
-                    //.requestMatchers("/api/home").hasAuthority(Role.BUDDING_PILOT.toString())
+                    //.requestMatchers("/api/home").hasAuthority(Authority.BUDDING_PILOT.toString())
                     .requestMatchers("/api/home").authenticated()
                     .requestMatchers("/api/users").permitAll()
                     //For all the others, everybody need to be authenticated with a JWT token

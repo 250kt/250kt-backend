@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WhoAmIController {
     @GetMapping("/api/whoami")
     public ResponseEntity<String> whoAmI(@AuthenticationPrincipal User user) {
-        user.setUserPassword(null);
+        user.setPassword(null);
         return ResponseEntity.ok(user.toString());
     }
 }

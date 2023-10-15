@@ -14,7 +14,7 @@ public class Obstacle {
     @Column(name = "obstacle_id",
             nullable = false)
     @XmlAttribute(name = "pk")
-    private int obstacleId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
@@ -23,25 +23,25 @@ public class Obstacle {
 
     @Column(name = "obstacle_latitude")
     @XmlElement(name = "Latitude")
-    private float obstacleLatitude;
+    private float latitude;
 
     @Column(name = "obstacle_longitude")
     @XmlElement(name = "Longitude")
-    private float obstacleLongitude;
+    private float longitude;
 
     @Column(name = "obstacle_altitude")
     @XmlElement(name = "AmslFt")
-    private float obstacleAltitude;
+    private float altitude;
 
     @Column(name = "obstacle_height")
     @XmlElement(name = "AglFt")
-    private float obstacleHeight;
+    private float height;
 
     @Column(name = "obstacle_type")
     @XmlElement(name = "TypeObst")
-    private String obstacleType;
+    private String type;
 
     @Column(name = "obstacle_count")
     @XmlElement(name = "Combien")
-    private int obstacleCount;
+    private int count;
 }

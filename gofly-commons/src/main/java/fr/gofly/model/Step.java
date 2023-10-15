@@ -15,22 +15,22 @@ public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_step_generator")
     @Column(name = "step_id")
-    private long stepId;
+    private long id;
 
     @Column(name = "step_altitude", nullable = false)
-    private int stepAltitude;
+    private int altitude;
 
     @Column(name = "step_cap", nullable = false)
-    private String stepCap;
+    private String cap;
 
     @Column(name = "step_distance", nullable = false)
-    private int stepDistance;
+    private int distance;
 
     @Column(name = "step_time", nullable = false)
-    private double stepTime;
+    private double time;
 
     @Column(name = "step_order", nullable = false)
-    private int stepOrder;
+    private int order;
 
     @ManyToOne
     @JoinColumn(name = "navlog_id", nullable = false)

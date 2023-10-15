@@ -13,7 +13,7 @@ public class Radio {
     @Id
     @Column(name = "radio_id")
     @XmlAttribute(name = "pk")
-    private int radioId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "airfield_id")
@@ -22,17 +22,17 @@ public class Radio {
 
     @Column(name = "radio_frequency")
     @XmlElement(name = "Frequence")
-    private String radioFrequency;
+    private String Frequency;
 
     @Column(name = "radio_phraseo_name")
     @XmlElement(name = "NomPhraseo")
-    private String radioPhraseoName;
+    private String phraseoName;
 
     @Column(name = "radio_altitude")
     @XmlElement(name = "LatDme")
-    private float radioLatitude;
+    private float latitude;
 
     @Column(name = "radio_longitude")
     @XmlElement(name = "LongDme")
-    private float radioLongitude;
+    private float longitude;
 }

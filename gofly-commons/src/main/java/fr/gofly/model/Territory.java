@@ -17,14 +17,14 @@ public class Territory {
     @Id
     @Column(name = "territory_id")
     @XmlAttribute(name = "pk")
-    private int territoryId;
+    private int id;
 
     @Column(name = "territory_identification_code")
     @XmlElement(name = "Territoire")
-    private String territoryIdentificationCode;
+    private String identificationCode;
 
     @Column(name = "territory_name",
             nullable = true)
     @XmlElement(name = "Nom")
-    private String territoryName;
+    private String name;
 }

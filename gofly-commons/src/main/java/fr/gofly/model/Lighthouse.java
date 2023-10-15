@@ -14,7 +14,7 @@ public class Lighthouse {
     @Column(name = "lighthouse_id",
             nullable = false)
     @XmlAttribute(name = "pk")
-    private int lighthouseId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
@@ -23,26 +23,26 @@ public class Lighthouse {
 
     @Column(name = "lighhouse_latitude")
     @XmlElement(name = "Latitude")
-    private float lighthouseLatitude;
+    private float latitude;
 
     @Column(name = "lighhouse_longitude")
     @XmlElement(name = "Longitude")
-    private float lighthouseLongitude;
+    private float longitude;
 
     @Column(name = "lighhouse_number_name")
     @XmlElement(name = "NumeroNom")
-    private float lighthouseNumberName;
+    private float numberName;
 
     @Column(name = "lighhouse_type")
     @XmlElement(name = "Type")
-    private String lighthouseType;
+    private String type;
 
     @Column(name = "lighhouse_situation")
     @XmlElement(name = "Situation")
-    private String lighthouseSituation;
+    private String situation;
 
     @Column(name = "lighhouse_remark",
             length = 1000)
     @XmlElement(name = "Remarque")
-    private String lighthouseRemark;
+    private String remark;
 }

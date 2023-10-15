@@ -39,8 +39,8 @@ public class LogoutService implements LogoutHandler {
         Optional<Token> storedToken = tokenRepository.findByTokenHex(jwt);
 
         if(storedToken.isPresent()){
-            storedToken.get().setTokenExpired(true);
-            storedToken.get().setTokenRevoked(true);
+            storedToken.get().setExpired(true);
+            storedToken.get().setRevoked(true);
             tokenRepository.save(storedToken.get());
         }
 

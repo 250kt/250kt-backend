@@ -40,7 +40,7 @@ public class UserController {
      */
     @GetMapping("/{userId}")
     ResponseEntity<User> getUser(@PathVariable String userId){
-        Optional<User> userOptional = userRepository.findByUserId(userId);
+        Optional<User> userOptional = userRepository.findById(userId);
         return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

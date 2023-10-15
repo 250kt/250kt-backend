@@ -24,30 +24,30 @@ public class User implements UserDetails {
     @Column(name = "user_id",
             nullable = false)
     @UuidGenerator
-    private String userId;
+    private String id;
 
     @Column(name = "user_name",
             nullable = false,
             unique=true)
-    private String userName;
+    private String username;
 
     @Column(name = "user_password",
             nullable = false)
-    private String userPassword;
+    private String password;
 
     @Column(name = "user_email",
             nullable = false,
             unique=true)
-    private String userEmail;
+    private String email;
 
     @Column(name = "user_email_confirmed",
             nullable = false)
-    private Boolean userEmailConfirmed = false;
+    private Boolean isEmailConfirmed = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_authorities",
             nullable = false)
-    private List<Role> userAuthorities;
+    private List<Authority> authorities;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @Transient
@@ -60,20 +60,20 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : userAuthorities)
-            authorities.add(new SimpleGrantedAuthority(role.name()));
+        for (Authority authority : this.authorities)
+            authorities.add(new SimpleGrantedAuthority(authority.name()));
 
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return userPassword;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override

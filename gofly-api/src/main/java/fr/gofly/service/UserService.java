@@ -1,12 +1,11 @@
 package fr.gofly.service;
 
 import fr.gofly.helper.UserHelper;
-import fr.gofly.model.Role;
+import fr.gofly.model.Authority;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class UserService {
         String emailRegex = "^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$";
         Pattern emailPattern = Pattern.compile(emailRegex);
 
-        if(!emailPattern.matcher(newUser.getUserEmail()).matches())
+        if(!emailPattern.matcher(newUser.getEmail()).matches())
             return Optional.empty();
 
 
@@ -47,7 +46,7 @@ public class UserService {
         if(newUser.getPassword().length() == 0)
             return Optional.empty();
 
-        if (userRepository.findByUserEmail(newUser.getUserEmail()).isPresent())
+        if (userRepository.findByEmail(newUser.getEmail()).isPresent())
             return Optional.empty();
 
         return Optional.of(userRepository.save(newUser));
@@ -61,16 +60,16 @@ public class UserService {
      */
     public Optional<User> putUser(User user){
         //We retrieve the current user to compare if the email is the same in order to avoid error 500 UserAlreadyExistsException
-        Optional<User> currentUserDbOptional = userRepository.findByUserId(user.getUserId());
+        Optional<User> currentUserDbOptional = userRepository.findById(user.getId());
 
         //If user exist in database
         if(currentUserDbOptional.isPresent()){
-            Optional<User> userFindByEmail = userRepository.findByUserEmail(user.getUserEmail());
+            Optional<User> userFindByEmail = userRepository.findByEmail(user.getEmail());
 
             //If the user with the email passed exist
             if(userFindByEmail.isPresent()){
                 //If the userFindByEmail is not the same as the user given
-                if(!Objects.equals(userFindByEmail.get().getUserId(), user.getUserId()))
+                if(!Objects.equals(userFindByEmail.get().getId(), user.getId()))
                     return Optional.empty();
                 return Optional.of(userRepository.save(user));
             }
@@ -87,8 +86,8 @@ public class UserService {
      */
     @Transactional
     public boolean deleteUser(String userId, User user) {
-        if(user.getUserAuthorities().contains(Role.ADMIN) || userHelper.isUserAccountOwnedByUser(user, userId)){
-            userRepository.deleteByUserId(userId);
+        if(user.getAuthorities().contains(Authority.ADMIN) || userHelper.isUserAccountOwnedByUser(user, userId)){
+            userRepository.deleteById(userId);
             return true;
         }
         return false;
