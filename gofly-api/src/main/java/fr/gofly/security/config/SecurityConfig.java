@@ -38,7 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable() // Disable Cross-Site Request Forgery (CSRF)
-                //.cors(cors -> corsConfigurationSource())
+                .cors(cors -> corsConfigurationSource())
                 .authorizeHttpRequests()
                     //Everybody are able to access to the application patterns bellow
                     .requestMatchers("/api/auth/**").permitAll()
@@ -60,7 +60,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /*@Bean
+    @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("https://250kt.futurecom"));
@@ -68,5 +68,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }*/
+    }
 }
