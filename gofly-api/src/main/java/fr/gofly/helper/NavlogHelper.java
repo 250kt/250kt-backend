@@ -32,10 +32,8 @@ public class NavlogHelper {
      * @return True if the Navlog contains all mandatory fields, false otherwise.
      */
     public boolean isMissingMandatoryFields(Navlog navlog){
-        int steps = navlog.getSteps().size();
-
         return navlog.getAircraft() != null &&
                navlog.getUser() != null &&
-               steps >= 2 ;
+                navlog.getSteps().size() >= 2 ;
     }
 }
