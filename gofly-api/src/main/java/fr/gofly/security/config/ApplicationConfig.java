@@ -28,10 +28,10 @@ public class ApplicationConfig {
     public UserDetailsService userDetailsService(){
         return usernameOrEmail -> {
             if(usernameOrEmail.contains("@")){
-                return userRepository.findByUserEmail(usernameOrEmail)
+                return userRepository.findByEmail(usernameOrEmail)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }else{
-                return userRepository.findByUserName(usernameOrEmail)
+                return userRepository.findByUsername(usernameOrEmail)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }
         };

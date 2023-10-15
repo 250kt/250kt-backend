@@ -36,7 +36,7 @@ public class LogoutService implements LogoutHandler {
         }
 
         jwt = authHeader.substring(7); // substring after "Bearer "
-        Optional<Token> storedToken = tokenRepository.findByTokenHex(jwt);
+        Optional<Token> storedToken = tokenRepository.findByHex(jwt);
 
         if(storedToken.isPresent()){
             storedToken.get().setExpired(true);

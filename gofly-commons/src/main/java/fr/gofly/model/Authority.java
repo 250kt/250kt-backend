@@ -1,6 +1,8 @@
 package fr.gofly.model;
 
-public enum Authority {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Authority implements GrantedAuthority {
     ADMIN(0),
     BUDDING_PILOT(100),
     EXPERIENCED_PILOT(200),
@@ -10,5 +12,10 @@ public enum Authority {
 
     Authority(int authority){
         this.authority = authority;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }

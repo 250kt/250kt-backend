@@ -191,7 +191,7 @@ public class AuthenticationService {
             User user = userRepository.findByUsername(usernameOrEmail)
                     .orElseThrow();
 
-            boolean isTokenValid = tokenRepository.findByTokenHex(refreshToken)
+            boolean isTokenValid = tokenRepository.findByHex(refreshToken)
                     .map(t -> !t.isRevoked() && !t.isExpired())
                     .orElse(false);
 

@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(usernameOrEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){// ... and verify if the user is already connected
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(usernameOrEmail);
-            boolean isTokenValid = tokenRepository.findByTokenHex(jwt)
+            boolean isTokenValid = tokenRepository.findByHex(jwt)
                     .map(t -> !t.isRevoked() && !t.isExpired())
                     .orElse(false);
 

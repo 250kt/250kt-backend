@@ -22,7 +22,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -74,7 +73,7 @@ public class AuthenticationServiceTests {
                 .build();
 
         when(authenticationManager.authenticate(any())).thenReturn(null);
-        when(userRepository.findByUserName(request.getUsername())).thenReturn(Optional.of(new User()));
+        when(userRepository.findByUsername(request.getUsername())).thenReturn(Optional.of(new User()));
         when(jwtService.generateToken(any(User.class))).thenReturn("token");
         when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refreshToken");
 
@@ -93,7 +92,7 @@ public class AuthenticationServiceTests {
                 .build();
 
         when(authenticationManager.authenticate(any())).thenReturn(null);
-        when(userRepository.findByUserEmail(request.getEmail())).thenReturn(Optional.of(new User()));
+        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(new User()));
         when(jwtService.generateToken(any(User.class))).thenReturn("token");
         when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refreshToken");
 
