@@ -50,8 +50,9 @@ public class AircraftController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Aircraft>> retriveAllAircraft(@RequestBody User user) {
-        List<Aircraft> aircrafts = aircraftService.getAllAircrafts(user);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<Aircraft>> retriveAllAircraft() {
+        List<Aircraft> aircrafts = aircraftService.getAllAircrafts();
         return new ResponseEntity<>(aircrafts, HttpStatus.OK);
     }
 }

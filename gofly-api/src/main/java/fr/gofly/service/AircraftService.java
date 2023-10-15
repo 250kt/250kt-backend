@@ -54,7 +54,7 @@ public class AircraftService {
         return aircraftRepository.findAllByUser(user);
     }
 
-    public List<Aircraft> getAllAircrafts(User user) {
+    public List<Aircraft> getAllAircrafts() {
         return aircraftRepository.findAll();
     }
 

@@ -7,7 +7,6 @@ import fr.gofly.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ import java.util.Optional;
  * Controller for user-related operations.
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
@@ -47,7 +46,7 @@ public class UserController {
      * @param newUser The new user information.
      * @return The updated user.
      */
-    @PutMapping()
+    @PutMapping
     ResponseEntity<User> updateUser(@AuthenticationPrincipal User userAuthenticated, @RequestBody User newUser) {
         if(!userHelper.isOwnerOrAdmin(userAuthenticated, newUser.getId()))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

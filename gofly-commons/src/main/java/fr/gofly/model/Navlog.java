@@ -1,15 +1,15 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Data
+@Builder
 @Entity
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "navlogs")
 public class Navlog {
     @Id
@@ -37,6 +37,7 @@ public class Navlog {
     @JoinColumn(name = "aircraft_id", nullable = false)
     private Aircraft aircraft;
 
-    @OneToMany(mappedBy = "navlog")
+    @OneToMany(mappedBy = "navlog",
+            fetch = FetchType.LAZY)
     private List<Step> steps;
 }
