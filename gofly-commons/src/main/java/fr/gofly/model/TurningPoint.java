@@ -1,31 +1,30 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Data
 @Entity
 @Table(name = "turning_points")
-@Getter
-@Setter
-@RequiredArgsConstructor
 public class TurningPoint {
     @Id
     @Column(name = "turning_point_id")
-    private long turningPointId;
+    private long pointId;
 
     @Column(name = "turning_point_estimation_time")
-    private int turningPointEstimatedTime;
+    private int pointEstimatedTime;
 
     @Column(name = "turning_point_real_time")
-    private int turningPointRealTime;
+    private int pointRealTime;
 
     @Column(name = "turning_point_longitude")
-    private double turningPointLongitude;
+    private double pointLongitude;
 
     @Column(name = "turning_point_latitude")
-    private double turningPointLatitude;
+    private double pointLatitude;
 
     @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)

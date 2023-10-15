@@ -4,6 +4,14 @@ spring:
     hibernate:
       ddl-auto: update
 
+application:
+  security:
+    jwt:
+      secret-key: ${SECRET_KEY}
+      expiration: 86400000 #a day
+      refresh-token:
+        expiration: 604800000 #7 days
+
 ---
 spring:
   config:

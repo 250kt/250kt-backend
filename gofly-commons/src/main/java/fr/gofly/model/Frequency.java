@@ -13,7 +13,7 @@ public class Frequency {
     @Id
     @Column(name = "frequency_id")
     @XmlAttribute(name = "pk")
-    private int frequencyId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
@@ -26,7 +26,7 @@ public class Frequency {
 
     @Column(name = "frequency_operating_hour_code")
     @XmlElement(name = "HorCode")
-    private String frequencyOperatingHourCode;
+    private String operatingHourCode;
 
     /*@Column(name = "frequency_operating_hour_text",
             nullable = true)
@@ -36,5 +36,5 @@ public class Frequency {
     @Column(name = "frequency_remark",
             length = 1000)
     @XmlElement(name = "Remarque")
-    private String frequencyRemark;
+    private String remark;
 }

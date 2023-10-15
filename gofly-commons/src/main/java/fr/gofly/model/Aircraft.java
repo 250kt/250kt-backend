@@ -1,20 +1,20 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name="aircrafts")
-@RequiredArgsConstructor
-@Getter
-@Setter
 public class Aircraft {
     @Id
     @Column(name = "aircraft_id",
             nullable = false)
     private int airfieldId;
+
+    @Column(name = "aircraft_registration",
+            nullable = false)
+    private String aircraftRegistration;
 
     @Column(name = "aircraft_base_factor",
             nullable = false)

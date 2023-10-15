@@ -13,7 +13,7 @@ public class Service {
     @Id
     @Column(name = "service_id")
     @XmlAttribute(name = "pk")
-    private int serviceId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "airfield_id")
@@ -28,17 +28,17 @@ public class Service {
     @Column(name = "service_type",
             nullable = true)
     @XmlElement(name = "Service")
-    private String serviceType;
+    private String type;
 
     @Column(name = "service_indicative_field")
     @XmlElement(name = "IndicLieu")
-    private String serviceIndicativeField;
+    private String indicativeField;
 
     @Column(name = "service_indicative_service")
     @XmlElement(name = "IndicService")
-    private String serviceIndicativeService;
+    private String indicativeService;
 
     @Column(name = "service_language")
     @XmlElement(name = "Langue")
-    private String serviceLanguage;
+    private String language;
 }

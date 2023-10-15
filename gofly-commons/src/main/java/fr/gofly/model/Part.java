@@ -13,7 +13,7 @@ public class Part {
     @Id
     @Column(name = "part_id")
     @XmlAttribute(name = "pk")
-    private int partId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "airspace_id")
@@ -22,18 +22,18 @@ public class Part {
 
     @Column(name = "part_name")
     @XmlElement(name = "NomPartie")
-    private String partName;
+    private String name;
 
     @Column(name = "part_number")
     @XmlElement(name = "NumeroPartie")
-    private int partNumber;
+    private int number;
 
     @Column(name = "part_common_name")
     @XmlElement(name = "NomUsuel")
-    private String partCommonName;
+    private String commonName;
 
     @Column(name = "part_geometry",
             length = 10485760)
     @XmlElement(name = "Geometrie")
-    private String partGeometry;
+    private String geometry;
 }

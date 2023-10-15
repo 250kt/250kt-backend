@@ -13,7 +13,7 @@ public class Border {
     @Id
     @Column(name = "border_id")
     @XmlAttribute(name = "pk")
-    private int borderId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
@@ -22,14 +22,14 @@ public class Border {
 
     @Column(name = "border_code")
     @XmlElement(name = "Code")
-    private String borderCode;
+    private String code;
 
     @Column(name = "border_name")
     @XmlElement(name = "Nom")
-    private String borderNom;
+    private String nom;
 
     @Column(name = "border_geometry",
             length = 10485760)
     @XmlElement(name = "Geometrie")
-    private String borderGeometry;
+    private String geometry;
 }

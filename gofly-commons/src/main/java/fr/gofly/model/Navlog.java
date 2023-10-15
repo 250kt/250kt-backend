@@ -1,34 +1,33 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "navlogs")
-@RequiredArgsConstructor
-@Getter
-@Setter
 public class Navlog {
     @Id
     @Column(name = "navlog_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long navlogId;
+    private long id;
 
     @Column(name = "navlog_back_passenger")
-    private int navLogBackPassengerWeight;
+    private int backPassengerWeight;
 
     @Column(name = "navlog_front_passenger_weight")
-    private int navLogFrontPassengerWeight;
+    private int frontPassengerWeight;
 
     @Column(name = "navlog_luggage_weight")
-    private int navLogLuggageWeight;
+    private int luggageWeight;
 
     @Column(name = "navlog_embedded_fuel")
-    private int navLogEmbeddedFuel;
+    private int embeddedFuel;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
