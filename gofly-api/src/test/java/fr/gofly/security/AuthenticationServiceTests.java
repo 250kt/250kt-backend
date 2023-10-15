@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +55,7 @@ public class AuthenticationServiceTests {
                 .build();
 
         when(tokenRepository.save(any(Token.class))).thenReturn(new Token());
+        when(passwordEncoder.encode(anyString())).thenReturn(new String("passwordEncoded"));
         when(userRepository.save(any(User.class))).thenReturn(new User());
         when(jwtService.generateToken(any(User.class))).thenReturn("token");
         when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refreshToken");
@@ -66,7 +68,53 @@ public class AuthenticationServiceTests {
     }
 
     @Test
-    void test_ShouldReturnAuthenticationResponse_WhenAuthenticate_AndWhenEmailIsNull(){
+    void testRegister_ShouldReturnOptionalEmpty_WhenEmailInvalid(){
+        RegisterRequest request = RegisterRequest.builder()
+                .username("test")
+                .email("test@.com")
+                .password("testPassword")
+                .build();
+
+        assertEquals(Optional.empty(), authenticationService.register(request));
+    }
+
+    @Test
+    void testRegister_ShouldReturnOptionalEmpty_WhenUsernameInvalid(){
+        RegisterRequest request = RegisterRequest.builder()
+                .username("T€st")
+                .email("test@250kt.com")
+                .password("testPassword")
+                .build();
+
+        assertEquals(Optional.empty(), authenticationService.register(request));
+    }
+
+    @Test
+    void testRegister_ShouldReturnOptionalEmpty_WhenPasswordEmpty(){
+        RegisterRequest request = RegisterRequest.builder()
+                .username("Test")
+                .email("test@250kt.com")
+                .password("")
+                .build();
+
+        assertEquals(Optional.empty(), authenticationService.register(request));
+    }
+
+    @Test
+    void testRegister_ShouldReturnOptionalEmpty_WhenAlreadyExist(){
+        RegisterRequest request = RegisterRequest.builder()
+                .username("Test")
+                .email("test@250kt.com")
+                .password("testPassword")
+                .build();
+
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new User()));
+
+        assertEquals(Optional.empty(), authenticationService.register(request));
+    }
+
+    @Test
+    void testAuthenticate_ShouldReturnAuthenticationResponse_AndWhenEmailIsNull(){
         AuthenticationRequest request = AuthenticationRequest.builder()
                 .username("test")
                 .password("testPassword")
@@ -85,7 +133,7 @@ public class AuthenticationServiceTests {
     }
 
     @Test
-    void test_ShouldReturnAuthenticationResponse_WhenAuthenticate_AndWhenEmailNotNull(){
+    void testAuthenticate_ShouldReturnAuthenticationResponse_AndWhenEmailNotNull(){
         AuthenticationRequest request = AuthenticationRequest.builder()
                 .email("test@250kt.com")
                 .password("testPassword")
