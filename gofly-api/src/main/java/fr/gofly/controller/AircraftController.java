@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,36 +22,36 @@ public class AircraftController {
     private final AircraftService aircraftService;
 
     @GetMapping("/{aircraftId}")
-    public ResponseEntity<Aircraft> retrieveAircraft(@PathVariable Integer aircraftId, @RequestBody User user) {
+    public ResponseEntity<Aircraft> retrieveAircraft(@PathVariable Integer aircraftId, @AuthenticationPrincipal User user) {
         Optional<Aircraft> aircraftOptional = aircraftService.getAircraft(aircraftId, user);
         return aircraftOptional.map(aircraft -> new ResponseEntity<>(aircraft, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<Aircraft>> retrieveAircrafts(@RequestBody User user) {
+    public ResponseEntity<Set<Aircraft>> retrieveAircrafts(@AuthenticationPrincipal User user) {
         Set<Aircraft> aircrafts = aircraftService.getUserAircrafts(user);
         return new ResponseEntity<>(aircrafts, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<Aircraft> createAircraft(@RequestBody Aircraft aircraft) {
-        Optional<Aircraft> aircraftOptional = aircraftService.createAircraft(aircraft);
+    public ResponseEntity<Aircraft> createAircraft(@RequestBody Aircraft aircraft, @AuthenticationPrincipal User user) {
+        Optional<Aircraft> aircraftOptional = aircraftService.createAircraft(aircraft, user);
         return aircraftOptional.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @PutMapping("")
-    public ResponseEntity<Aircraft> updateAircraft(@RequestBody Aircraft aircraft, @RequestBody User user) {
+    public ResponseEntity<Aircraft> updateAircraft(@RequestBody Aircraft aircraft, @AuthenticationPrincipal User user) {
         Optional<Aircraft> aircraftOptional = aircraftService.updateAircraft(aircraft, user);
         return aircraftOptional.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Aircraft> deleteAircraft(@RequestBody Aircraft aircraft, @RequestBody User user) {
+    public ResponseEntity<Aircraft> deleteAircraft(@RequestBody Aircraft aircraft, @AuthenticationPrincipal User user) {
         return aircraftService.deleteAircraft(aircraft, user) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Aircraft>> retriveAllAircraft(@RequestBody User user) {
+    public ResponseEntity<List<Aircraft>> retriveAllAircraft(@AuthenticationPrincipal User user) {
         List<Aircraft> aircrafts = aircraftService.getAllAircrafts(user);
         return new ResponseEntity<>(aircrafts, HttpStatus.OK);
     }

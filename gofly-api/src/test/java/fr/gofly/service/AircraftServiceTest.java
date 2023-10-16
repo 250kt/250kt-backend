@@ -36,11 +36,12 @@ public class AircraftServiceTest {
 
     @Test
     void testCreateAircraft_ShouldReturnOptionalEmpty_WhenAircraftHasOneMissingMandatoryField() {
+        User user = new User();
         Aircraft aircraft = Aircraft.builder().id(1).build();
 
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(true);
 
-        assertEquals(Optional.empty(), aircraftService.createAircraft(aircraft));
+        assertEquals(Optional.empty(), aircraftService.createAircraft(aircraft, user));
     }
 
     @Test

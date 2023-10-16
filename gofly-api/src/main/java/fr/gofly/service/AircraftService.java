@@ -20,7 +20,8 @@ public class AircraftService {
     private final AircraftHelper aircraftHelper;
     private final UserHelper userHelper;
 
-    public Optional<Aircraft> createAircraft(Aircraft aircraft) {
+    public Optional<Aircraft> createAircraft(Aircraft aircraft, User user) {
+        aircraft.setUser(user);
         if (aircraftHelper.isMissingMandatoryField(aircraft)) {
             return Optional.empty();
         }
