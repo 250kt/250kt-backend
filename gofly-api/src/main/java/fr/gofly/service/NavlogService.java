@@ -26,9 +26,11 @@ public class NavlogService {
      * Create a new navigation log (Navlog).
      *
      * @param navlog The Navlog to be created.
+     * @param user The ower of the Navlog to be created.
      * @return An Optional containing the created Navlog, or empty if mandatory fields are missing.
      */
-    public Optional<Navlog> createNavlog(Navlog navlog){
+    public Optional<Navlog> createNavlog(Navlog navlog, User user){
+        navlog.setUser(user);
         if(navlogHelper.isMissingMandatoryFields(navlog))
             return Optional.empty();
 

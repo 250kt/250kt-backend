@@ -33,6 +33,8 @@ public class NavlogServiceTest {
 
     @Test
     void testCreateNavlog_ShouldReturnOptionalEmpty_WhenIsMissingMandatoryFields(){
+        User user = User.builder().build();
+
         Navlog navlog = Navlog.builder()
                 .id(1)
                 .user(new User())
@@ -42,7 +44,7 @@ public class NavlogServiceTest {
 
         when(navlogHelper.isMissingMandatoryFields(navlog)).thenReturn(true);
 
-        assertEquals(Optional.empty(), navlogService.createNavlog(navlog));
+        assertEquals(Optional.empty(), navlogService.createNavlog(navlog, user));
     }
 
     @Test

@@ -40,8 +40,8 @@ public class NavlogController {
     }
 
     @PostMapping
-    public ResponseEntity<Navlog> createNavlog(@RequestBody Navlog navlog){
-        Optional<Navlog> navlogOptional = navlogService.createNavlog(navlog);
+    public ResponseEntity<Navlog> createNavlog(@RequestBody Navlog navlog, @AuthenticationPrincipal User userAuthenticated){
+        Optional<Navlog> navlogOptional = navlogService.createNavlog(navlog, userAuthenticated);
         return navlogOptional.map(navlogV -> new ResponseEntity<>(navlogV, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
