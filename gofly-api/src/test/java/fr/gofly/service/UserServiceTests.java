@@ -1,13 +1,19 @@
 package fr.gofly.service;
 
+import fr.gofly.dto.UserDto;
+import fr.gofly.mapper.UserToUserDto;
+import fr.gofly.model.Authority;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +29,16 @@ public class UserServiceTests {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private UserToUserDto userMapper;
+
+    private List<Authority> authorities = new ArrayList<>();
+
+    @BeforeEach
+    void setUp(){
+        authorities.add(Authority.BUDDING_PILOT);
+    }
 
     @Test
     void test_ShouldReturnAnUser_WhenCreateUser(){
@@ -61,21 +77,23 @@ public class UserServiceTests {
 
         when(userRepository.findById((String) any())).thenReturn(Optional.empty());
 
-        assertEquals(Optional.empty(), userService.putUser(user));
+        assertEquals(Optional.empty(), userService.updateUser(user));
     }
 
     @Test
-    void test_ShouldReturnUser_WhenUpdateUser_WhenUserOwnItsAccount(){
+    void testUpdateUser_ShouldReturnOptionalUser_WhenEmailDoesntChanged(){
         User user = User.builder()
                 .id("id")
                 .email("test@250kt.com")
+                .authorities(authorities)
                 .build();
 
         when(userRepository.findById((String) any())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userMapper.map(any(User.class))).thenReturn(new UserDto());
 
-        assertEquals(Optional.of(user), userService.putUser(user));
+        assertEquals(Optional.of(userMapper.map(user)), userService.updateUser(user));
     }
 
     @Test
@@ -88,7 +106,7 @@ public class UserServiceTests {
         when(userRepository.findById((String) any())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new User()));
 
-        assertEquals(Optional.empty(), userService.putUser(user));
+        assertEquals(Optional.empty(), userService.updateUser(user));
     }
 
     @Test
@@ -96,12 +114,14 @@ public class UserServiceTests {
         User user = User.builder()
                 .id("id")
                 .email("test@250kt.com")
+                .authorities(authorities)
                 .build();
 
         when(userRepository.findById((String) any())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userMapper.map(any(User.class))).thenReturn(new UserDto());
 
-        assertEquals(Optional.of(user), userService.putUser(user));
+        assertEquals(Optional.of(userMapper.map(user)), userService.updateUser(user));
     }
 }

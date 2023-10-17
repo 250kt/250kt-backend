@@ -1,7 +1,9 @@
 package fr.gofly.service;
 
+import fr.gofly.dto.AircraftDto;
 import fr.gofly.helper.AircraftHelper;
 import fr.gofly.helper.UserHelper;
+import fr.gofly.mapper.AircraftToAircraftDto;
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
 import fr.gofly.repository.AircraftRepository;
@@ -9,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,45 +22,64 @@ public class AircraftService {
 
     private final AircraftRepository aircraftRepository;
     private final AircraftHelper aircraftHelper;
+    private final AircraftToAircraftDto aircraftMapper;
     private final UserHelper userHelper;
 
-    public Optional<Aircraft> createAircraft(Aircraft aircraft, User user) {
+    public Optional<AircraftDto> createAircraft(Aircraft aircraft, User user) {
         aircraft.setUser(user);
         if (aircraftHelper.isMissingMandatoryField(aircraft)) {
             return Optional.empty();
         }
-        return Optional.of(aircraftRepository.save(aircraft));
+        return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 
-    public Optional<Aircraft> updateAircraft(Aircraft aircraft, User user) {
-        if (aircraftHelper.isMissingMandatoryField(aircraft) || !aircraftHelper.isAircraftOwnedByUser(aircraft, user) || !userHelper.isAdmin(user)){
+    public Optional<AircraftDto> updateAircraft(Aircraft aircraft, User user) {
+        Optional<Aircraft> aircraftDatabase = aircraftRepository.findById(aircraft.getId());
+
+        if (aircraftDatabase.isEmpty() ||
+                aircraftHelper.isMissingMandatoryField(aircraft) ||
+                !(aircraftHelper.isAircraftOwnedByUser(aircraftDatabase.get(), user) || userHelper.isAdmin(user)))
             return Optional.empty();
-        }
-        return Optional.of(aircraftRepository.save(aircraft));
+
+        aircraft.setUser(aircraftDatabase.get().getUser());
+        return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 
-    public boolean deleteAircraft(Aircraft aircraft, User user) {
-        if (aircraftHelper.isAircraftOwnedByUser(aircraft, user) || userHelper.isAdmin(user)) {
-            aircraftRepository.delete(aircraft);
-            return true;
+    public boolean deleteAircraft(Integer aircraftId, User user) {
+        Optional<Aircraft> aircraftOptional = aircraftRepository.findById(aircraftId);
+
+        if(aircraftOptional.isPresent()){
+            if (aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
+                aircraftRepository.deleteById(aircraftId);
+                return true;
+            }
         }
+
         return false;
     }
 
-    public Optional<Aircraft> getAircraft(Integer aircraftId, User user) {
+    public Optional<AircraftDto> getAircraft(Integer aircraftId, User user) {
         Optional<Aircraft> aircraftOptional = aircraftRepository.findById(aircraftId);
         if (aircraftOptional.isPresent() && aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
-            return aircraftOptional;
+            return Optional.of(aircraftMapper.map(aircraftOptional.get()));
         }
         return Optional.empty();
     }
 
-    public Set<Aircraft> getUserAircrafts(User user) {
-        return aircraftRepository.findAllByUser(user);
+    public Optional<Set<AircraftDto>> getUserAircrafts(String userId, User user) {
+        if(!(userHelper.isOwnerOrAdmin(user, userId)))
+            return Optional.empty();
+
+        return Optional.of(aircraftRepository.findAllByUserId(userId)
+                .stream()
+                .map(aircraftMapper::map)
+                .collect(Collectors.toSet()));
     }
 
-    public List<Aircraft> getAllAircrafts(User user) {
-        return aircraftRepository.findAll();
+    public Optional<List<AircraftDto>> getAllAircrafts() {
+        return Optional.of(aircraftRepository.findAll()
+                .stream()
+                .map(aircraftMapper::map)
+                .collect(Collectors.toList()));
     }
-
 }

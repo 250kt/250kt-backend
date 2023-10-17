@@ -1,7 +1,7 @@
 package fr.gofly.service;
 
-import fr.gofly.helper.UserHelper;
-import fr.gofly.model.Authority;
+import fr.gofly.dto.UserDto;
+import fr.gofly.mapper.UserToUserDto;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for handling user-related operations.
@@ -19,6 +21,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserToUserDto userMapping;
 
     /**
      * Creates a new user.
@@ -56,7 +59,7 @@ public class UserService {
      * @param user The updated user data.
      * @return The updated user.
      */
-    public Optional<User> putUser(User user){
+    public Optional<UserDto> updateUser(User user){
         //We retrieve the current user to compare if the email is the same in order to avoid error 500 UserAlreadyExistsException
         Optional<User> currentUserDbOptional = userRepository.findById(user.getId());
 
@@ -69,9 +72,9 @@ public class UserService {
                 //If the userFindByEmail is not the same as the user given
                 if(!Objects.equals(userFindByEmail.get().getId(), user.getId()))
                     return Optional.empty();
-                return Optional.of(userRepository.save(user));
+                return Optional.of(userMapping.map(userRepository.save(user)));
             }
-            return Optional.of(userRepository.save(user));
+            return Optional.of(userMapping.map(userRepository.save(user)));
         }
         return Optional.empty();
     }
@@ -89,5 +92,18 @@ public class UserService {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public Optional<UserDto> getUserById(String userId){
+        Optional<UserDto> userDto = userRepository.findById(userId).map(userMapping::map);
+
+        if(userDto.isEmpty())
+            return null;
+
+        return userDto;
+    }
+
+    public Optional<Set<UserDto>> getAllUsers(){
+        return Optional.of(userRepository.findAll().stream().map(userMapping::map).collect(Collectors.toSet()));
     }
 }

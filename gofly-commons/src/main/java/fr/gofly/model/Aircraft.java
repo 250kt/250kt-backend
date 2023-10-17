@@ -1,10 +1,7 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "aircrafts")

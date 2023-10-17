@@ -2,8 +2,10 @@ package fr.gofly.helper;
 
 import fr.gofly.model.Authority;
 import fr.gofly.model.User;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Objects;
 
 @Component
@@ -37,6 +39,10 @@ public class UserHelper {
      * @return true if the user is ADMIN
      */
     public boolean isAdmin(User user){
-        return user.getAuthorities().contains(Authority.ADMIN);
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        for(GrantedAuthority authority : authorities)
+            if(Objects.equals(authority.getAuthority(), Authority.ADMIN.name()))
+                return true;
+        return false;
     }
 }

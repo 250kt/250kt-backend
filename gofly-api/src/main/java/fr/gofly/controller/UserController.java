@@ -1,8 +1,8 @@
 package fr.gofly.controller;
 
+import fr.gofly.dto.UserDto;
 import fr.gofly.helper.UserHelper;
 import fr.gofly.model.User;
-import fr.gofly.repository.UserRepository;
 import fr.gofly.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Controller for user-related operations.
@@ -20,7 +21,6 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
     private final UserService userService;
     private final UserHelper userHelper;
 
@@ -32,11 +32,11 @@ public class UserController {
      * @return The user corresponding to the identifier.
      */
     @GetMapping("/{userId}")
-    ResponseEntity<User> getUser(@AuthenticationPrincipal User userAuthenticated, @PathVariable String userId){
+    ResponseEntity<UserDto> getUser(@AuthenticationPrincipal User userAuthenticated, @PathVariable String userId){
         if(!userHelper.isOwnerOrAdmin(userAuthenticated, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<UserDto> userOptional = userService.getUserById(userId);
         return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -48,12 +48,12 @@ public class UserController {
      * @return The updated user.
      */
     @PutMapping()
-    ResponseEntity<User> updateUser(@AuthenticationPrincipal User userAuthenticated, @RequestBody User newUser) {
+    ResponseEntity<UserDto> updateUser(@AuthenticationPrincipal User userAuthenticated, @RequestBody User newUser) {
         if(!userHelper.isOwnerOrAdmin(userAuthenticated, newUser.getId()))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        Optional<User> userOptional = userService.putUser(newUser);
-        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        Optional<UserDto> userDtoOptional = userService.updateUser(newUser);
+        return userDtoOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     /**
@@ -63,10 +63,22 @@ public class UserController {
      * @param userId The identifier of the user to delete.
      */
     @DeleteMapping("/{userId}")
-    ResponseEntity<User> deleteUser(@AuthenticationPrincipal User userAuthenticated, @PathVariable String userId) {
+    ResponseEntity<HttpStatus> deleteUser(@AuthenticationPrincipal User userAuthenticated, @PathVariable String userId) {
         if(!userHelper.isOwnerOrAdmin(userAuthenticated, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         return userService.deleteUser(userId) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Get all users
+     *
+     * @return The all users.
+     */
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    ResponseEntity<Set<UserDto>> getAllUsers(){
+        Optional<Set<UserDto>> userDtoOptional = userService.getAllUsers();
+        return userDtoOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
