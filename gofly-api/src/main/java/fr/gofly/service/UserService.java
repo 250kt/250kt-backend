@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserToUserDto userMapping;
+    private final UserToUserDto userMapper;
 
     /**
      * Creates a new user.
@@ -72,9 +72,8 @@ public class UserService {
                 //If the userFindByEmail is not the same as the user given
                 if(!Objects.equals(userFindByEmail.get().getId(), user.getId()))
                     return Optional.empty();
-                return Optional.of(userMapping.map(userRepository.save(user)));
             }
-            return Optional.of(userMapping.map(userRepository.save(user)));
+            return Optional.of(userMapper.map(userRepository.save(user)));
         }
         return Optional.empty();
     }
@@ -95,7 +94,7 @@ public class UserService {
     }
 
     public Optional<UserDto> getUserById(String userId){
-        Optional<UserDto> userDto = userRepository.findById(userId).map(userMapping::map);
+        Optional<UserDto> userDto = userRepository.findById(userId).map(userMapper::map);
 
         if(userDto.isEmpty())
             return null;
@@ -104,6 +103,6 @@ public class UserService {
     }
 
     public Optional<Set<UserDto>> getAllUsers(){
-        return Optional.of(userRepository.findAll().stream().map(userMapping::map).collect(Collectors.toSet()));
+        return Optional.of(userRepository.findAll().stream().map(userMapper::map).collect(Collectors.toSet()));
     }
 }

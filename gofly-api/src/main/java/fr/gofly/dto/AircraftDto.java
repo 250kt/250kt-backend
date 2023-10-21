@@ -26,6 +26,5 @@ public class AircraftDto {
     private Integer tankCapacity;
     private Integer trueAirSpeed;
     private Integer unloadedWeight;
-
     private String userId;
 }

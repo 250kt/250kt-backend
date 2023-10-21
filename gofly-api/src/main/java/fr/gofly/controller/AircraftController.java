@@ -39,7 +39,7 @@ public class AircraftController {
     @PostMapping
     public ResponseEntity<AircraftDto> createAircraft(@RequestBody Aircraft aircraft, @AuthenticationPrincipal User user) {
         Optional<AircraftDto> aircraftOptionalDto = aircraftService.createAircraft(aircraft, user);
-        return aircraftOptionalDto.map(value -> new ResponseEntity<>(aircraftMapper.map(aircraft), HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        return aircraftOptionalDto.map(aircraftDto -> new ResponseEntity<>(aircraftDto, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @PutMapping
