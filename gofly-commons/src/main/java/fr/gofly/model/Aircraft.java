@@ -1,10 +1,7 @@
 package fr.gofly.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "aircrafts")
@@ -14,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class Aircraft {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "aircraft_id",
             nullable = false)
     private Integer id;
