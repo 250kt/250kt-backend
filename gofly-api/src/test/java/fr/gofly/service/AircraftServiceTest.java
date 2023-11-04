@@ -130,7 +130,6 @@ public class AircraftServiceTest {
         when(aircraftHelper.isAircraftOwnedByUser(any(Aircraft.class), any(User.class))).thenReturn(false);
 
         assertFalse(aircraftService.deleteAircraft(aircraft.getId(), new User()));
-
     }
 
 }
