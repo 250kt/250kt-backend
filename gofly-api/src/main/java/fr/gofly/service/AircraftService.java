@@ -30,6 +30,7 @@ public class AircraftService {
         if (aircraftHelper.isMissingMandatoryField(aircraft)) {
             return Optional.empty();
         }
+        aircraft.setBaseFactor(60.0 / (double) aircraft.getTrueAirSpeed());
         return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 
