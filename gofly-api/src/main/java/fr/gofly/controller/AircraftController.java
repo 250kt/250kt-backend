@@ -22,7 +22,6 @@ import java.util.Set;
 public class AircraftController {
 
     private final AircraftService aircraftService;
-    private final AircraftToAircraftDto aircraftMapper;
 
     @GetMapping("/{aircraftId}")
     public ResponseEntity<AircraftDto> retrieveAircraft(@PathVariable Integer aircraftId, @AuthenticationPrincipal User user) {
