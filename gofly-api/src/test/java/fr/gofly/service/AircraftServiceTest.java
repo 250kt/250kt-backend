@@ -75,7 +75,7 @@ public class AircraftServiceTest {
         user.setId("id");
         user.setAuthorities(authorities);
 
-        Aircraft aircraft = Aircraft.builder().id(1).user(user).build();
+        Aircraft aircraft = Aircraft.builder().id(1).user(user).trueAirSpeed(100).build();
 
         when(aircraftRepository.findById(anyInt())).thenReturn(Optional.of(aircraft));
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(false);

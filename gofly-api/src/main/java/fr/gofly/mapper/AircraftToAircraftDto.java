@@ -19,12 +19,12 @@ public class AircraftToAircraftDto {
             .leverArmLuggage(aircraft.getLeverArmLuggage())
             .nonPumpableFuel(aircraft.getNonPumpableFuel())
             .registration(aircraft.getRegistration())
+            .model(aircraft.getModel())
             .tankCapacity(aircraft.getTankCapacity())
             .trueAirSpeed(aircraft.getTrueAirSpeed())
             .unloadedWeight(aircraft.getUnloadedWeight())
             .leverArmUnloadedWeight(aircraft.getLeverArmUnloadedWeight())
             .maximumWeight(aircraft.getMaximumWeight())
-            .userId(aircraft.getUser().getId())
             .build();
     }
 }
