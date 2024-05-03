@@ -17,9 +17,7 @@ public class AircraftHelper {
      * @return true if a mandatory field missing, otherwise false
      */
     public boolean isMissingMandatoryField(Aircraft aircraft) {
-        return aircraft.getBaseFactor() == null ||
-                aircraft.getBaseFactor() < 0.0 ||
-                aircraft.getConsumption() == null ||
+        return aircraft.getConsumption() == null ||
                 aircraft.getNonPumpableFuel() == null ||
                 aircraft.getTankCapacity() == null ||
                 aircraft.getTrueAirSpeed() == null;

@@ -30,6 +30,7 @@ public class AircraftService {
         if (aircraftHelper.isMissingMandatoryField(aircraft)) {
             return Optional.empty();
         }
+        aircraft.setBaseFactor(60.0 / (double) aircraft.getTrueAirSpeed());
         return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 
@@ -42,6 +43,7 @@ public class AircraftService {
             return Optional.empty();
 
         aircraft.setUser(aircraftDatabase.get().getUser());
+        aircraft.setBaseFactor(60.0 / (double) aircraft.getTrueAirSpeed());
         return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 
@@ -50,7 +52,7 @@ public class AircraftService {
 
         if(aircraftOptional.isPresent()){
             if (aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
-                aircraftRepository.deleteById(aircraftId);
+                aircraftRepository.delete(aircraftOptional.get());
                 return true;
             }
         }
@@ -66,11 +68,8 @@ public class AircraftService {
         return Optional.empty();
     }
 
-    public Optional<Set<AircraftDto>> getUserAircrafts(String userId, User user) {
-        if(!(userHelper.isOwnerOrAdmin(user, userId)))
-            return Optional.empty();
-
-        return Optional.of(aircraftRepository.findAllByUserId(userId)
+    public Optional<Set<AircraftDto>> getUserAircrafts(User user) {
+        return Optional.of(aircraftRepository.findAllByUser(user)
                 .stream()
                 .map(aircraftMapper::map)
                 .collect(Collectors.toSet()));

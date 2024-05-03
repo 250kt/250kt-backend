@@ -11,5 +11,5 @@ import java.util.Set;
 public interface AircraftRepository extends JpaRepository<Aircraft, Integer> {
 
     //Set<Aircraft> findAllByUser(User user);
-    Set<Aircraft> findAllByUserId(String userId);
+    Set<Aircraft> findAllByUser(User user);
 }

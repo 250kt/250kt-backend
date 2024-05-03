@@ -2,7 +2,7 @@ package fr.gofly.model;
 
 public enum Fuel {
     ELECTRIC,
-    AVGAS,
+    AVGAS100LL,
     JETA1,
     NONE
 }

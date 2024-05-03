@@ -4,6 +4,7 @@ import fr.gofly.dto.AircraftDto;
 import fr.gofly.mapper.AircraftToAircraftDto;
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
+import fr.gofly.security.config.JwtService;
 import fr.gofly.service.AircraftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,6 @@ import java.util.Set;
 public class AircraftController {
 
     private final AircraftService aircraftService;
-    private final AircraftToAircraftDto aircraftMapper;
 
     @GetMapping("/{aircraftId}")
     public ResponseEntity<AircraftDto> retrieveAircraft(@PathVariable Integer aircraftId, @AuthenticationPrincipal User user) {
@@ -30,9 +30,9 @@ public class AircraftController {
         return aircraftOptionalDto.map(aircraft -> new ResponseEntity<>(aircraft, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<Set<AircraftDto>> retrieveAircrafts(@AuthenticationPrincipal User user, @PathVariable String userId) {
-        Optional<Set<AircraftDto>> aircraftOptionalDto = aircraftService.getUserAircrafts(userId, user);
+    @GetMapping("/user-aircrafts")
+    public ResponseEntity<Set<AircraftDto>> retrieveAircrafts(@AuthenticationPrincipal User user) {
+        Optional<Set<AircraftDto>> aircraftOptionalDto = aircraftService.getUserAircrafts(user);
         return aircraftOptionalDto.map(aircraft -> new ResponseEntity<>(aircraft, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
@@ -48,7 +48,7 @@ public class AircraftController {
         return aircraftOptionalDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @DeleteMapping("/{aircraftId}")
+    @DeleteMapping
     public ResponseEntity<HttpStatus> deleteAircraft(@PathVariable Integer aircraftId, @AuthenticationPrincipal User user) {
         return aircraftService.deleteAircraft(aircraftId, user) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

@@ -48,6 +48,18 @@ public class AircraftServiceTest {
     }
 
     @Test
+    void testCreateAircraft_ShouldReturnOptionalAircraft_WhenAllMandatoryFieldsArePresent() {
+        User user = new User();
+        Aircraft aircraft = Aircraft.builder().id(1).trueAirSpeed(120).build();
+
+        when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(false);
+        when(aircraftRepository.save(any(Aircraft.class))).thenReturn(aircraft);
+        when(aircraftMapper.map(any(Aircraft.class))).thenReturn(AircraftDto.builder().build());
+
+        assertEquals(Optional.of(aircraftMapper.map(aircraft)), aircraftService.createAircraft(aircraft, user));
+    }
+
+    @Test
     void testCreateAircraft_ShouldReturnOptionalEmpty_WhenAircraftHasOneMissingMandatoryField() {
         User user = new User();
         Aircraft aircraft = Aircraft.builder().id(1).build();
@@ -63,7 +75,7 @@ public class AircraftServiceTest {
         user.setId("id");
         user.setAuthorities(authorities);
 
-        Aircraft aircraft = Aircraft.builder().id(1).user(user).build();
+        Aircraft aircraft = Aircraft.builder().id(1).user(user).trueAirSpeed(100).build();
 
         when(aircraftRepository.findById(anyInt())).thenReturn(Optional.of(aircraft));
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(false);
@@ -79,12 +91,14 @@ public class AircraftServiceTest {
         User user = new User();
         user.setId("id");
 
+        User user2 = User.builder()
+            .id("id2")
+            .build();
+
         Aircraft aircraft = Aircraft.builder()
-                .id(1)
-                .user(User.builder()
-                        .id("id2")
-                        .build())
-                .build();
+            .id(1)
+            .user(user2)
+            .build();
 
         when(aircraftRepository.findById(anyInt())).thenReturn(Optional.of(aircraft));
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(false);

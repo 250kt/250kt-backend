@@ -20,6 +20,10 @@ public class Aircraft {
             nullable = false)
     private String registration;
 
+    @Column(name = "aircraft_model",
+            nullable = false)
+    private String model;
+
     @Column(name = "aircraft_base_factor",
             nullable = false)
     private Double baseFactor;

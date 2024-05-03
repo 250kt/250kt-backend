@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class AircraftDto {
     private Integer id;
     private String registration;
+    private String model;
     private Double baseFactor;
     private Integer consumption;
     private Fuel fuelType;
@@ -26,5 +27,4 @@ public class AircraftDto {
     private Integer tankCapacity;
     private Integer trueAirSpeed;
     private Integer unloadedWeight;
-    private String userId;
 }
