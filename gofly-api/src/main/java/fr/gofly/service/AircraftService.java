@@ -63,7 +63,9 @@ public class AircraftService {
     public Optional<AircraftDto> getAircraft(Integer aircraftId, User user) {
         Optional<Aircraft> aircraftOptional = aircraftRepository.findById(aircraftId);
         if (aircraftOptional.isPresent() && aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
-            return Optional.of(aircraftMapper.map(aircraftOptional.get()));
+            if(aircraftOptional.isPresent()){
+                return Optional.of(aircraftMapper.map(aircraftOptional.get()));
+            }
         }
         return Optional.empty();
     }

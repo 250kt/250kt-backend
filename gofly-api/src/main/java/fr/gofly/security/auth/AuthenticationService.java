@@ -8,6 +8,7 @@ import fr.gofly.model.token.Token;
 import fr.gofly.model.token.TokenType;
 import fr.gofly.repository.TokenRepository;
 import fr.gofly.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
+    private final Pattern emailPattern = Pattern.compile("^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$");
+    private final Pattern usernamePattern = Pattern.compile("^[A-Za-z][A-Za-z0-9_]{2,29}$");
     /**
      * Register a new user.
      *
@@ -39,21 +43,14 @@ public class AuthenticationService {
      * @return AuthenticationResponse with access and refresh tokens.
      */
     public Optional<AuthenticationResponse> register(RegisterRequest request) {
-        //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
-        String emailRegex = "^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$";
-        Pattern emailPattern = Pattern.compile(emailRegex);
 
         if(!emailPattern.matcher(request.getEmail()).matches())
             return Optional.empty();
 
-
-        String usernameRegex = "^[A-Za-z][A-Za-z0-9_]{2,29}$";
-        Pattern usernamePattern = Pattern.compile(usernameRegex);
-
         if(!usernamePattern.matcher(request.getUsername()).matches())
             return Optional.empty();
 
-        if(request.getPassword().length() == 0)
+        if(request.getPassword().isEmpty())
             return Optional.empty();
 
         if (userRepository.findByEmail(request.getEmail()).isPresent())
@@ -170,26 +167,24 @@ public class AuthenticationService {
      * Refresh the authentication token.
      *
      * @param request  The original HTTP request.
-     * @param response The HTTP response to return with a new authentication token.
-     * @throws IOException In case of an error during token refresh handling.
      */
-    public void refreshToken(HttpServletResponse request, HttpServletResponse response) throws IOException {
+    public Optional<AuthenticationResponse> refreshToken(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String usernameOrEmail;
-
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
-            return;
+            return Optional.empty();
         }
-
         // Extract and validate the refresh token.
         refreshToken = authHeader.substring(7); // substring after "Bearer "
-
         usernameOrEmail = jwtService.extractUsernameOrEmail(refreshToken);
 
         if(usernameOrEmail != null){
-            User user = userRepository.findByUsername(usernameOrEmail)
-                    .orElseThrow();
+            Optional<User> userOptional = userRepository.findByUsername(usernameOrEmail);
+            if(userOptional.isEmpty()){
+                return Optional.empty();
+            }
+            User user = userOptional.get();
 
             boolean isTokenValid = tokenRepository.findByHex(refreshToken)
                     .map(t -> !t.isRevoked() && !t.isExpired())
@@ -198,16 +193,19 @@ public class AuthenticationService {
             if(jwtService.isTokenValid(refreshToken, user) && isTokenValid){
                 // Generate a new access token for the user.
                 String accessToken = jwtService.generateToken(user);
+                String newRefreshToken = jwtService.generateRefreshToken(user);
                 // Revoke old tokens, save the new token, and return the updated token response.
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
+                saveUserToken(user, newRefreshToken);
                 AuthenticationResponse authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .refreshToken(newRefreshToken)
                         .build();
 
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                return Optional.of(authResponse);
             }
         }
+        return Optional.empty();
     }
 }

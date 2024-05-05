@@ -48,7 +48,7 @@ public class AircraftController {
         return aircraftOptionalDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{aircraftId}")
     public ResponseEntity<HttpStatus> deleteAircraft(@PathVariable Integer aircraftId, @AuthenticationPrincipal User user) {
         return aircraftService.deleteAircraft(aircraftId, user) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -57,6 +57,6 @@ public class AircraftController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<AircraftDto>> retrieveAllAircraft() {
         Optional<List<AircraftDto>> aircraftsDto = aircraftService.getAllAircrafts();
-        return aircraftsDto.map(aircraft -> new ResponseEntity<>(aircraft, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
+        return aircraftsDto.map(aircraft -> new ResponseEntity<>(aircraft, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }

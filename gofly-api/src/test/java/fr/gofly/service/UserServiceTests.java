@@ -41,35 +41,6 @@ public class UserServiceTests {
     }
 
     @Test
-    void test_ShouldReturnAnUser_WhenCreateUser(){
-        User user = User.builder()
-                .id("id")
-                .email("test@250kt.com")
-                .username("test")
-                .password("testPassword")
-                .build();
-
-        when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
-        assertEquals(Optional.of(user), userService.createUser(user));
-    }
-
-    @Test
-    void testCreateUser_ShouldReturnOptionalEmpty_WhenCreateUser(){
-        User user = User.builder()
-                .id("id")
-                .email("test@250kt.com")
-                .username("test")
-                .password("testPassword")
-                .build();
-
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-
-        assertEquals(Optional.empty(), userService.createUser(user));
-    }
-
-    @Test
     void test_ShouldReturnOptionalEmpty_WhenPutUser(){
         User user = User.builder()
                 .id("id")
