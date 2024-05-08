@@ -1,5 +1,6 @@
 package fr.gofly.security.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,8 @@ public class SecurityConfig {
         http
                 .csrf().disable() // Disable Cross-Site Request Forgery (CSRF)
                 .cors(cors -> corsConfigurationSource())
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
+                        (request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, exception.getMessage())))
                 .authorizeHttpRequests()
                     //Everybody are able to access to the application patterns bellow
                     .requestMatchers("/api/auth/**").permitAll()

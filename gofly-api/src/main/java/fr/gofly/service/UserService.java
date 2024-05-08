@@ -23,35 +23,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserToUserDto userMapper;
 
-    /**
-     * Creates a new user.
-     *
-     * @param newUser The user object to be created.
-     * @return The newly created user.
-     */
-    public Optional<User> createUser(User newUser) {
-        //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
-        String emailRegex = "^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$";
-        Pattern emailPattern = Pattern.compile(emailRegex);
-
-        if(!emailPattern.matcher(newUser.getEmail()).matches())
-            return Optional.empty();
-
-
-        String usernameRegex = "^[A-Za-z][A-Za-z0-9_]{2,29}$";
-        Pattern usernamePattern = Pattern.compile(usernameRegex);
-
-        if(!usernamePattern.matcher(newUser.getUsername()).matches())
-            return Optional.empty();
-
-        if(newUser.getPassword().length() == 0)
-            return Optional.empty();
-
-        if (userRepository.findByEmail(newUser.getEmail()).isPresent())
-            return Optional.empty();
-
-        return Optional.of(userRepository.save(newUser));
-    }
+    //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
+    private final Pattern emailPattern = Pattern.compile("^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$");
+    private final Pattern usernamePattern = Pattern.compile("^[A-Za-z][A-Za-z0-9_]{2,29}$");
 
     /**
      * Updates an existing user with the provided data.
@@ -94,12 +68,8 @@ public class UserService {
     }
 
     public Optional<UserDto> getUserById(String userId){
-        Optional<UserDto> userDto = userRepository.findById(userId).map(userMapper::map);
+        return userRepository.findById(userId).map(userMapper::map);
 
-        if(userDto.isEmpty())
-            return null;
-
-        return userDto;
     }
 
     public Optional<Set<UserDto>> getAllUsers(){

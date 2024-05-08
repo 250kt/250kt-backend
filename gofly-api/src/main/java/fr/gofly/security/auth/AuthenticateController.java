@@ -1,5 +1,6 @@
 package fr.gofly.security.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,14 +47,13 @@ public class AuthenticateController {
      * Endpoint for refreshing the authentication token.
      *
      * @param request The original HTTP request.
-     * @param response The HTTP response to be returned with the new authentication token.
      * @throws IOException In case of an error during token refresh handling.
      */
     @PostMapping("/refresh-token")
-    public void refreshToken(
-            HttpServletResponse request,
-            HttpServletResponse response
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            HttpServletRequest request
     ) throws IOException {
-        authenticationService.refreshToken(request, response);
+        Optional<AuthenticationResponse> authResponse = authenticationService.refreshToken(request);
+        return authResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 }
