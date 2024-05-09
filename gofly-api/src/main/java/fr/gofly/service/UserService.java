@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -22,10 +23,6 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final UserToUserDto userMapper;
-
-    //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
-    private final Pattern emailPattern = Pattern.compile("^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$");
-    private final Pattern usernamePattern = Pattern.compile("^[A-Za-z][A-Za-z0-9_]{2,29}$");
 
     /**
      * Updates an existing user with the provided data.
@@ -50,6 +47,13 @@ public class UserService {
             return Optional.of(userMapper.map(userRepository.save(user)));
         }
         return Optional.empty();
+    }
+
+    public void updateLastConnection(String userId){
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setLastConnection(LocalDateTime.now());
+            userRepository.save(user);
+        });
     }
 
     /**
