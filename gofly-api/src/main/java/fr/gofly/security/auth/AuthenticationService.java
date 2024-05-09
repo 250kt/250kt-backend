@@ -8,6 +8,7 @@ import fr.gofly.model.token.Token;
 import fr.gofly.model.token.TokenType;
 import fr.gofly.repository.TokenRepository;
 import fr.gofly.repository.UserRepository;
+import fr.gofly.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +34,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
     private final Pattern emailPattern = Pattern.compile("^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$");
@@ -63,6 +66,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .authorities(Collections.singletonList(Authority.BUDDING_PILOT))
                 .isEmailConfirmed(false)
+                .lastConnection(LocalDateTime.now())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -121,6 +125,9 @@ public class AuthenticationService {
 
         // Save the tokens and return the response.
         saveUserToken(user.get(), refreshToken);
+
+        // Update the last connection time.
+        userService.updateLastConnection(user.get().getId());
 
         return Optional.of(AuthenticationResponse.builder()
                 .accessToken(jwtToken)

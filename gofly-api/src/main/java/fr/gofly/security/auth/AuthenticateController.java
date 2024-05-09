@@ -47,12 +47,11 @@ public class AuthenticateController {
      * Endpoint for refreshing the authentication token.
      *
      * @param request The original HTTP request.
-     * @throws IOException In case of an error during token refresh handling.
      */
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthenticationResponse> refreshToken(
             HttpServletRequest request
-    ) throws IOException {
+    ) {
         Optional<AuthenticationResponse> authResponse = authenticationService.refreshToken(request);
         return authResponse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

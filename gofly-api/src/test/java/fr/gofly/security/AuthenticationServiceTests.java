@@ -9,6 +9,7 @@ import fr.gofly.security.auth.AuthenticationResponse;
 import fr.gofly.security.auth.AuthenticationService;
 import fr.gofly.security.auth.RegisterRequest;
 import fr.gofly.security.config.JwtService;
+import fr.gofly.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,6 +46,9 @@ public class AuthenticationServiceTests {
 
     @Mock
     private AuthenticationManager authenticationManager;
+
+    @Mock
+    private UserService userService;
 
     @Test
     void testRegister_ShouldReturnAuthenticationResponse(){

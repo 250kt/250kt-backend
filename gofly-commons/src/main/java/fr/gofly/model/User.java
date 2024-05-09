@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,6 +57,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @Transient
     private List<Token> tokens;
+
+    @Column(name = "user_last_connection", nullable = false)
+    private LocalDateTime lastConnection;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
