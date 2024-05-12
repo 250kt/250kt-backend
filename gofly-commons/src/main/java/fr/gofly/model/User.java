@@ -61,6 +61,10 @@ public class User implements UserDetails {
     @Column(name = "user_last_connection", nullable = false)
     private LocalDateTime lastConnection;
 
+    @ManyToOne
+    @JoinColumn(name = "user_favorite_airfield")
+    private Airfield favoriteAirfield;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

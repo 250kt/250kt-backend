@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                     //Everybody are able to access to the application patterns bellow
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/airfield/all").permitAll()
                     //.requestMatchers("/api/home").hasAuthority(Authority.BUDDING_PILOT.toString())
                     .requestMatchers("/api/home").authenticated()
                     //For all the others, everybody need to be authenticated with a JWT token

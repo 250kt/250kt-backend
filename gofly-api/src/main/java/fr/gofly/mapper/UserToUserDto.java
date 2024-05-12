@@ -14,6 +14,7 @@ public class UserToUserDto {
                 .authorities(user.getAuthorities())
                 .isEmailConfirmed(user.getIsEmailConfirmed())
                 .username(user.getUsername())
+                .favoriteAirfield(user.getFavoriteAirfield())
                 .build();
     }
 }
