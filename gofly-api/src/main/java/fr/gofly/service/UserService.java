@@ -1,6 +1,8 @@
 package fr.gofly.service;
 
+import fr.gofly.dto.AirfieldDto;
 import fr.gofly.dto.UserDto;
+import fr.gofly.mapper.AirfieldToAirfieldDto;
 import fr.gofly.mapper.UserToUserDto;
 import fr.gofly.model.User;
 import fr.gofly.repository.UserRepository;
@@ -21,8 +23,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final UserToUserDto userMapper;
+    private final AirfieldToAirfieldDto airfieldMapper;
 
     /**
      * Updates an existing user with the provided data.
@@ -78,5 +82,10 @@ public class UserService {
 
     public Optional<Set<UserDto>> getAllUsers(){
         return Optional.of(userRepository.findAll().stream().map(userMapper::map).collect(Collectors.toSet()));
+    }
+
+    public Optional<AirfieldDto> getFavoritedAirfield(User user){
+        return Optional.of(user.getFavoriteAirfield())
+                .map(airfieldMapper::map);
     }
 }

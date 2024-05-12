@@ -1,5 +1,6 @@
 package fr.gofly.controller;
 
+import fr.gofly.dto.AirfieldDto;
 import fr.gofly.dto.UserDto;
 import fr.gofly.helper.UserHelper;
 import fr.gofly.model.User;
@@ -81,4 +82,11 @@ public class UserController {
         Optional<Set<UserDto>> userDtoOptional = userService.getAllUsers();
         return userDtoOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping("/favorite-airfield")
+    public ResponseEntity<AirfieldDto> getFavoriteAirfield(@AuthenticationPrincipal User userAuthenticated) {
+        Optional<AirfieldDto> airfieldDtoOptional = userService.getFavoritedAirfield(userAuthenticated);
+        return airfieldDtoOptional.map(airfield -> new ResponseEntity<>(airfield, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 }
