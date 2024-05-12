@@ -20,11 +20,19 @@ public class Territory {
     private int id;
 
     @Column(name = "territory_identification_code")
-    @XmlElement(name = "Territoire")
     private String identificationCode;
 
     @Column(name = "territory_name",
             nullable = true)
     @XmlElement(name = "Nom")
     private String name;
+
+    @XmlElement(name = "Territoire")
+    public String getIdentificationCode() {
+        return identificationCode;
+    }
+
+    public void setIdentificationCode(String identificationCode) {
+        this.identificationCode = identificationCode;
+    }
 }

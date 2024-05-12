@@ -16,7 +16,7 @@ public class Airfield {
     @Column(name = "airfield_id",
             nullable = false)
     @XmlAttribute(name = "pk")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
@@ -50,6 +50,18 @@ public class Airfield {
     @Column(name = "airfield_accept_Vfr")
     private boolean isAcceptVfr;
 
+    @Column(name = "airfield_altitude")
+    @XmlElement(name = "AdRefAltFt")
+    private Integer altitude;
+
+    @Column(name = "airfield_latitude")
+    @XmlElement(name = "ArpLat")
+    private Float latitude;
+
+    @Column(name = "airfield_longitude")
+    @XmlElement(name = "ArpLong")
+    private Float longitude;
+
     @XmlElement(name = "TfcVfr")
     public String getAcceptVfrString() {
         return isAcceptVfr ? "oui" : "non";
@@ -59,15 +71,4 @@ public class Airfield {
         isAcceptVfr = "oui".equalsIgnoreCase(value);
     }
 
-    @Column(name = "airfield_altitude")
-    @XmlElement(name = "AdRefAltFt")
-    private int altitude;
-
-    @Column(name = "airfield_latitude")
-    @XmlElement(name = "ArpLat")
-    private float latitude;
-
-    @Column(name = "airfield_longitude")
-    @XmlElement(name = "ArpLong")
-    private float longitude;
 }

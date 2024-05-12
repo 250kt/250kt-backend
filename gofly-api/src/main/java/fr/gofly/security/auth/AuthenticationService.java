@@ -67,6 +67,7 @@ public class AuthenticationService {
                 .authorities(Collections.singletonList(Authority.BUDDING_PILOT))
                 .isEmailConfirmed(false)
                 .lastConnection(LocalDateTime.now())
+                .favoriteAirfield(request.getFavoriteAirfield())
                 .build();
 
         User savedUser = userRepository.save(user);

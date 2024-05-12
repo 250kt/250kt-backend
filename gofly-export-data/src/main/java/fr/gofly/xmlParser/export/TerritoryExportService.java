@@ -26,6 +26,7 @@ public class TerritoryExportService {
                 logger.info("Territories export : " + siaExport.getTerritories().size() + " territories found");
 
                 for (Territory territory: siaExport.getTerritories()) {
+                    territory.setIdentificationCode(territory.getIdentificationCode().toUpperCase());
                     saveTerritoryToDatabase(territory);
                 }
 
