@@ -5,6 +5,7 @@ import fr.gofly.xmlParser.export.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,44 +14,24 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 
 @Service
+@RequiredArgsConstructor
 public class XmlParserService {
 
     private final String xmlFilePath = "import.xml";
     private Logger logger = LoggerFactory.getLogger(XmlParserService.class);
     private SiaExport siaExport;
 
-    @Autowired
-    private TerritoryExportService territoryExportService;
-
-    @Autowired
-    private AirfieldExportService airfieldExportService;
-
-    @Autowired
-    private ObstacleExportService obstacleExportService;
-
-    @Autowired
-    private HelipadExportService helipadExportService;
-
-    @Autowired
-    private RadioExportService radioExportService;
-
-    @Autowired
-    private AirspaceExportService airspaceExportService;
-
-    @Autowired
-    private FrequencyExportService frequencyExportService;
-
-    @Autowired
-    private ServiceExportService serviceExportService;
-
-    @Autowired
-    private BorderExportService borderExportService;
-
-    @Autowired
-    private PartExportService partExportService;
-
-    @Autowired
-    private LighthouseExportService lighthouseExportService;
+    private final TerritoryExportService territoryExportService;
+    private final AirfieldExportService airfieldExportService;
+    private final ObstacleExportService obstacleExportService;
+    private final HelipadExportService helipadExportService;
+    private final RadioExportService radioExportService;
+    private final AirspaceExportService airspaceExportService;
+    private final FrequencyExportService frequencyExportService;
+    private final ServiceExportService serviceExportService;
+    private final BorderExportService borderExportService;
+    private final PartExportService partExportService;
+    private final LighthouseExportService lighthouseExportService;
 
     /**
      * Parses the XML file and exports objects to the database.
