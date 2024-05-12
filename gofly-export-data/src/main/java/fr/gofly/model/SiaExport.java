@@ -1,5 +1,6 @@
 package fr.gofly.model;
 
+import fr.gofly.model.obstacle.Obstacle;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
