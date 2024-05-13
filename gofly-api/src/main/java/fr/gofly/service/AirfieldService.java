@@ -17,8 +17,15 @@ public class AirfieldService {
     private final AirfieldRepository airfieldRepository;
     private final AirfieldToAirfieldDto airfieldMapper;
 
-    public Optional<List<AirfieldDto>> getAllAirfields() {
+    public Optional<List<AirfieldDto>> getAllAirfieldsAcceptVfr() {
         return Optional.of(airfieldRepository.findAllByAcceptVfrIsTrue()
+                .stream()
+                .map(airfieldMapper::map)
+                .collect(Collectors.toList()));
+    }
+
+    public Optional<List<AirfieldDto>> getAllAirfields() {
+        return Optional.of(airfieldRepository.findAll()
                 .stream()
                 .map(airfieldMapper::map)
                 .collect(Collectors.toList()));

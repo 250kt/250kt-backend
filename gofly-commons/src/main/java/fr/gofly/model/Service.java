@@ -1,5 +1,6 @@
 package fr.gofly.model;
 
+import fr.gofly.model.airfield.Airfield;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.RequiredArgsConstructor;

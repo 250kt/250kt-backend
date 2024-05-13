@@ -1,6 +1,6 @@
 package fr.gofly.security.auth;
 
-import fr.gofly.model.Airfield;
+import fr.gofly.model.airfield.Airfield;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

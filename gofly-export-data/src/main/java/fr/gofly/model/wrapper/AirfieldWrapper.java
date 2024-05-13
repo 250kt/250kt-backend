@@ -1,6 +1,6 @@
 package fr.gofly.model.wrapper;
 
-import fr.gofly.model.Airfield;
+import fr.gofly.model.airfield.Airfield;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;

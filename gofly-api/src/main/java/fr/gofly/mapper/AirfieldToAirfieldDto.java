@@ -1,7 +1,7 @@
 package fr.gofly.mapper;
 
 import fr.gofly.dto.AirfieldDto;
-import fr.gofly.model.Airfield;
+import fr.gofly.model.airfield.Airfield;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +16,8 @@ public class AirfieldToAirfieldDto {
                 .longitude(airfield.getLongitude())
                 .altitude(airfield.getAltitude())
                 .territory(airfield.getTerritory())
+                .status(airfield.getStatus())
+                .type(airfield.getType())
                 .build();
     }
 }
