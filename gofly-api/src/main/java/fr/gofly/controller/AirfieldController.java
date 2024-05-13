@@ -19,9 +19,16 @@ public class AirfieldController {
 
     private final AirfieldService airfieldService;
 
+    @GetMapping("/all-accept-vfr")
+    public ResponseEntity<List<AirfieldDto>> retrieveAllAirfieldsAcceptVfr() {
+        Optional<List<AirfieldDto>> airfieldsDto = airfieldService.getAllAirfieldsAcceptVfr();
+        return airfieldsDto.map(airfield -> new ResponseEntity<>(airfield, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<AirfieldDto>> retrieveAllAirfields() {
         Optional<List<AirfieldDto>> airfieldsDto = airfieldService.getAllAirfields();
         return airfieldsDto.map(airfield -> new ResponseEntity<>(airfield, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
 }

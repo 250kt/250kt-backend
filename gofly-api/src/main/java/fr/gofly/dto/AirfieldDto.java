@@ -1,6 +1,7 @@
 package fr.gofly.dto;
 
 import fr.gofly.model.Territory;
+import fr.gofly.model.airfield.AirfieldType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,7 @@ public class AirfieldDto {
     private Float latitude;
     private Float longitude;
     private Territory territory;
+    private String status;
+    private AirfieldType type;
 
 }

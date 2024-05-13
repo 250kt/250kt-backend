@@ -1,5 +1,6 @@
 package fr.gofly.model;
 
+import fr.gofly.model.airfield.Airfield;
 import fr.gofly.model.token.Token;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,5 +1,6 @@
-package fr.gofly.model;
+package fr.gofly.model.airfield;
 
+import fr.gofly.model.Territory;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.Getter;
@@ -62,6 +63,10 @@ public class Airfield {
     @XmlElement(name = "ArpLong")
     private Float longitude;
 
+    @Column(name = "airfield_type")
+    @Enumerated(EnumType.STRING)
+    private AirfieldType type;
+
     @XmlElement(name = "TfcVfr")
     public String getAcceptVfrString() {
         return isAcceptVfr ? "oui" : "non";
@@ -69,6 +74,10 @@ public class Airfield {
 
     public void setAcceptVfrString(String value) {
         isAcceptVfr = "oui".equalsIgnoreCase(value);
+    }
+
+    public void setType(AirfieldType type) {
+        this.type = type;
     }
 
 }

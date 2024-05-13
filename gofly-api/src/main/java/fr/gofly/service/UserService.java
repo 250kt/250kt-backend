@@ -85,7 +85,6 @@ public class UserService {
     }
 
     public Optional<AirfieldDto> getFavoritedAirfield(User user){
-        return Optional.of(user.getFavoriteAirfield())
-                .map(airfieldMapper::map);
+        return userRepository.findFavoriteAirfield(user).map(airfieldMapper::map);
     }
 }
