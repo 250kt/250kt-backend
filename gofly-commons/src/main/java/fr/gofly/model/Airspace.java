@@ -2,6 +2,7 @@ package fr.gofly.model;
 
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -9,11 +10,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @XmlRootElement(name = "Espace")
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@Getter
 public class Airspace {
     @Id
     @Column(name = "airspace_id")
     @XmlAttribute(name = "pk")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "territory_id")
