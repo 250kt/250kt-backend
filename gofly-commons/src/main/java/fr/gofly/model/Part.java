@@ -2,6 +2,7 @@ package fr.gofly.model;
 
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @XmlRootElement(name = "PartieS")
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@Getter
 public class Part {
     @Id
     @Column(name = "part_id")
