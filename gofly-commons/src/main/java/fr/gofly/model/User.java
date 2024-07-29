@@ -75,6 +75,10 @@ public class User implements UserDetails {
         return authorities;
     }
 
+    @Column(name = "user_avatar")
+    @Enumerated(EnumType.STRING)
+    private PilotAvatar avatar;
+
     @Override
     public String getPassword() {
         return password;

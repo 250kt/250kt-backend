@@ -5,6 +5,7 @@ import fr.gofly.dto.UserDto;
 import fr.gofly.mapper.AirfieldToAirfieldDto;
 import fr.gofly.mapper.UserToUserDto;
 import fr.gofly.model.User;
+import fr.gofly.model.airfield.Airfield;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -86,5 +87,15 @@ public class UserService {
 
     public Optional<AirfieldDto> getFavoritedAirfield(User user){
         return userRepository.findFavoriteAirfield(user).map(airfieldMapper::map);
+    }
+
+    public boolean updateFavoriteAirfield(User user, Airfield airfield){
+        if(user.getFavoriteAirfield() != null && user.getFavoriteAirfield().getId().equals(airfield.getId())){
+            user.setFavoriteAirfield(null);
+        }else{
+            user.setFavoriteAirfield(airfield);
+        }
+        userRepository.save(user);
+        return true;
     }
 }

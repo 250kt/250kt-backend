@@ -20,4 +20,5 @@ public class UserDto {
     private Boolean isEmailConfirmed;
     private Collection<? extends GrantedAuthority> authorities;
     private Airfield favoriteAirfield;
+    private String avatar;
 }

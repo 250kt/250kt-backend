@@ -4,6 +4,7 @@ import fr.gofly.dto.AirfieldDto;
 import fr.gofly.dto.UserDto;
 import fr.gofly.helper.UserHelper;
 import fr.gofly.model.User;
+import fr.gofly.model.airfield.Airfield;
 import fr.gofly.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -93,6 +94,11 @@ public class UserController {
     public ResponseEntity<UserDto> getProfile(@AuthenticationPrincipal User userAuthenticated) {
         Optional<UserDto> userDtoOptional = userService.getUserById(userAuthenticated.getId());
         return userDtoOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/favorite-airfield")
+    public ResponseEntity<HttpStatus> updateFavoriteAirfield(@AuthenticationPrincipal User userAuthenticated, @RequestBody Airfield airfield) {
+        return userService.updateFavoriteAirfield(userAuthenticated, airfield) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

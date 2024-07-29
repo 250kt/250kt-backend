@@ -15,6 +15,7 @@ public class UserToUserDto {
                 .isEmailConfirmed(user.getIsEmailConfirmed())
                 .username(user.getUsername())
                 .favoriteAirfield(user.getFavoriteAirfield())
+                .avatar(user.getAvatar().getAvatar())
                 .build();
     }
 }
