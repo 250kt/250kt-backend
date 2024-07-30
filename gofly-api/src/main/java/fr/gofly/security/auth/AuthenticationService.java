@@ -2,6 +2,7 @@ package fr.gofly.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.gofly.model.Authority;
+import fr.gofly.model.PilotAvatar;
 import fr.gofly.security.config.JwtService;
 import fr.gofly.model.User;
 import fr.gofly.model.token.Token;
@@ -19,10 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -59,6 +60,8 @@ public class AuthenticationService {
         if (userRepository.findByEmail(request.getEmail()).isPresent())
             return Optional.empty();
 
+        String verificationCode = generateVerificationCode();
+
         // Create a new user and encode the password.
         User user = User.builder()
                 .username(request.getUsername())
@@ -68,6 +71,8 @@ public class AuthenticationService {
                 .isEmailConfirmed(false)
                 .lastConnection(LocalDateTime.now())
                 .favoriteAirfield(request.getFavoriteAirfield())
+                .verificationCode(verificationCode)
+                .avatar(PilotAvatar.PILOT_MAN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -215,5 +220,11 @@ public class AuthenticationService {
             }
         }
         return Optional.empty();
+    }
+
+    private String generateVerificationCode() {
+        byte[] array = new byte[16];
+        new Random().nextBytes(array);
+        return Base64.getEncoder().encodeToString(array);
     }
 }

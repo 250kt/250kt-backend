@@ -1,14 +1,21 @@
 package fr.gofly.service;
 
 import fr.gofly.dto.AirfieldDto;
+import fr.gofly.dto.AirfieldShortDto;
 import fr.gofly.dto.UserDto;
 import fr.gofly.mapper.AirfieldToAirfieldDto;
+import fr.gofly.mapper.AirfieldToAirfieldShortDto;
 import fr.gofly.mapper.UserToUserDto;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,11 +30,21 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService{
 
     private final UserRepository userRepository;
     private final UserToUserDto userMapper;
-    private final AirfieldToAirfieldDto airfieldMapper;
+    private final AirfieldToAirfieldShortDto airfieldShortMapper;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username:null}")
+    private String fromEmail;
+
+    @Value("${app.url:null}")
+    private String appUrl;
 
     /**
      * Updates an existing user with the provided data.
@@ -85,17 +102,50 @@ public class UserService {
         return Optional.of(userRepository.findAll().stream().map(userMapper::map).collect(Collectors.toSet()));
     }
 
-    public Optional<AirfieldDto> getFavoritedAirfield(User user){
-        return userRepository.findFavoriteAirfield(user).map(airfieldMapper::map);
+    public Optional<AirfieldShortDto> getFavoritedAirfield(User user){
+        return userRepository.findFavoriteAirfield(user).map(airfieldShortMapper::map);
     }
 
     public boolean updateFavoriteAirfield(User user, Airfield airfield){
-        if(user.getFavoriteAirfield() != null && user.getFavoriteAirfield().getId().equals(airfield.getId())){
-            user.setFavoriteAirfield(null);
-        }else{
-            user.setFavoriteAirfield(airfield);
-        }
+        user.setFavoriteAirfield(airfield);
         userRepository.save(user);
         return true;
+    }
+
+    public boolean sendConfirmationEmail(User user){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Confirm your adresse email");
+        mailMessage.setText("Click on the link to confirm your email: " + appUrl + "confirm-email?code=" + user.getVerificationCode());
+        javaMailSender.send(mailMessage);
+        return true;
+    }
+
+    public boolean confirmEmail(String code){
+        Optional<User> userOptional = userRepository.findByVerificationCode(code);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            user.setVerificationCode(null);
+            user.setIsEmailConfirmed(true);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changePassword(User user, String newPassword){
+        if(Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$", newPassword)){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setFrom(fromEmail);
+            mailMessage.setSubject("Password changed");
+            mailMessage.setText("Your password has been changed.");
+            javaMailSender.send(mailMessage);
+            return true;
+        }
+        return false;
     }
 }

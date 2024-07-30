@@ -79,6 +79,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private PilotAvatar avatar;
 
+    @Column(name = "user_verification_code")
+    private String verificationCode;
+
     @Override
     public String getPassword() {
         return password;

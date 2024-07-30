@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Optional<User> findById(String userId);
     Optional<User> findByEmail(String userEmail);
     Optional<User> findByUsername(String username);
@@ -17,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u.favoriteAirfield FROM User u WHERE u = :user")
     Optional<Airfield> findFavoriteAirfield(User user);
+
+    Optional<User> findByVerificationCode(String verificationCode);
 }
