@@ -8,9 +8,13 @@ import fr.gofly.mapper.AirfieldToAirfieldShortDto;
 import fr.gofly.mapper.UserToUserDto;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
+import fr.gofly.repository.AircraftRepository;
+import fr.gofly.repository.TokenRepository;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -32,10 +36,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService{
 
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final UserToUserDto userMapper;
     private final AirfieldToAirfieldShortDto airfieldShortMapper;
     private final PasswordEncoder passwordEncoder;
+    private final TokenRepository tokenRepository;
+    private final AircraftRepository aircraftRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -86,6 +93,8 @@ public class UserService{
     @Transactional
     public boolean deleteUser(String userId) {
         try{
+            tokenRepository.deleteAllByUserId(userId);
+            aircraftRepository.deleteAllByUserId(userId);
             userRepository.deleteById(userId);
             return true;
         }catch (Exception e){
@@ -123,10 +132,9 @@ public class UserService{
     }
 
     public boolean confirmEmail(String code){
-        Optional<User> userOptional = userRepository.findByVerificationCode(code);
+        Optional<User> userOptional = userRepository.findByVerificationCodeAndIsEmailConfirmedFalse(code);
         if(userOptional.isPresent()){
             User user = userOptional.get();
-            user.setVerificationCode(null);
             user.setIsEmailConfirmed(true);
             userRepository.save(user);
             return true;

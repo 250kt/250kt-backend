@@ -10,10 +10,7 @@ import fr.gofly.repository.AircraftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,7 +71,8 @@ public class AircraftService {
         return Optional.of(aircraftRepository.findAllByUser(user)
                 .stream()
                 .map(aircraftMapper::map)
-                .collect(Collectors.toSet()));
+                .sorted(Comparator.comparing(a -> Objects.requireNonNull(a.getRegistration())))
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     public Optional<List<AircraftDto>> getAllAircrafts() {

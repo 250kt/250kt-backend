@@ -26,7 +26,6 @@ import java.util.Set;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final UserHelper userHelper;
 
@@ -118,5 +117,10 @@ public class UserController {
     @PutMapping("/change-password")
     public ResponseEntity<HttpStatus> changePassword(@AuthenticationPrincipal User userAuthenticated, @RequestBody String newPassword) {
         return userService.changePassword(userAuthenticated, newPassword) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/delete-account")
+    public ResponseEntity<HttpStatus> deleteAccount(@AuthenticationPrincipal User userAuthenticated) {
+        return userService.deleteUser(userAuthenticated.getId()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

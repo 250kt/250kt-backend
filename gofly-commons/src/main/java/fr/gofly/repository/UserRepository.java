@@ -19,5 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.favoriteAirfield FROM User u WHERE u = :user")
     Optional<Airfield> findFavoriteAirfield(User user);
 
-    Optional<User> findByVerificationCode(String verificationCode);
+    Optional<User> findByVerificationCodeAndIsEmailConfirmedFalse(String verificationCode);
 }
