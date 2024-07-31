@@ -1,11 +1,15 @@
 package fr.gofly.controller;
 
 import fr.gofly.dto.AirfieldDto;
+import fr.gofly.dto.AirfieldShortDto;
 import fr.gofly.dto.UserDto;
 import fr.gofly.helper.UserHelper;
 import fr.gofly.model.User;
+import fr.gofly.model.airfield.Airfield;
 import fr.gofly.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -84,9 +88,39 @@ public class UserController {
     }
 
     @GetMapping("/favorite-airfield")
-    public ResponseEntity<AirfieldDto> getFavoriteAirfield(@AuthenticationPrincipal User userAuthenticated) {
-        Optional<AirfieldDto> airfieldDtoOptional = userService.getFavoritedAirfield(userAuthenticated);
+    public ResponseEntity<AirfieldShortDto> getFavoriteAirfield(@AuthenticationPrincipal User userAuthenticated) {
+        Optional<AirfieldShortDto> airfieldDtoOptional = userService.getFavoritedAirfield(userAuthenticated);
         return airfieldDtoOptional.map(airfield -> new ResponseEntity<>(airfield, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<UserDto> getProfile(@AuthenticationPrincipal User userAuthenticated) {
+        Optional<UserDto> userDtoOptional = userService.getUserById(userAuthenticated.getId());
+        return userDtoOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/favorite-airfield")
+    public ResponseEntity<HttpStatus> updateFavoriteAirfield(@AuthenticationPrincipal User userAuthenticated, @RequestBody Airfield airfield) {
+        return userService.updateFavoriteAirfield(userAuthenticated, airfield) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/send-confirm-email")
+    public ResponseEntity<HttpStatus> sendConfirmEmail(@AuthenticationPrincipal User userAuthenticated) {
+        return userService.sendConfirmationEmail(userAuthenticated) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/confirm-email")
+    public ResponseEntity<HttpStatus> confirmEmail(@RequestBody String code) {
+        return userService.confirmEmail(code) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<HttpStatus> changePassword(@AuthenticationPrincipal User userAuthenticated, @RequestBody String newPassword) {
+        return userService.changePassword(userAuthenticated, newPassword) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/delete-account")
+    public ResponseEntity<HttpStatus> deleteAccount(@AuthenticationPrincipal User userAuthenticated) {
+        return userService.deleteUser(userAuthenticated.getId()) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

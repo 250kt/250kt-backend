@@ -2,6 +2,7 @@ package fr.gofly.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.gofly.model.Authority;
+import fr.gofly.model.PilotAvatar;
 import fr.gofly.security.config.JwtService;
 import fr.gofly.model.User;
 import fr.gofly.model.token.Token;
@@ -19,11 +20,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,11 @@ public class AuthenticationService {
     //Check the email regex (RFC 5322 Official Standard) before check if the user already exist permit to avoid SQL injection
     private final Pattern emailPattern = Pattern.compile("^((?:[A-Za-z0-9!#$%&'*+\\-\\/=?^_`{|}~]|(?<=^|\\.)\"|\"(?=$|\\.|@)|(?<=\".*)[ .](?=.*\")|(?<!\\.)\\.){1,64})(@)((?:[A-Za-z0-9.\\-])*(?:[A-Za-z0-9])\\.(?:[A-Za-z0-9]){2,})$");
     private final Pattern usernamePattern = Pattern.compile("^[A-Za-z][A-Za-z0-9_]{2,29}$");
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final int CODE_LENGTH = 16;
+    private static final SecureRandom RANDOM = new SecureRandom();
+
     /**
      * Register a new user.
      *
@@ -59,6 +67,8 @@ public class AuthenticationService {
         if (userRepository.findByEmail(request.getEmail()).isPresent())
             return Optional.empty();
 
+        String verificationCode = generateVerificationCode();
+
         // Create a new user and encode the password.
         User user = User.builder()
                 .username(request.getUsername())
@@ -68,6 +78,8 @@ public class AuthenticationService {
                 .isEmailConfirmed(false)
                 .lastConnection(LocalDateTime.now())
                 .favoriteAirfield(request.getFavoriteAirfield())
+                .verificationCode(verificationCode)
+                .avatar(PilotAvatar.PILOT_MAN)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -215,5 +227,11 @@ public class AuthenticationService {
             }
         }
         return Optional.empty();
+    }
+
+    private String generateVerificationCode() {
+        return RANDOM.ints(CODE_LENGTH, 0, CHARACTERS.length())
+                .mapToObj(i -> String.valueOf(CHARACTERS.charAt(i)))
+                .collect(Collectors.joining());
     }
 }

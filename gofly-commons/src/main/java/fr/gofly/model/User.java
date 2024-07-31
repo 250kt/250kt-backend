@@ -51,11 +51,11 @@ public class User implements UserDetails {
             nullable = false)
     private List<Authority> authorities;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Transient
     private Set<Aircraft> aircraft;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Transient
     private List<Token> tokens;
 
@@ -74,6 +74,13 @@ public class User implements UserDetails {
 
         return authorities;
     }
+
+    @Column(name = "user_avatar")
+    @Enumerated(EnumType.STRING)
+    private PilotAvatar avatar;
+
+    @Column(name = "user_verification_code")
+    private String verificationCode;
 
     @Override
     public String getPassword() {

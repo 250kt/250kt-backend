@@ -1,6 +1,5 @@
 package fr.gofly.dto;
 
-import fr.gofly.model.airfield.Airfield;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,6 @@ public class UserDto {
     private String email;
     private Boolean isEmailConfirmed;
     private Collection<? extends GrantedAuthority> authorities;
-    private Airfield favoriteAirfield;
+    private AirfieldShortDto favoriteAirfield;
+    private String avatar;
 }

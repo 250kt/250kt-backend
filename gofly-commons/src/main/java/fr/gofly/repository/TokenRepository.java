@@ -14,4 +14,6 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
     """)
     List<Token> findAllValidTokensByUser(String userId);
     Optional<Token> findByHex(String token);
+
+    void deleteAllByUserId(String userId);
 }
