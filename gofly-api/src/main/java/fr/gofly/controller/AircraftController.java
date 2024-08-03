@@ -1,12 +1,12 @@
 package fr.gofly.controller;
 
 import fr.gofly.dto.AircraftDto;
-import fr.gofly.mapper.AircraftToAircraftDto;
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
-import fr.gofly.security.config.JwtService;
 import fr.gofly.service.AircraftService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AircraftController {
 
+    private static final Logger log = LoggerFactory.getLogger(AircraftController.class);
     private final AircraftService aircraftService;
 
     @GetMapping("/{aircraftId}")
@@ -58,5 +59,11 @@ public class AircraftController {
     public ResponseEntity<List<AircraftDto>> retrieveAllAircraft() {
         Optional<List<AircraftDto>> aircraftsDto = aircraftService.getAllAircrafts();
         return aircraftsDto.map(aircraft -> new ResponseEntity<>(aircraft, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
+    @PutMapping("/favorite")
+    public ResponseEntity<AircraftDto> setFavoriteAircraft(@RequestBody Aircraft aircraft, @AuthenticationPrincipal User user) {
+        Optional<AircraftDto> aircraftOptionalDto = aircraftService.changeFavoriteAircraft(aircraft, user);
+        return aircraftOptionalDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }
