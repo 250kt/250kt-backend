@@ -71,7 +71,8 @@ public class AircraftService {
         return Optional.of(aircraftRepository.findAllByUser(user)
                 .stream()
                 .map(aircraftMapper::map)
-                .sorted(Comparator.comparing(a -> Objects.requireNonNull(a.getRegistration())))
+                .sorted(Comparator.comparing(AircraftDto::isFavorite).reversed()
+                .thenComparing(AircraftDto::getRegistration))
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
@@ -80,5 +81,23 @@ public class AircraftService {
                 .stream()
                 .map(aircraftMapper::map)
                 .collect(Collectors.toList()));
+    }
+
+    public Optional<AircraftDto> changeFavoriteAircraft(Aircraft aircraft, User user) {
+
+        Optional<Aircraft> currentFavoriteAircraft = aircraftRepository.findByFavoriteTrueAndUser(user);
+
+        if(currentFavoriteAircraft.isPresent()){
+            currentFavoriteAircraft.get().setFavorite(false);
+            aircraftRepository.save(currentFavoriteAircraft.get());
+        }
+        Optional<Aircraft> newFavoriteAircraft= aircraftRepository.findById(aircraft.getId());
+
+        if (newFavoriteAircraft.isEmpty() || !(aircraftHelper.isAircraftOwnedByUser(newFavoriteAircraft.get(), user))){
+            return Optional.empty();
+        }
+
+        newFavoriteAircraft.get().setFavorite(!newFavoriteAircraft.get().isFavorite());
+        return Optional.of(aircraftMapper.map(aircraftRepository.save(newFavoriteAircraft.get())));
     }
 }
