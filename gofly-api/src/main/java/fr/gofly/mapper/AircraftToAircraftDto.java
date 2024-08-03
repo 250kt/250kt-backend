@@ -25,6 +25,7 @@ public class AircraftToAircraftDto {
             .unloadedWeight(aircraft.getUnloadedWeight())
             .leverArmUnloadedWeight(aircraft.getLeverArmUnloadedWeight())
             .maximumWeight(aircraft.getMaximumWeight())
+            .isFavorite(aircraft.isFavorite())
             .build();
     }
 }

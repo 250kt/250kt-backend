@@ -82,6 +82,9 @@ public class User implements UserDetails {
     @Column(name = "user_verification_code")
     private String verificationCode;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Flight> flights;
+
     @Override
     public String getPassword() {
         return password;

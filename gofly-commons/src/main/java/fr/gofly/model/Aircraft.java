@@ -69,4 +69,7 @@ public class Aircraft {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "aircraft_is_favorite")
+    private boolean isFavorite;
 }
