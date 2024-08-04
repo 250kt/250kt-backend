@@ -38,4 +38,10 @@ public class FlightController {
         Optional<FlightDto> flightDto = flightService.updateFlight(flight, user);
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+    @PutMapping("/archive")
+    public ResponseEntity<HttpStatus> archiveFlight(@RequestBody Flight flight, @AuthenticationPrincipal User user) {
+        flightService.archiveCurrentUserFlight(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

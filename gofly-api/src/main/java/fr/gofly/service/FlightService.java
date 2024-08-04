@@ -9,6 +9,8 @@ import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FlightService {
 
+    private static final Logger log = LoggerFactory.getLogger(FlightService.class);
     private final FlightHelper flightHelper;
     private final FlightRepository flightRepository;
     private final FlightToFlightDto flightMapper;
@@ -46,12 +49,18 @@ public class FlightService {
 
     public Optional<FlightDto> updateFlight(Flight flight, User user) {
         flight.setUser(user);
-
         FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(flight.getAirfieldDeparture().getLatitude(), flight.getAirfieldDeparture().getLongitude(), flight.getAirfieldArrival().getLatitude(), flight.getAirfieldArrival().getLongitude());
         flight.setDistance(metrics.distance());
         flight.setDirection(metrics.direction());
         flight.setDuration(flightHelper.calculateDuration(metrics.distance(), flight.getAircraft().getBaseFactor()));
 
         return Optional.of(flightMapper.map(flightRepository.save(flight)));
+    }
+
+    public void archiveCurrentUserFlight(User user) {
+        flightRepository.findFirstByUserAndIsCurrentEdit(user, true).ifPresent(f -> {
+            f.setCurrentEdit(false);
+            flightRepository.save(f);
+        });
     }
 }
