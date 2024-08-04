@@ -44,4 +44,13 @@ public class Flight {
     @Column(name = "flight_is_current_edit")
     private boolean isCurrentEdit;
 
+    @Column(name = "flight_distance")
+    private double distance;
+
+    @Column(name = "flight_duration")
+    private int duration;
+
+    @Column(name = "flight_direction")
+    private int direction;
+
 }

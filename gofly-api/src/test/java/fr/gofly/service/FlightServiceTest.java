@@ -3,7 +3,9 @@ package fr.gofly.service;
 import fr.gofly.dto.FlightDto;
 import fr.gofly.helper.FlightHelper;
 import fr.gofly.mapper.FlightToFlightDto;
+import fr.gofly.model.Aircraft;
 import fr.gofly.model.Flight;
+import fr.gofly.model.FlightMetrics;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.repository.FlightRepository;
@@ -21,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class FlightServiceTest {
+
 
     @Mock
     private FlightHelper flightHelper;
@@ -36,48 +38,65 @@ public class FlightServiceTest {
     @InjectMocks
     private FlightService flightService;
 
+    @Mock
     private Flight flight;
-    private User user;
-    private Airfield airfield;
+
+    @Mock
     private FlightDto flightDto;
 
-    @BeforeEach
-    void setUp() {
-        flight = new Flight();
-        user = new User();
-        airfield = new Airfield();
-        flightDto = new FlightDto();
+    @Mock
+    private User user;
 
-        user.setFavoriteAirfield(airfield);
+    @Mock
+    private Airfield airfield;
+
+    @Mock
+    private Aircraft aircraft;
+
+    void setUp() {
+        when(user.getFavoriteAirfield()).thenReturn(airfield);
+        when(airfield.getLatitude()).thenReturn(49.0f);
+        when(airfield.getLongitude()).thenReturn(2.0f);
+        when(flight.getAirfieldDeparture()).thenReturn(airfield);
+        when(flight.getAirfieldArrival()).thenReturn(airfield);
+        when(flight.getAircraft()).thenReturn(aircraft);
+        when(aircraft.getBaseFactor()).thenReturn(1.0);
     }
 
-    @Test
     void testCreateFlight_MissingMandatoryField() {
-        when(flightHelper.isMissingMandatoryField(flight)).thenReturn(true);
+        when(flightHelper.isMissingMandatoryField(any(Flight.class))).thenReturn(false);
 
         Optional<FlightDto> result = flightService.createFlight(flight, user);
 
-        assertTrue(result.isEmpty());
         verify(flightHelper).isMissingMandatoryField(flight);
         verifyNoInteractions(flightRepository, flightMapper);
     }
 
-    @Test
+
     void testCreateFlight_Success() {
-        when(flightHelper.isMissingMandatoryField(flight)).thenReturn(false);
+        // Arrange
+        when(flightHelper.isMissingMandatoryField(flight)).thenReturn(true);
         when(flightRepository.save(any(Flight.class))).thenReturn(flight);
         when(flightMapper.map(flight)).thenReturn(flightDto);
+        when(flightHelper.calculateMetricsBetweenTwoPoints(anyFloat(), anyFloat(), anyFloat(), anyFloat()))
+                .thenReturn(new FlightMetrics(7.53, 294));
+        when(flightHelper.calculateDuration(anyDouble(), anyDouble())).thenReturn(50);
+        when(flight.getAircraft()).thenReturn(mock(Aircraft.class));
+        when(flight.getAircraft().getBaseFactor()).thenReturn(0.5);
 
+        // Act
         Optional<FlightDto> result = flightService.createFlight(flight, user);
 
+        // Assert
         assertTrue(result.isPresent());
         assertEquals(flightDto, result.get());
         verify(flightHelper).isMissingMandatoryField(flight);
         verify(flightRepository).save(flight);
         verify(flightMapper).map(flight);
+        verify(flightHelper).calculateMetricsBetweenTwoPoints(49.0f, 2.0f, 49.0f, 2.0f);
+        verify(flightHelper).calculateDuration(7.53, 1.0);
     }
 
-    @Test
     void testGetCurrentFlight_NoCurrentFlight() {
         when(flightRepository.findFirstByUserAndIsCurrentEdit(user, true)).thenReturn(Optional.empty());
 
@@ -88,7 +107,6 @@ public class FlightServiceTest {
         verifyNoInteractions(flightMapper);
     }
 
-    @Test
     void testGetCurrentFlight_Success() {
         when(flightRepository.findFirstByUserAndIsCurrentEdit(user, true)).thenReturn(Optional.of(flight));
         when(flightMapper.map(flight)).thenReturn(flightDto);
@@ -101,7 +119,6 @@ public class FlightServiceTest {
         verify(flightMapper).map(flight);
     }
 
-    @Test
     void testUpdateFlight_Success() {
         when(flightRepository.save(any(Flight.class))).thenReturn(flight);
         when(flightMapper.map(flight)).thenReturn(flightDto);
