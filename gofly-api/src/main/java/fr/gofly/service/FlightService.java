@@ -4,6 +4,7 @@ import fr.gofly.dto.FlightDto;
 import fr.gofly.helper.FlightHelper;
 import fr.gofly.mapper.FlightToFlightDto;
 import fr.gofly.model.Flight;
+import fr.gofly.model.FlightMetrics;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.repository.FlightRepository;
@@ -30,6 +31,12 @@ public class FlightService {
         flight.setCurrentEdit(true);
         flight.setAirfieldDeparture(favoriteAirfield);
         flight.setAirfieldArrival(favoriteAirfield);
+
+        FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(flight.getAirfieldDeparture().getLatitude(), flight.getAirfieldDeparture().getLongitude(), flight.getAirfieldArrival().getLatitude(), flight.getAirfieldArrival().getLongitude());
+        flight.setDistance(metrics.distance());
+        flight.setDirection(metrics.direction());
+        flight.setDuration(flightHelper.calculateDuration(metrics.distance(), flight.getAircraft().getBaseFactor()));
+
         return Optional.of(flightMapper.map(flightRepository.save(flight)));
     }
 
@@ -39,6 +46,12 @@ public class FlightService {
 
     public Optional<FlightDto> updateFlight(Flight flight, User user) {
         flight.setUser(user);
+
+        FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(flight.getAirfieldDeparture().getLatitude(), flight.getAirfieldDeparture().getLongitude(), flight.getAirfieldArrival().getLatitude(), flight.getAirfieldArrival().getLongitude());
+        flight.setDistance(metrics.distance());
+        flight.setDirection(metrics.direction());
+        flight.setDuration(flightHelper.calculateDuration(metrics.distance(), flight.getAircraft().getBaseFactor()));
+
         return Optional.of(flightMapper.map(flightRepository.save(flight)));
     }
 }

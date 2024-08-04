@@ -20,5 +20,8 @@ public class FlightDto {
     private String createdAt;
     private AircraftDto aircraft;
     private boolean isCurrentEdit;
+    private double distance;
+    private int duration;
+    private int direction;
 
 }

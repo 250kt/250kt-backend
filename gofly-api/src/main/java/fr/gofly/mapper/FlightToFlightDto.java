@@ -21,6 +21,9 @@ public class FlightToFlightDto {
             .airfieldDeparture(airfieldMapper.map(flight.getAirfieldDeparture()))
             .airfieldArrival(airfieldMapper.map(flight.getAirfieldArrival()))
             .isCurrentEdit(flight.isCurrentEdit())
+            .distance(flight.getDistance())
+            .duration(flight.getDuration())
+            .direction(flight.getDirection())
             .build();
     }
 
