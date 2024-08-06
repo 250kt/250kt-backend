@@ -23,6 +23,11 @@ public class AircraftService {
     private final UserHelper userHelper;
 
     public Optional<AircraftDto> createAircraft(Aircraft aircraft, User user) {
+        if(aircraftRepository.count()<1){
+            aircraft.setFavorite(true);
+        }
+
+        aircraft.setRegistration(aircraft.getRegistration().toUpperCase());
         aircraft.setUser(user);
         if (aircraftHelper.isMissingMandatoryField(aircraft)) {
             return Optional.empty();
@@ -39,6 +44,7 @@ public class AircraftService {
                 !(aircraftHelper.isAircraftOwnedByUser(aircraftDatabase.get(), user) || userHelper.isAdmin(user)))
             return Optional.empty();
 
+        aircraft.setRegistration(aircraft.getRegistration().toUpperCase());
         aircraft.setUser(aircraftDatabase.get().getUser());
         aircraft.setBaseFactor(60.0 / (double) aircraft.getTrueAirSpeed());
         return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
@@ -85,17 +91,15 @@ public class AircraftService {
 
     public Optional<AircraftDto> changeFavoriteAircraft(Aircraft aircraft, User user) {
 
-        Optional<Aircraft> currentFavoriteAircraft = aircraftRepository.findByFavoriteTrueAndUser(user);
-
-        if(currentFavoriteAircraft.isPresent()){
-            currentFavoriteAircraft.get().setFavorite(false);
-            aircraftRepository.save(currentFavoriteAircraft.get());
-        }
+        Aircraft currentFavoriteAircraft = aircraftRepository.findByFavoriteTrueAndUser(user);
         Optional<Aircraft> newFavoriteAircraft= aircraftRepository.findById(aircraft.getId());
 
         if (newFavoriteAircraft.isEmpty() || !(aircraftHelper.isAircraftOwnedByUser(newFavoriteAircraft.get(), user))){
             return Optional.empty();
         }
+
+        currentFavoriteAircraft.setFavorite(false);
+        aircraftRepository.save(currentFavoriteAircraft);
 
         newFavoriteAircraft.get().setFavorite(!newFavoriteAircraft.get().isFavorite());
         return Optional.of(aircraftMapper.map(aircraftRepository.save(newFavoriteAircraft.get())));

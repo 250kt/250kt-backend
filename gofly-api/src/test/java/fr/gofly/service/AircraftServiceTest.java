@@ -51,6 +51,7 @@ public class AircraftServiceTest {
     void testCreateAircraft_ShouldReturnOptionalAircraft_WhenAllMandatoryFieldsArePresent() {
         User user = new User();
         Aircraft aircraft = Aircraft.builder().id(1).trueAirSpeed(120).build();
+        aircraft.setRegistration("F-GOFL");
 
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(false);
         when(aircraftRepository.save(any(Aircraft.class))).thenReturn(aircraft);
@@ -63,6 +64,7 @@ public class AircraftServiceTest {
     void testCreateAircraft_ShouldReturnOptionalEmpty_WhenAircraftHasOneMissingMandatoryField() {
         User user = new User();
         Aircraft aircraft = Aircraft.builder().id(1).build();
+        aircraft.setRegistration("F-GOFL");
 
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(true);
 
@@ -76,6 +78,7 @@ public class AircraftServiceTest {
         user.setAuthorities(authorities);
 
         Aircraft aircraft = Aircraft.builder().id(1).user(user).trueAirSpeed(100).build();
+        aircraft.setRegistration("F-gofl");
 
         when(aircraftRepository.findById(anyInt())).thenReturn(Optional.of(aircraft));
         when(aircraftHelper.isMissingMandatoryField(any(Aircraft.class))).thenReturn(false);
