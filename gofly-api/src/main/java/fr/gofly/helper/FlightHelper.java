@@ -52,7 +52,6 @@ public class FlightHelper {
     }
 
     public int calculateDuration(double distance, Double baseFactor) {
-        log.info("Calculating duration for a distance of {} and a base factor of {}", distance, baseFactor);
         return (int) (distance * baseFactor);
     }
 }

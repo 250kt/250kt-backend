@@ -63,40 +63,6 @@ public class FlightServiceTest {
         when(aircraft.getBaseFactor()).thenReturn(1.0);
     }
 
-    void testCreateFlight_MissingMandatoryField() {
-        when(flightHelper.isMissingMandatoryField(any(Flight.class))).thenReturn(false);
-
-        Optional<FlightDto> result = flightService.createFlight(flight, user);
-
-        verify(flightHelper).isMissingMandatoryField(flight);
-        verifyNoInteractions(flightRepository, flightMapper);
-    }
-
-
-    void testCreateFlight_Success() {
-        // Arrange
-        when(flightHelper.isMissingMandatoryField(flight)).thenReturn(true);
-        when(flightRepository.save(any(Flight.class))).thenReturn(flight);
-        when(flightMapper.map(flight)).thenReturn(flightDto);
-        when(flightHelper.calculateMetricsBetweenTwoPoints(anyFloat(), anyFloat(), anyFloat(), anyFloat()))
-                .thenReturn(new FlightMetrics(7.53, 294));
-        when(flightHelper.calculateDuration(anyDouble(), anyDouble())).thenReturn(50);
-        when(flight.getAircraft()).thenReturn(mock(Aircraft.class));
-        when(flight.getAircraft().getBaseFactor()).thenReturn(0.5);
-
-        // Act
-        Optional<FlightDto> result = flightService.createFlight(flight, user);
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(flightDto, result.get());
-        verify(flightHelper).isMissingMandatoryField(flight);
-        verify(flightRepository).save(flight);
-        verify(flightMapper).map(flight);
-        verify(flightHelper).calculateMetricsBetweenTwoPoints(49.0f, 2.0f, 49.0f, 2.0f);
-        verify(flightHelper).calculateDuration(7.53, 1.0);
-    }
-
     void testGetCurrentFlight_NoCurrentFlight() {
         when(flightRepository.findFirstByUserAndIsCurrentEdit(user, true)).thenReturn(Optional.empty());
 

@@ -16,5 +16,5 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Integer> {
     void deleteAllByUserId(String userId);
 
     @Query("SELECT a FROM Aircraft a WHERE a.isFavorite = true AND a.user = ?1")
-    Optional<Aircraft> findByFavoriteTrueAndUser(User user);
+    Aircraft findByFavoriteTrueAndUser(User user);
 }

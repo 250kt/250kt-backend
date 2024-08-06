@@ -22,11 +22,11 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "flight_airfield_departure")
     private Airfield airfieldDeparture = null;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "flight_airfield_arrival")
     private Airfield airfieldArrival = null;
 
@@ -37,7 +37,7 @@ public class Flight {
     @Column(name = "flight_created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "flight_aircraft_id")
     private Aircraft aircraft;
 
