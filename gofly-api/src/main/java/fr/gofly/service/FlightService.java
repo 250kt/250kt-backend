@@ -125,4 +125,22 @@ public class FlightService {
         currentFlight.get().setDuration(flightHelper.calculateDuration(metrics.distance(), currentFlight.get().getAircraft().getBaseFactor()));
         return Optional.of(flightMapper.map(flightRepository.save(currentFlight.get())));
     }
+
+    public Optional<FlightDto> reverseDepartureArrival(User user) {
+        Optional<Flight> currentFlight = flightRepository.findFirstByUserAndIsCurrentEdit(user, true);
+        if(currentFlight.isEmpty()) {
+            return Optional.empty();
+        }
+        Airfield departure = currentFlight.get().getAirfieldDeparture();
+        currentFlight.get().setAirfieldDeparture(currentFlight.get().getAirfieldArrival());
+        currentFlight.get().setAirfieldArrival(departure);
+
+        FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(currentFlight.get().getAirfieldDeparture().getLatitude(), currentFlight.get().getAirfieldDeparture().getLongitude(), currentFlight.get().getAirfieldArrival().getLatitude(), currentFlight.get().getAirfieldArrival().getLongitude());
+
+        currentFlight.get().setDistance(metrics.distance());
+        currentFlight.get().setDirection(metrics.direction());
+        currentFlight.get().setDuration(flightHelper.calculateDuration(metrics.distance(), currentFlight.get().getAircraft().getBaseFactor()));
+
+        return Optional.of(flightMapper.map(flightRepository.save(currentFlight.get())));
+    }
 }
