@@ -63,4 +63,10 @@ public class FlightController {
         Optional<FlightDto> flightDto = flightService.setAirfield(airfield, user, typeAirfield);
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+    @PutMapping("/reverse-departure-arrival-airfield")
+    public ResponseEntity<FlightDto> reverseDepartureArrival(@AuthenticationPrincipal User user) {
+        Optional<FlightDto> flightDto = flightService.reverseDepartureArrival(user);
+        return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
 }
