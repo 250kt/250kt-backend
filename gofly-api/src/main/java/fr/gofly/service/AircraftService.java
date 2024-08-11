@@ -81,6 +81,7 @@ public class AircraftService {
                 .map(aircraftMapper::map)
                 .sorted(Comparator.comparing(AircraftDto::isFavorite).reversed()
                 .thenComparing(AircraftDto::getRegistration))
+                .sorted(Comparator.comparing(AircraftDto::isCommon))
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
