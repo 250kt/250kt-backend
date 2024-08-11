@@ -2,7 +2,7 @@ package fr.gofly.controller;
 
 import fr.gofly.dto.FlightDto;
 import fr.gofly.model.Aircraft;
-import fr.gofly.model.Flight;
+import fr.gofly.model.flight.Flight;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.service.FlightService;
@@ -34,12 +34,6 @@ public class FlightController {
         return flightDtoOptional.map(flightDto -> new ResponseEntity<>(flightDto, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.OK));
     }
 
-    @PutMapping
-    public ResponseEntity<FlightDto> updateFlight(@RequestBody Flight flight, @AuthenticationPrincipal User user) {
-        Optional<FlightDto> flightDto = flightService.updateFlight(flight, user);
-        return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-    }
-
     @GetMapping
     public ResponseEntity<List<FlightDto>> getFlights(@AuthenticationPrincipal User user) {
         Optional<List<FlightDto>> flightDtos = flightService.getFlights(user);
@@ -58,15 +52,15 @@ public class FlightController {
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @PutMapping("/airfield/{typeAirfield}")
-    public ResponseEntity<FlightDto> setAirfield(@RequestBody Airfield airfield, @AuthenticationPrincipal User user, @PathVariable("typeAirfield") String typeAirfield) {
-        Optional<FlightDto> flightDto = flightService.setAirfield(airfield, user, typeAirfield);
+    @PutMapping("/step/{idStep}/airfield")
+    public ResponseEntity<FlightDto> setAirfieldStep(@RequestBody Airfield airfield, @PathVariable("idStep") Long idStep, @AuthenticationPrincipal User user) {
+        Optional<FlightDto> flightDto = flightService.setAirfieldStep(airfield, idStep, user);
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @PutMapping("/reverse-departure-arrival-airfield")
-    public ResponseEntity<FlightDto> reverseDepartureArrival(@AuthenticationPrincipal User user) {
-        Optional<FlightDto> flightDto = flightService.reverseDepartureArrival(user);
-        return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    @PostMapping("/step")
+    public ResponseEntity<FlightDto> addStep(@AuthenticationPrincipal User user) {
+        Optional<FlightDto> flightDto = flightService.addStep(user);
+        return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }

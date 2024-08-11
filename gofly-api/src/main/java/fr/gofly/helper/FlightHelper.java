@@ -1,19 +1,10 @@
 package fr.gofly.helper;
 
-import fr.gofly.model.Flight;
-import fr.gofly.model.FlightMetrics;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.gofly.model.flight.FlightMetrics;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FlightHelper {
-
-    private static final Logger log = LoggerFactory.getLogger(FlightHelper.class);
-
-    public boolean isMissingMandatoryField(Flight flight) {
-        return flight.getCreatedAt() == null || flight.getAircraft() == null;
-    }
 
     public FlightMetrics calculateMetricsBetweenTwoPoints(float lat1, float lon1, float lat2, float lon2) {
         // Convert latitude and longitude from degrees to radians

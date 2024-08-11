@@ -1,6 +1,6 @@
 package fr.gofly.helper;
 
-import fr.gofly.model.FlightMetrics;
+import fr.gofly.model.flight.FlightMetrics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
