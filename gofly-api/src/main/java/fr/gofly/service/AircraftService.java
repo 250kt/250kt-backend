@@ -8,11 +8,13 @@ import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
 import fr.gofly.repository.AircraftRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AircraftService {
@@ -23,7 +25,7 @@ public class AircraftService {
     private final UserHelper userHelper;
 
     public Optional<AircraftDto> createAircraft(Aircraft aircraft, User user) {
-        if(aircraftRepository.count()<1){
+        if(aircraftRepository.countByUser(user)<1){
             aircraft.setFavorite(true);
         }
 
