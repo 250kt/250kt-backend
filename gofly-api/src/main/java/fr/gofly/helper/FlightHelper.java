@@ -5,10 +5,12 @@ import fr.gofly.model.flight.FlightMetrics;
 import fr.gofly.model.flight.Step;
 import fr.gofly.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FlightHelper {
@@ -57,7 +59,6 @@ public class FlightHelper {
 
 
     public List<Step> computeStepsMetrics(List<Step> steps, Flight currentFlight) {
-
         for(int i = 0; i < steps.size(); i++) {
             Step s = steps.get(i);
             if (s.getOrder() != steps.size()){
@@ -65,6 +66,10 @@ public class FlightHelper {
                 s.setDistance(metrics.distance());
                 s.setCap(metrics.direction());
                 s.setDuration(calculateDuration(s.getDistance(), currentFlight.getAircraft().getBaseFactor()));
+            }else{
+                s.setDistance(0.0);
+                s.setCap(0);
+                s.setDuration(0);
             }
         }
         return steps;
@@ -73,6 +78,7 @@ public class FlightHelper {
     public Flight computeTotalMetrics(Flight currentFlight) {
         List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
         double totalDistance = steps.stream().mapToDouble(Step::getDistance).sum();
+        totalDistance = Math.round(totalDistance);
         int totalDuration = steps.stream().mapToInt(Step::getDuration).sum();
         currentFlight.setDistance(totalDistance);
         currentFlight.setDuration(totalDuration);

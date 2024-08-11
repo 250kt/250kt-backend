@@ -63,4 +63,10 @@ public class FlightController {
         Optional<FlightDto> flightDto = flightService.addStep(user);
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+    @DeleteMapping("/step/{idStep}")
+    public ResponseEntity<FlightDto> deleteStep(@PathVariable("idStep") Long idStep, @AuthenticationPrincipal User user) {
+        Optional<FlightDto> flightDto = flightService.deleteStep(idStep, user);
+        return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
 }
