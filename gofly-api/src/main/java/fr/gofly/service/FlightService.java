@@ -189,4 +189,37 @@ public class FlightService {
 
     }
 
+    public Optional<FlightDto> deleteStep(Long idStep, User user) {
+        Optional<Flight> currentFlightOptional = flightRepository.findFirstByUserAndIsCurrentEdit(user, true);
+        if (currentFlightOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        Flight currentFlight = currentFlightOptional.get();
+        List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
+
+        Step stepToRemove = steps.stream()
+                .filter(step -> step.getId().equals(idStep))
+                .findFirst()
+                .orElse(null);
+
+        if (stepToRemove == null) {
+            return Optional.empty();
+        }
+
+        steps.remove(stepToRemove);
+        stepRepository.delete(stepToRemove);
+
+        // Adjust the order of the remaining steps
+        for (int i = 0; i < steps.size(); i++) {
+            steps.get(i).setOrder(i + 1);
+        }
+
+        stepRepository.saveAll(steps);
+        steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
+        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
+        currentFlight.setSteps(stepRepository.findAllByFlightOrderByOrder(currentFlight));
+        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
+
+        return Optional.of(flightMapper.map(currentFlight));
+    }
 }
