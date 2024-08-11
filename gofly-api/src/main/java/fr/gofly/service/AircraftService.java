@@ -1,12 +1,18 @@
 package fr.gofly.service;
 
 import fr.gofly.dto.AircraftDto;
+import fr.gofly.dto.FlightDto;
 import fr.gofly.helper.AircraftHelper;
+import fr.gofly.helper.FlightHelper;
 import fr.gofly.helper.UserHelper;
 import fr.gofly.mapper.AircraftToAircraftDto;
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
+import fr.gofly.model.flight.Flight;
+import fr.gofly.model.flight.Step;
 import fr.gofly.repository.AircraftRepository;
+import fr.gofly.repository.FlightRepository;
+import fr.gofly.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,10 @@ public class AircraftService {
     private final AircraftHelper aircraftHelper;
     private final AircraftToAircraftDto aircraftMapper;
     private final UserHelper userHelper;
+    private final FlightRepository flightRepository;
+    private final StepRepository stepRepository;
+    private final FlightHelper flightHelper;
+
 
     public Optional<AircraftDto> createAircraft(Aircraft aircraft, User user) {
         if(aircraftRepository.countByUser(user)<1){
@@ -55,14 +65,32 @@ public class AircraftService {
     public boolean deleteAircraft(Integer aircraftId, User user) {
         Optional<Aircraft> aircraftOptional = aircraftRepository.findById(aircraftId);
 
-        if(aircraftOptional.isPresent()){
-            if (aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
-                aircraftRepository.delete(aircraftOptional.get());
-                return true;
-            }
+        if(aircraftOptional.isEmpty()) {
+            return false;
+        }
+
+        setDefaultAircraft(aircraftOptional.get(), user);
+
+        if (aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
+            aircraftRepository.delete(aircraftOptional.get());
+            return true;
         }
 
         return false;
+    }
+
+
+    private void setDefaultAircraft(Aircraft aircraft, User user) {
+        List<Flight> flights =  flightRepository.findallByUserAndAicraft(user, aircraft);
+        Aircraft defaultAircraft = aircraftRepository.findDefaultAircraft();
+
+        flights.forEach(flight -> {
+            flight.setAircraft(defaultAircraft);
+            flightRepository.save(flight);
+            List<Step> steps = stepRepository.findAllByFlightOrderByOrder(flight);
+            stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, flight));
+            flightRepository.save(flightHelper.computeTotalMetrics(flight));
+        });
     }
 
     public Optional<AircraftDto> getAircraft(Integer aircraftId, User user) {

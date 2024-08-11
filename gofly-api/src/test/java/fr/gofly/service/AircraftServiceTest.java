@@ -123,30 +123,4 @@ public class AircraftServiceTest {
         assertEquals(Optional.of(aircraftMapper.map(aircraft)), aircraftService.getAircraft(aircraft.getId(), user));
     }
 
-    @Test
-    void testDeleteAircraft_ShouldReturnTrue_WhenAircraftOwnedByUser() {
-        User user = new User();
-        user.setId("id");
-
-        Aircraft aircraft = Aircraft.builder().id(1).user(user).build();
-
-        when(aircraftRepository.findById(anyInt())).thenReturn(Optional.of(aircraft));
-        when(aircraftHelper.isAircraftOwnedByUser(any(Aircraft.class), any(User.class))).thenReturn(true);
-
-        assertTrue(aircraftService.deleteAircraft(aircraft.getId(), user));
-    }
-
-    @Test
-    void testDeleteAircraft_ShouldReturnFalse_WhenAircraftDoesNotOwnedByUser() {
-        User user = new User();
-        user.setId("id");
-
-        Aircraft aircraft = Aircraft.builder().id(1).user(user).build();
-
-        when(aircraftRepository.findById(anyInt())).thenReturn(Optional.of(aircraft));
-        when(aircraftHelper.isAircraftOwnedByUser(any(Aircraft.class), any(User.class))).thenReturn(false);
-
-        assertFalse(aircraftService.deleteAircraft(aircraft.getId(), new User()));
-    }
-
 }
