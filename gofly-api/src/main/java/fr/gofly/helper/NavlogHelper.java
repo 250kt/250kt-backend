@@ -33,7 +33,6 @@ public class NavlogHelper {
      */
     public boolean isMissingMandatoryFields(Navlog navlog){
         return navlog.getAircraft() != null &&
-               navlog.getUser() != null &&
-                navlog.getSteps().size() >= 2 ;
+               navlog.getUser() != null ;
     }
 }

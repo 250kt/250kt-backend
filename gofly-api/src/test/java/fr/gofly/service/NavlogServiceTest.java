@@ -36,7 +36,6 @@ public class NavlogServiceTest {
         Navlog navlog = Navlog.builder()
                 .id(1)
                 .user(new User())
-                .steps(null)
                 .aircraft(new Aircraft())
                 .build();
 

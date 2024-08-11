@@ -1,26 +1,24 @@
 package fr.gofly.dto;
 
-import fr.gofly.model.flight.Step;
+import fr.gofly.model.airfield.Airfield;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class FlightDto {
+public class StepDto {
 
     private Long id;
-    private String createdAt;
-    private AircraftDto aircraft;
-    private Boolean isCurrentEdit;
+    @Nullable
+    private Integer altitude;
+    private Integer cap;
     private Double distance;
     private Integer duration;
-    private List<StepDto> steps;
-
+    private Integer order;
+    private AirfieldDto airfield;
 }

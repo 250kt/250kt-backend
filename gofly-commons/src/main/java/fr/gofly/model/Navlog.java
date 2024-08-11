@@ -1,5 +1,6 @@
 package fr.gofly.model;
 
+import fr.gofly.model.flight.Step;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,7 +38,4 @@ public class Navlog {
     @JoinColumn(name = "aircraft_id", nullable = false)
     private Aircraft aircraft;
 
-    @OneToMany(mappedBy = "navlog",
-            fetch = FetchType.LAZY)
-    private List<Step> steps;
 }

@@ -1,13 +1,13 @@
-package fr.gofly.model;
+package fr.gofly.model.flight;
 
+import fr.gofly.model.Aircraft;
+import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "flights")
@@ -23,14 +23,6 @@ public class Flight {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "flight_airfield_departure")
-    private Airfield airfieldDeparture = null;
-
-    @ManyToOne
-    @JoinColumn(name = "flight_airfield_arrival")
-    private Airfield airfieldArrival = null;
-
-    @ManyToOne
     @JoinColumn(name = "flight_user_id", nullable = false)
     private User user;
 
@@ -42,15 +34,14 @@ public class Flight {
     private Aircraft aircraft;
 
     @Column(name = "flight_is_current_edit")
-    private boolean isCurrentEdit;
+    private Boolean isCurrentEdit;
 
     @Column(name = "flight_distance")
-    private double distance;
+    private Double distance;
 
     @Column(name = "flight_duration")
-    private int duration;
+    private Integer duration;
 
-    @Column(name = "flight_direction")
-    private int direction;
-
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+    private List<Step> steps;
 }
