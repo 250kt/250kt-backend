@@ -1,5 +1,6 @@
 package fr.gofly.repository;
 
+import fr.gofly.model.Aircraft;
 import fr.gofly.model.flight.Flight;
 import fr.gofly.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface FlightRepository extends JpaRepository<Flight, Integer> {
     @Query("SELECT f FROM Flight f WHERE f.user = ?1 ORDER BY f.isCurrentEdit DESC, f.createdAt DESC")
     Optional<List<Flight>> findAllByUserOrderByCurrentEditAndCreatedAtDesc(User user);
 
+    @Query("SELECT f FROM Flight f WHERE f.user = ?1 AND f.aircraft = ?2")
+    List<Flight> findallByUserAndAicraft(User user, Aircraft aircraft);
 }

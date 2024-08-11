@@ -135,9 +135,9 @@ public class FlightService {
 
         List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
 
-        stepRepository.saveAll(computeStepsMetrics(steps, currentFlight));
+        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
         currentFlight.getSteps().sort(Comparator.comparingInt(Step::getOrder));
-        currentFlight = flightRepository.save(computeTotalMetrics(currentFlight));
+        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
         return Optional.of(flightMapper.map(currentFlight));
     }
 
@@ -154,8 +154,8 @@ public class FlightService {
             }
         });
 
-        stepRepository.saveAll(computeStepsMetrics(steps, currentFlight));
-        currentFlight = flightRepository.save(computeTotalMetrics(currentFlight));
+        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
+        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
         currentFlight.getSteps().sort(Comparator.comparingInt(Step::getOrder));
         return Optional.of(flightMapper.map(currentFlight));
 
@@ -181,34 +181,12 @@ public class FlightService {
 
         stepRepository.saveAll(steps);
         steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
-        stepRepository.saveAll(computeStepsMetrics(steps, currentFlight));
+        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
         currentFlight.setSteps(stepRepository.findAllByFlightOrderByOrder(currentFlight));
-        currentFlight = flightRepository.save(computeTotalMetrics(currentFlight));
+        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
 
         return Optional.of(flightMapper.map(currentFlight));
 
     }
 
-    private List<Step> computeStepsMetrics(List<Step> steps, Flight currentFlight) {
-
-        for(int i = 0; i < steps.size(); i++) {
-            Step s = steps.get(i);
-            if (s.getOrder() != steps.size()){
-                FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(s.getAirfield().getLatitude(), s.getAirfield().getLongitude(), steps.get(i+1).getAirfield().getLatitude(), steps.get(i+1).getAirfield().getLongitude());
-                s.setDistance(metrics.distance());
-                s.setCap(metrics.direction());
-                s.setDuration(flightHelper.calculateDuration(s.getDistance(), currentFlight.getAircraft().getBaseFactor()));
-            }
-        }
-        return steps;
-    }
-
-    private Flight computeTotalMetrics(Flight currentFlight) {
-        List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
-        double totalDistance = steps.stream().mapToDouble(Step::getDistance).sum();
-        int totalDuration = steps.stream().mapToInt(Step::getDuration).sum();
-        currentFlight.setDistance(totalDistance);
-        currentFlight.setDuration(totalDuration);
-        return currentFlight;
-    }
 }
