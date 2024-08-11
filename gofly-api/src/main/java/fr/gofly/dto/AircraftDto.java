@@ -28,4 +28,5 @@ public class AircraftDto {
     private Integer trueAirSpeed;
     private Integer unloadedWeight;
     private boolean isFavorite;
+    private boolean isCommon;
 }

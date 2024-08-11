@@ -67,9 +67,12 @@ public class Aircraft {
     private Integer unloadedWeight;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "aircraft_is_favorite")
     private boolean isFavorite;
+
+    @Column(name = "aircraft_is_common")
+    private boolean isCommon;
 }

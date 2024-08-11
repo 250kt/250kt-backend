@@ -14,8 +14,6 @@ import fr.gofly.repository.FlightRepository;
 import fr.gofly.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -42,8 +40,9 @@ public class FlightService {
 
         Airfield favoriteAirfield = user.getFavoriteAirfield();
         Aircraft aircraft = aircraftRepository.findByFavoriteTrueAndUser(user);
+
         if(aircraft == null) {
-            return Optional.empty();
+            aircraft = aircraftRepository.findDefaultAircraft();
         }
 
         FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(favoriteAirfield.getLatitude(), favoriteAirfield.getLongitude(), favoriteAirfield.getLatitude(), favoriteAirfield.getLongitude());
@@ -95,16 +94,7 @@ public class FlightService {
         currentFlight.getSteps().sort(Comparator.comparingInt(Step::getOrder));
         return Optional.of(flightMapper.map(currentFlight));
     }
-/*
-    public Optional<FlightDto> updateFlight(Flight flight, User user) {
-        flight.setUser(user);
-        FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(flight.getAirfieldDeparture().getLatitude(), flight.getAirfieldDeparture().getLongitude(), flight.getAirfieldArrival().getLatitude(), flight.getAirfieldArrival().getLongitude());
-        flight.setDistance(metrics.distance());
-        flight.setDuration(flightHelper.calculateDuration(metrics.distance(), flight.getAircraft().getBaseFactor()));
 
-        return Optional.of(flightMapper.map(flightRepository.save(flight)));
-    }
-*/
     private void archiveCurrentUserFlight(User user) {
         flightRepository.findFirstByUserAndIsCurrentEdit(user, true).ifPresent(f -> {
             f.setIsCurrentEdit(false);
