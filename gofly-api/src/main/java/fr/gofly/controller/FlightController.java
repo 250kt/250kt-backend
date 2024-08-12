@@ -69,4 +69,11 @@ public class FlightController {
         Optional<FlightDto> flightDto = flightService.deleteStep(idStep, user);
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+    @PutMapping("/step/order/{idFlight}/{previousOrder}/{currentOrder}")
+    public ResponseEntity<FlightDto> updateStepOrder(@PathVariable("idFlight") Long idFlight, @PathVariable("previousOrder") Integer previousOrder, @PathVariable("currentOrder") Integer currentOrder, @AuthenticationPrincipal User user) {
+        Optional<FlightDto> flightDto = flightService.updateStepOrder(idFlight, previousOrder, currentOrder, user);
+        return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
 }

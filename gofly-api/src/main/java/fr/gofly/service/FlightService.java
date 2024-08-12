@@ -53,13 +53,13 @@ public class FlightService {
         Step stepArrival = new Step();
 
         stepDeparture.setAirfield(favoriteAirfield);
-        stepDeparture.setOrder(1);
+        stepDeparture.setOrder(0);
         stepDeparture.setDistance(metrics.distance());
         stepDeparture.setCap(metrics.direction());
         stepDeparture.setDuration(duration);
 
         stepArrival.setAirfield(favoriteAirfield);
-        stepArrival.setOrder(2);
+        stepArrival.setOrder(1);
         stepArrival.setDistance(0.0);
         stepArrival.setCap(0);
         stepArrival.setDuration(0);
@@ -170,11 +170,10 @@ public class FlightService {
         Airfield favoriteAirfield = user.getFavoriteAirfield();
 
         List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
-        steps.get(steps.size()-1).setOrder(steps.size()+1);
-
+        steps.get(steps.size()-1).setOrder(steps.size());
         Step step = new Step();
         step.setAirfield(favoriteAirfield);
-        step.setOrder(currentFlight.getSteps().size());
+        step.setOrder(currentFlight.getSteps().size()-1);
         step.setFlight(currentFlight);
 
         steps.add(step);
@@ -211,7 +210,7 @@ public class FlightService {
 
         // Adjust the order of the remaining steps
         for (int i = 0; i < steps.size(); i++) {
-            steps.get(i).setOrder(i + 1);
+            steps.get(i).setOrder(i);
         }
 
         stepRepository.saveAll(steps);
@@ -221,5 +220,41 @@ public class FlightService {
         currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
 
         return Optional.of(flightMapper.map(currentFlight));
+    }
+
+    public Optional<FlightDto> updateStepOrder(Long idFlight, Integer previousOrder, Integer currentOrder, User user) {
+        Optional<Flight> currentFlightOptional = flightRepository.findFirstByUserAndIsCurrentEdit(user, true);
+        if (currentFlightOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Flight currentFlight = currentFlightOptional.get();
+        List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
+
+        Step stepToMove = steps.stream()
+                .filter(step -> step.getOrder().equals(previousOrder))
+                .findFirst()
+                .orElse(null);
+
+        if (stepToMove == null) {
+            return Optional.empty();
+        }
+
+        steps.remove(stepToMove);
+        steps.add(currentOrder, stepToMove);
+
+        // Adjust the order of the remaining steps
+        for (int i = 0; i < steps.size(); i++) {
+            steps.get(i).setOrder(i);
+        }
+
+        stepRepository.saveAll(steps);
+        steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
+        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
+        currentFlight.setSteps(stepRepository.findAllByFlightOrderByOrder(currentFlight));
+        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
+
+        return Optional.of(flightMapper.map(currentFlight));
+
     }
 }
