@@ -59,9 +59,9 @@ public class FlightHelper {
 
 
     public List<Step> computeStepsMetrics(List<Step> steps, Flight currentFlight) {
-        for(int i = 0; i < steps.size(); i++) {
+        for(int i = 0; i < steps.size()-1; i++) {
             Step s = steps.get(i);
-            if (s.getOrder() != steps.size()){
+            if (s.getOrder() != steps.size()-1){
                 FlightMetrics metrics = calculateMetricsBetweenTwoPoints(s.getAirfield().getLatitude(), s.getAirfield().getLongitude(), steps.get(i+1).getAirfield().getLatitude(), steps.get(i+1).getAirfield().getLongitude());
                 s.setDistance(metrics.distance());
                 s.setCap(metrics.direction());
