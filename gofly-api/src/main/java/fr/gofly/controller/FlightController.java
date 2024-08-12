@@ -76,4 +76,8 @@ public class FlightController {
         return flightDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
+    @DeleteMapping("/{idFlight}")
+    public ResponseEntity<HttpStatus> deleteFlight(@PathVariable("idFlight") Integer idFlight, @AuthenticationPrincipal User user) {
+        return flightService.deleteFlight(idFlight, user) ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

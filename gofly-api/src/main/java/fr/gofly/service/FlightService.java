@@ -257,4 +257,17 @@ public class FlightService {
         return Optional.of(flightMapper.map(currentFlight));
 
     }
+
+    public boolean deleteFlight(Integer idFlight, User user) {
+        Optional<Flight> flightOptional = flightRepository.findByIdAndUser(idFlight, user);
+        if (flightOptional.isEmpty()) {
+            return false;
+        }
+        flightRepository.delete(flightOptional.get());
+        flightRepository.findFirstByUserAndIsCurrentEdit(user, false).ifPresent(f -> {
+            f.setIsCurrentEdit(true);
+            flightRepository.save(f);
+        });
+        return true;
+    }
 }
