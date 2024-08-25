@@ -24,6 +24,9 @@ application:
         expiration: 604800000 #7 days
 
 app-url: ${APP_URL}
+weather-api:
+    url: ${WEATHER_API_URL}
+    key: ${WEATHER_API_KEY}
 
 ---
 spring:
@@ -41,7 +44,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:postgresql://localhost:5432/gofly
+    url: jdbc:postgresql://localhost:5433/gofly
     username: ${DB_USERNAME}
     password: ${DB_USERNAME}
 
