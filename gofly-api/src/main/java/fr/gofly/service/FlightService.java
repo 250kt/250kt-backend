@@ -4,11 +4,9 @@ import fr.gofly.dto.FlightDto;
 import fr.gofly.helper.FlightHelper;
 import fr.gofly.mapper.FlightToFlightDto;
 import fr.gofly.model.Aircraft;
-import fr.gofly.model.flight.Flight;
-import fr.gofly.model.flight.FlightMetrics;
+import fr.gofly.model.flight.*;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
-import fr.gofly.model.flight.Step;
 import fr.gofly.repository.AircraftRepository;
 import fr.gofly.repository.FlightRepository;
 import fr.gofly.repository.StepRepository;
@@ -16,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -45,42 +41,12 @@ public class FlightService {
             aircraft = aircraftRepository.findDefaultAircraft();
         }
 
-        FlightMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(favoriteAirfield.getLatitude(), favoriteAirfield.getLongitude(), favoriteAirfield.getLatitude(), favoriteAirfield.getLongitude());
-        int duration = flightHelper.calculateDuration(metrics.distance(), aircraft.getBaseFactor());
+        StepMetrics metrics = flightHelper.calculateMetricsBetweenTwoPoints(favoriteAirfield.getLatitude(), favoriteAirfield.getLongitude(), favoriteAirfield.getLatitude(), favoriteAirfield.getLongitude(), aircraft.getBaseFactor());
+        FuelMetrics fuelMetrics = flightHelper.computeFuelMetrics(metrics.duration(), aircraft.getConsumption());
 
-        List<Step> steps = new ArrayList<>();
-        Step stepDeparture = new Step();
-        Step stepArrival = new Step();
-
-        stepDeparture.setAirfield(favoriteAirfield);
-        stepDeparture.setOrder(0);
-        stepDeparture.setDistance(metrics.distance());
-        stepDeparture.setCap(metrics.direction());
-        stepDeparture.setDuration(duration);
-
-        stepArrival.setAirfield(favoriteAirfield);
-        stepArrival.setOrder(1);
-        stepArrival.setDistance(0.0);
-        stepArrival.setCap(0);
-        stepArrival.setDuration(0);
-
-        steps.add(stepDeparture);
-        steps.add(stepArrival);
-
-        Flight flight = Flight.builder()
-                .createdAt(LocalDateTime.now())
-                .user(user)
-                .isCurrentEdit(true)
-                .distance(metrics.distance())
-                .duration(duration)
-                .aircraft(aircraft)
-                .build();
-
-        flight = flightRepository.save(flight);
-        flight.setSteps(steps);
-        stepDeparture.setFlight(flight);
-        stepArrival.setFlight(flight);
-        stepRepository.saveAll(steps);
+        Flight flight = flightHelper.initFlight(user, aircraft, metrics);
+        flight.setSteps(flightHelper.initDepartureArrivalSteps(favoriteAirfield, metrics, flight));
+        flight.setFuelReport(flightHelper.initFuelReport(flight, fuelMetrics));
 
         return Optional.of(flightMapper.map(flightRepository.save(flight)));
     }
@@ -131,14 +97,12 @@ public class FlightService {
         }
         Flight currentFlight = currentFlightOptional.get();
         currentFlight.setAircraft(aircraft);
-        currentFlight = flightRepository.save(currentFlight);
 
         List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
 
-        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
+        currentFlight.setSteps(flightHelper.computeStepsMetrics(steps, currentFlight));
         currentFlight.getSteps().sort(Comparator.comparingInt(Step::getOrder));
-        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
-        return Optional.of(flightMapper.map(currentFlight));
+        return Optional.of(flightMapper.map(flightRepository.save(flightHelper.computeTotalMetrics(currentFlight))));
     }
 
     public Optional<FlightDto> setAirfieldStep(Airfield airfield, Long idStep, User user) {
@@ -154,11 +118,9 @@ public class FlightService {
             }
         });
 
-        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
-        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
+        currentFlight.setSteps(flightHelper.computeStepsMetrics(steps, currentFlight));
         currentFlight.getSteps().sort(Comparator.comparingInt(Step::getOrder));
-        return Optional.of(flightMapper.map(currentFlight));
-
+        return Optional.of(flightMapper.map(flightRepository.save(flightHelper.computeTotalMetrics(currentFlight))));
     }
 
     public Optional<FlightDto> addStep(User user) {
@@ -177,15 +139,10 @@ public class FlightService {
         step.setFlight(currentFlight);
 
         steps.add(step);
+        steps.sort(Comparator.comparingInt(Step::getOrder));
+        currentFlight.setSteps(flightHelper.computeStepsMetrics(steps, currentFlight));
 
-        stepRepository.saveAll(steps);
-        steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
-        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
-        currentFlight.setSteps(stepRepository.findAllByFlightOrderByOrder(currentFlight));
-        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
-
-        return Optional.of(flightMapper.map(currentFlight));
-
+        return Optional.of(flightMapper.map(flightRepository.save(flightHelper.computeTotalMetrics(currentFlight))));
     }
 
     public Optional<FlightDto> deleteStep(Long idStep, User user) {
@@ -213,13 +170,8 @@ public class FlightService {
             steps.get(i).setOrder(i);
         }
 
-        stepRepository.saveAll(steps);
-        steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
-        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
-        currentFlight.setSteps(stepRepository.findAllByFlightOrderByOrder(currentFlight));
-        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
-
-        return Optional.of(flightMapper.map(currentFlight));
+        currentFlight.setSteps(flightHelper.computeStepsMetrics(steps, currentFlight));
+        return Optional.of(flightMapper.map(flightRepository.save(flightHelper.computeTotalMetrics(currentFlight))));
     }
 
     public Optional<FlightDto> updateStepOrder(Long idFlight, Integer previousOrder, Integer currentOrder, User user) {
@@ -248,14 +200,8 @@ public class FlightService {
             steps.get(i).setOrder(i);
         }
 
-        stepRepository.saveAll(steps);
-        steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
-        stepRepository.saveAll(flightHelper.computeStepsMetrics(steps, currentFlight));
-        currentFlight.setSteps(stepRepository.findAllByFlightOrderByOrder(currentFlight));
-        currentFlight = flightRepository.save(flightHelper.computeTotalMetrics(currentFlight));
-
-        return Optional.of(flightMapper.map(currentFlight));
-
+        currentFlight.setSteps(flightHelper.computeStepsMetrics(steps, currentFlight));
+        return Optional.of(flightMapper.map(flightRepository.save(flightHelper.computeTotalMetrics(currentFlight))));
     }
 
     public boolean deleteFlight(Integer idFlight, User user) {

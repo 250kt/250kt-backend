@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 public class FlightToFlightDto {
 
     private final AircraftToAircraftDto aircraftMapper;
-    private final StepToStepDto stepToStepDto;
+    private final StepToStepDto stepMapper;
+    private final FuelReportToFuelReportDto fuelReportMapper;
 
     public FlightDto map(Flight flight){
         return FlightDto.builder()
@@ -22,7 +23,8 @@ public class FlightToFlightDto {
             .isCurrentEdit(flight.getIsCurrentEdit())
             .distance(flight.getDistance())
             .duration(flight.getDuration())
-            .steps(flight.getSteps().stream().map(stepToStepDto::map).collect(Collectors.toList()))
+            .fuelReport(fuelReportMapper.map(flight.getFuelReport()))
+            .steps(flight.getSteps().stream().map(stepMapper::map).collect(Collectors.toList()))
             .build();
     }
 

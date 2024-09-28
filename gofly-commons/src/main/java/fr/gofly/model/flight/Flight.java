@@ -42,6 +42,9 @@ public class Flight {
     @Column(name = "flight_duration")
     private Integer duration;
 
+    @OneToOne(mappedBy = "flight", cascade = CascadeType.ALL)
+    private FuelReport fuelReport;
+
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<Step> steps;
 }

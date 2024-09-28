@@ -44,7 +44,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:postgresql://localhost:5433/gofly
+    url: jdbc:postgresql://localhost:5432/gofly
     username: ${DB_USERNAME}
     password: ${DB_USERNAME}
 

@@ -44,7 +44,7 @@ public class AircraftService {
         if (aircraftHelper.isMissingMandatoryField(aircraft)) {
             return Optional.empty();
         }
-        aircraft.setBaseFactor(60.0 / (double) aircraft.getTrueAirSpeed());
+        aircraft.setBaseFactor(Math.round((60.0 / (double) aircraft.getTrueAirSpeed()) * 100.0) / 100.0);
         return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 
@@ -58,7 +58,7 @@ public class AircraftService {
 
         aircraft.setRegistration(aircraft.getRegistration().toUpperCase());
         aircraft.setUser(aircraftDatabase.get().getUser());
-        aircraft.setBaseFactor(60.0 / (double) aircraft.getTrueAirSpeed());
+        aircraft.setBaseFactor(Math.round((60.0 / (double) aircraft.getTrueAirSpeed()) * 100.0) / 100.0);
         return Optional.of(aircraftMapper.map(aircraftRepository.save(aircraft)));
     }
 

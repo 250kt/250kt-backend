@@ -80,4 +80,12 @@ public class Airfield {
         this.type = type;
     }
 
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
 }

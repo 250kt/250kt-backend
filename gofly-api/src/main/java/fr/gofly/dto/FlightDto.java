@@ -1,7 +1,5 @@
 package fr.gofly.dto;
 
-import fr.gofly.model.flight.Step;
-import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +19,6 @@ public class FlightDto {
     private Boolean isCurrentEdit;
     private Double distance;
     private Integer duration;
+    private FuelReportDto fuelReport;
     private List<StepDto> steps;
-
 }
