@@ -1,9 +1,7 @@
 package fr.gofly.service;
 
-import fr.gofly.dto.AirfieldDto;
 import fr.gofly.dto.AirfieldShortDto;
 import fr.gofly.dto.UserDto;
-import fr.gofly.mapper.AirfieldToAirfieldDto;
 import fr.gofly.mapper.AirfieldToAirfieldShortDto;
 import fr.gofly.mapper.UserToUserDto;
 import fr.gofly.model.User;
@@ -13,8 +11,6 @@ import fr.gofly.repository.TokenRepository;
 import fr.gofly.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -36,15 +32,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService{
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final UserToUserDto userMapper;
     private final AirfieldToAirfieldShortDto airfieldShortMapper;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final AircraftRepository aircraftRepository;
-
-    @Autowired
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username:null}")
@@ -52,6 +45,17 @@ public class UserService{
 
     @Value("${app.url:null}")
     private String appUrl;
+
+    @Autowired
+    public UserService(UserRepository userRepository, UserToUserDto userMapper, AirfieldToAirfieldShortDto airfieldShortMapper, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, AircraftRepository aircraftRepository, JavaMailSender javaMailSender) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.airfieldShortMapper = airfieldShortMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenRepository = tokenRepository;
+        this.aircraftRepository = aircraftRepository;
+        this.javaMailSender = javaMailSender;
+    }
 
     /**
      * Updates an existing user with the provided data.
@@ -67,11 +71,9 @@ public class UserService{
         if(currentUserDbOptional.isPresent()){
             Optional<User> userFindByEmail = userRepository.findByEmail(user.getEmail());
 
-            //If the user with the email passed exist
-            if(userFindByEmail.isPresent()){
-                //If the userFindByEmail is not the same as the user given
-                if(!Objects.equals(userFindByEmail.get().getId(), user.getId()))
-                    return Optional.empty();
+            //If the user with the email passed exist and is not the same as the user given
+            if(userFindByEmail.isPresent() && !Objects.equals(userFindByEmail.get().getId(), user.getId())){
+                return Optional.empty();
             }
             return Optional.of(userMapper.map(userRepository.save(user)));
         }
@@ -143,7 +145,7 @@ public class UserService{
     }
 
     public boolean changePassword(User user, String newPassword){
-        if(Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$", newPassword)){
+        if(Pattern.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$", newPassword)){
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
             SimpleMailMessage mailMessage = new SimpleMailMessage();

@@ -1,10 +1,7 @@
 package fr.gofly.model;
 
-import fr.gofly.model.flight.Step;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Data
 @Builder

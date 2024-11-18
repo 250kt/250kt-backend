@@ -2,7 +2,6 @@ package fr.gofly.model.flight;
 
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
-import fr.gofly.model.airfield.Airfield;
 import jakarta.persistence.*;
 import lombok.*;
 

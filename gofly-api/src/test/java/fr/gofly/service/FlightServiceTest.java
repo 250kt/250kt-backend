@@ -1,7 +1,6 @@
 package fr.gofly.service;
 
 import fr.gofly.dto.FlightDto;
-import fr.gofly.helper.FlightHelper;
 import fr.gofly.mapper.FlightToFlightDto;
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.flight.Flight;
@@ -15,13 +14,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class FlightServiceTest {
-
-    @Mock
-    private FlightHelper flightHelper;
 
     @Mock
     private FlightRepository flightRepository;

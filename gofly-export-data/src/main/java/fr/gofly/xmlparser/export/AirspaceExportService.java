@@ -1,19 +1,21 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.Airspace;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.AirspaceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AirspaceExportService {
-    @Autowired
-    private AirspaceRepository airspaceRepository;
+    private final AirspaceRepository airspaceRepository;
 
     private final Logger logger = LoggerFactory.getLogger(AirspaceExportService.class);
+
+    public AirspaceExportService(AirspaceRepository airspaceRepository) {
+        this.airspaceRepository = airspaceRepository;
+    }
 
     /**
      * Exports airspaces to the database based on the parsed XML data.
@@ -23,13 +25,13 @@ public class AirspaceExportService {
         try{
             logger.info("Airspaces export : STARTED");
             if (siaExport != null && siaExport.getAirspaces() != null) {
-                logger.info("Airspaces export : " + siaExport.getAirspaces().size() + " airspaces found");
+                logger.info("Airspaces export : {} airspaces found", siaExport.getAirspaces().size());
 
                 for (Airspace airspace: siaExport.getAirspaces()) {
                     saveAirspaceToDatabase(airspace);
                 }
 
-                logger.info("Airspaces export : " + airspaceRepository.countBy() + " airspaces inserted");
+                logger.info("Airspaces export : {} airspaces inserted", airspaceRepository.countBy());
                 if(siaExport.getAirspaces().size() != airspaceRepository.countBy()){
                     logger.warn("Airspaces export : Not all airspaces have been exported to the database");
                 }
@@ -37,7 +39,6 @@ public class AirspaceExportService {
                 logger.warn("Airspaces export : No airspaces found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of airspace to database: " + e.getMessage());
             throw new RuntimeException("Error during export of airspace to database: " + e.getMessage(), e);
         }finally {
             logger.info("Airspaces export : FINISHED");
@@ -55,8 +56,7 @@ public class AirspaceExportService {
         try {
             airspaceRepository.save(airspace);
         } catch (Exception e) {
-            logger.error("Error saving airspace to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving airspace to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving airspace to database: " + e.getMessage(), e);
         }
     }
 }

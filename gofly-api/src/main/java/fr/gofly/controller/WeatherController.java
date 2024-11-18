@@ -1,6 +1,5 @@
 package fr.gofly.controller;
 
-import fr.gofly.dto.MetarDto;
 import fr.gofly.dto.WeatherDto;
 import fr.gofly.service.WeatherService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @Slf4j
 @RestController

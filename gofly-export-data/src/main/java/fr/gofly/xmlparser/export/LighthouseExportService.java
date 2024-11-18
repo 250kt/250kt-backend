@@ -1,19 +1,21 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.Lighthouse;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.LighthouseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LighthouseExportService {
-    @Autowired
-    private LighthouseRepository lighthouseRepository;
+    private final LighthouseRepository lighthouseRepository;
 
     private final Logger logger = LoggerFactory.getLogger(LighthouseExportService.class);
+
+    public LighthouseExportService(LighthouseRepository lighthouseRepository) {
+        this.lighthouseRepository = lighthouseRepository;
+    }
 
     /**
      * Exports lighthouse to the database based on the parsed XML data.
@@ -23,13 +25,13 @@ public class LighthouseExportService {
         try{
             logger.info("Lighthouses export : STARTED");
             if (siaExport != null && siaExport.getLighthouses() != null) {
-                logger.info("Lighthouses export : " + siaExport.getLighthouses().size() + " lighthouses found");
+                logger.info("Lighthouses export : {} lighthouses found", siaExport.getLighthouses().size());
 
                 for (Lighthouse lighthouse: siaExport.getLighthouses()) {
                     saveLighthouseToDatabase(lighthouse);
                 }
 
-                logger.info("Lighthouses export : " + lighthouseRepository.countBy() + " lighthouses inserted");
+                logger.info("Lighthouses export : {} lighthouses inserted", lighthouseRepository.countBy());
                 if(siaExport.getLighthouses().size() != lighthouseRepository.countBy()){
                     logger.warn("Lighthouses export : Not all lighthouses have been exported to the database");
                 }
@@ -37,7 +39,6 @@ public class LighthouseExportService {
                 logger.warn("Lighthouses export : No lighthouses found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of lighthouses to database: " + e.getMessage());
             throw new RuntimeException("Error during export of lighthouses to database: " + e.getMessage(), e);
         }finally {
             logger.info("Lighthouses export : FINISHED");
@@ -55,8 +56,7 @@ public class LighthouseExportService {
         try {
             lighthouseRepository.save(lighthouse);
         } catch (Exception e) {
-            logger.error("Error saving lighthouse to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving lighthouse to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving lighthouse to database: " + e.getMessage(), e);
         }
     }
 }

@@ -5,8 +5,6 @@ import jakarta.xml.bind.annotation.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table(name="territories")
 @RequiredArgsConstructor
@@ -22,8 +20,7 @@ public class Territory {
     @Column(name = "territory_identification_code")
     private String identificationCode;
 
-    @Column(name = "territory_name",
-            nullable = true)
+    @Column(name = "territory_name")
     @XmlElement(name = "Nom")
     private String name;
 

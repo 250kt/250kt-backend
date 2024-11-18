@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class ObstacleService {
         return Optional.of(obstacleRepository.findAll()
             .stream()
             .map(obstacleMapper::map)
-            .collect(Collectors.toList()));
+            .toList());
     }
 
 }

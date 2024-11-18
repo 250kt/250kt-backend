@@ -23,7 +23,7 @@ public class Radio {
 
     @Column(name = "radio_frequency")
     @XmlElement(name = "Frequence")
-    private String Frequency;
+    private String frequency;
 
     @Column(name = "radio_phraseo_name")
     @XmlElement(name = "NomPhraseo")

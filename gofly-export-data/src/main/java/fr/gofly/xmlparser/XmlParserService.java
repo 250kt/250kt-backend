@@ -1,14 +1,13 @@
-package fr.gofly.xmlParser;
+package fr.gofly.xmlparser;
 
 import fr.gofly.model.SiaExport;
-import fr.gofly.xmlParser.export.*;
+import fr.gofly.xmlparser.export.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import java.io.File;
@@ -17,8 +16,8 @@ import java.io.File;
 @RequiredArgsConstructor
 public class XmlParserService {
 
-    private final String xmlFilePath = "import.xml";
-    private Logger logger = LoggerFactory.getLogger(XmlParserService.class);
+    private static final String XML_FILE_PATH = "import.xml";
+    private final Logger logger = LoggerFactory.getLogger(XmlParserService.class);
     private SiaExport siaExport;
 
     private final TerritoryExportService territoryExportService;
@@ -42,7 +41,7 @@ public class XmlParserService {
         try {
             logger.info("XML Parser : STARTED");
 
-            File xmlFile = ResourceUtils.getFile("classpath:" + xmlFilePath);
+            File xmlFile = ResourceUtils.getFile("classpath:" + XML_FILE_PATH);
 
             JAXBContext jaxbContext = JAXBContext.newInstance(SiaExport.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -62,7 +61,6 @@ public class XmlParserService {
             frequencyExportService.exportFrequenciesToDatabase(siaExport);
 
         } catch (Exception e) {
-            logger.error("An error occurred during the process : " + e.getMessage());
             throw new RuntimeException("An error occurred during the process : " + e.getMessage(), e);
         } finally {
             logger.info("XML Parser : FINISHED");

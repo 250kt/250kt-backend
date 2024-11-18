@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @ExtendWith(MockitoExtension.class)
-public class AircraftHelperTest {
+class AircraftHelperTest {
 
     @InjectMocks
     private AircraftHelper aircraftHelper;

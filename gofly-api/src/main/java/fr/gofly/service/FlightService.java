@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +72,7 @@ public class FlightService {
         if(flights.isEmpty()) {
             return Optional.empty();
         }
-        return flights.map(flight -> flight.stream().map(flightMapper::map).collect(Collectors.toList()));
+        return flights.map(flight -> flight.stream().map(flightMapper::map).toList());
     }
 
     public Optional<FlightDto> setCurrentFlight(Flight flight, User user) {
@@ -174,7 +173,7 @@ public class FlightService {
         return Optional.of(flightMapper.map(flightRepository.save(flightHelper.computeTotalMetrics(currentFlight))));
     }
 
-    public Optional<FlightDto> updateStepOrder(Long idFlight, Integer previousOrder, Integer currentOrder, User user) {
+    public Optional<FlightDto> updateStepOrder(Integer previousOrder, Integer currentOrder, User user) {
         Optional<Flight> currentFlightOptional = flightRepository.findFirstByUserAndIsCurrentEdit(user, true);
         if (currentFlightOptional.isEmpty()) {
             return Optional.empty();

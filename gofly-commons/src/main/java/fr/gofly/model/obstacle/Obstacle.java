@@ -4,7 +4,6 @@ import fr.gofly.model.Territory;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Entity
 @Getter

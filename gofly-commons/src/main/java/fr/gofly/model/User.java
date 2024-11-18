@@ -1,7 +1,6 @@
 package fr.gofly.model;
 
 import fr.gofly.model.airfield.Airfield;
-import fr.gofly.model.flight.Flight;
 import fr.gofly.model.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
@@ -69,11 +68,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Authority authority : this.authorities)
-            authorities.add(new SimpleGrantedAuthority(authority.name()));
-
-        return authorities;
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        for (Authority authority : this.authorities) {
+            authorityList.add(new SimpleGrantedAuthority(authority.name()));
+        }
+        return authorityList;
     }
 
     @Column(name = "user_avatar")

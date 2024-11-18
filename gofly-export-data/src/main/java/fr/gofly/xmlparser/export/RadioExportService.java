@@ -1,19 +1,21 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.Radio;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.RadioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RadioExportService {
-    @Autowired
-    private RadioRepository radioRepository;
+    private final RadioRepository radioRepository;
 
     private final Logger logger = LoggerFactory.getLogger(RadioExportService.class);
+
+    public RadioExportService(RadioRepository radioRepository) {
+        this.radioRepository = radioRepository;
+    }
 
     /**
      * Exports radios to the database based on the parsed XML data.
@@ -23,13 +25,13 @@ public class RadioExportService {
         try{
             logger.info("Radios export : STARTED");
             if (siaExport != null && siaExport.getRadios() != null) {
-                logger.info("Radios export : " + siaExport.getRadios().size() + " radios found");
+                logger.info("Radios export : {} radios found", siaExport.getRadios().size());
 
                 for (Radio radio: siaExport.getRadios()) {
                     saveRadiosToDatabase(radio);
                 }
 
-                logger.info("Radios export : " + radioRepository.countBy() + " radios inserted");
+                logger.info("Radios export : {} radios inserted", radioRepository.countBy());
                 if(siaExport.getRadios().size() != radioRepository.countBy()){
                     logger.warn("Radios export : Not all radios have been exported to the database");
                 }
@@ -37,7 +39,6 @@ public class RadioExportService {
                 logger.warn("Radios export : No radios found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of radios to database: " + e.getMessage());
             throw new RuntimeException("Error during export of radios to database: " + e.getMessage(), e);
         }finally {
             logger.info("Radios export : FINISHED");
@@ -55,8 +56,7 @@ public class RadioExportService {
         try {
             radioRepository.save(radio);
         } catch (Exception e) {
-            logger.error("Error saving radio to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
         }
     }
 }

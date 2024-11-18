@@ -1,8 +1,6 @@
 package fr.gofly.service;
 
 import fr.gofly.model.obstacle.Obstacle;
-import fr.gofly.model.obstacle.ObstacleBeaconing;
-import fr.gofly.model.obstacle.ObstacleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ObstacleMergeService {
 
-    private final static double distanceMax = 0.9;
+    private static final double DISTANCE_MAX = 0.9;
 
     public List<Obstacle> mergeObstacles(List<Obstacle> obstacles) {
         List<List<Obstacle>> groupsLocals = findLocalGroups(obstacles);
@@ -41,7 +39,7 @@ public class ObstacleMergeService {
                 for (int j = i + 1; j < obstacles.size(); j++) {
                     if (!obstacleViews[j]) {
                         Obstacle nextObstacle = obstacles.get(j);
-                        if (distanceBetween(currentObstacle, nextObstacle) <= distanceMax) {
+                        if (distanceBetween(currentObstacle, nextObstacle) <= DISTANCE_MAX) {
                             group.add(nextObstacle);
                             obstacleViews[j] = true;
                         }

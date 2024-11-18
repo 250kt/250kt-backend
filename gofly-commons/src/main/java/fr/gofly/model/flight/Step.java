@@ -1,8 +1,5 @@
 package fr.gofly.model.flight;
 
-import fr.gofly.model.Aircraft;
-import fr.gofly.model.Navlog;
-import fr.gofly.model.TurningPoint;
 import fr.gofly.model.airfield.Airfield;
 import jakarta.persistence.*;
 import lombok.Data;

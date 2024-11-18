@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserHelperTest {
+class UserHelperTest {
     @InjectMocks
     private UserHelper userHelper;
 

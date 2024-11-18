@@ -1,4 +1,4 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.obstacle.Obstacle;
 import fr.gofly.model.SiaExport;
@@ -32,22 +32,21 @@ public class ObstacleExportService {
         try{
             logger.info("Obstacles export : STARTED");
             if (siaExport != null && siaExport.getObstacles() != null) {
-                logger.info("Obstacles export : " + siaExport.getObstacles().size() + " obstacles found");
+                logger.info("Obstacles export : {} obstacles found", siaExport.getObstacles().size());
 
                 Map<Boolean, List<Obstacle>> partitionedObstacles = siaExport.getObstacles().stream()
                         .collect(Collectors.partitioningBy(obstacle -> obstacle.getTypeObst().contains("Eolienne")));
 
                 List<Obstacle> windTurbineObstacles = partitionedObstacles.get(true);
-                logger.info("Obstacles export : " + windTurbineObstacles.size() + " wind turbines found");
+                logger.info("Obstacles export : {} wind turbines found", windTurbineObstacles.size());
 
                 List<Obstacle> windTurbines = obstacleMergeService.mergeObstacles(windTurbineObstacles);
-                logger.info("Obstacles export : " + windTurbines.size() + " wind turbines after merging");
+                logger.info("Obstacles export : {} wind turbines after merging", windTurbines.size());
 
                 List<Obstacle> obstacles = partitionedObstacles.get(false);
-                logger.info("Obstacles export : " + obstacles.size() + " obstacles found");
 
                 obstacles.addAll(windTurbines);
-                logger.info("Obstacles export : " + obstacles.size() + " obstacles after merging");
+                logger.info("Obstacles export : {} obstacles after merging", obstacles.size());
 
                 for (Obstacle obstacle: obstacles) {
                     if(obstacle.getHeight() > 300){
@@ -56,7 +55,7 @@ public class ObstacleExportService {
                     }
                 }
 
-                logger.info("Obstacles export : " + obstacleRepository.countBy() + " obstacles inserted");
+                logger.info("Obstacles export : {} obstacles inserted", obstacleRepository.countBy());
                 if(siaExport.getObstacles().size() != obstacleRepository.countBy()){
                     logger.warn("Obstacles export : Not all obstacles have been exported to the database");
                 }
@@ -64,7 +63,7 @@ public class ObstacleExportService {
                 logger.warn("Obstacles export : No obstacles found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of obstacles to database: " + e.getMessage());
+            logger.error("Error during export of obstacles to database: {}", e.getMessage());
             throw new RuntimeException("Error during export of obstacles to database: " + e.getMessage(), e);
         }finally {
             logger.info("Obstacles export : FINISHED");
@@ -82,8 +81,7 @@ public class ObstacleExportService {
         try {
             obstacleRepository.save(obstacle);
         } catch (Exception e) {
-            logger.error("Error saving obstacle to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
         }
     }
 
