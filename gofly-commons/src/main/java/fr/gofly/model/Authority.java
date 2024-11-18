@@ -8,10 +8,10 @@ public enum Authority implements GrantedAuthority {
     EXPERIENCED_PILOT(200),
     ACE_OF_THE_SKIES(300);
 
-    final int authority;
+    final int role;
 
-    Authority(int authority){
-        this.authority = authority;
+    Authority(int role){
+        this.role = role;
     }
 
     @Override

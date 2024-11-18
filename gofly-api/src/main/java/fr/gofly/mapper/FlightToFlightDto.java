@@ -5,8 +5,6 @@ import fr.gofly.model.flight.Flight;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
-
 @Component
 @RequiredArgsConstructor
 public class FlightToFlightDto {
@@ -24,7 +22,7 @@ public class FlightToFlightDto {
             .distance(flight.getDistance())
             .duration(flight.getDuration())
             .fuelReport(fuelReportMapper.map(flight.getFuelReport()))
-            .steps(flight.getSteps().stream().map(stepMapper::map).collect(Collectors.toList()))
+            .steps(flight.getSteps().stream().map(stepMapper::map).toList())
             .build();
     }
 

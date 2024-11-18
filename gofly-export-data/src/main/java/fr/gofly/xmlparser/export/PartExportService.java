@@ -1,19 +1,21 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.Part;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.PartRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PartExportService {
-    @Autowired
-    private PartRepository partRepository;
+    private final PartRepository partRepository;
 
     private final Logger logger = LoggerFactory.getLogger(PartExportService.class);
+
+    public PartExportService(PartRepository partRepository) {
+        this.partRepository = partRepository;
+    }
 
     /**
      * Exports parts to the database based on the parsed XML data.
@@ -23,13 +25,13 @@ public class PartExportService {
         try{
             logger.info("Parts export : STARTED");
             if (siaExport != null && siaExport.getParts() != null) {
-                logger.info("Parts export : " + siaExport.getParts().size() + " parts found");
+                logger.info("Parts export : {} parts found", siaExport.getParts().size());
 
                 for (Part part: siaExport.getParts()) {
                     savePartsToDatabase(part);
                 }
 
-                logger.info("Parts export : " + partRepository.countBy() + " parts inserted");
+                logger.info("Parts export : {} parts inserted", partRepository.countBy());
                 if(siaExport.getParts().size() != partRepository.countBy()){
                     logger.warn("Parts export : Not all parts have been exported to the database");
                 }
@@ -37,7 +39,6 @@ public class PartExportService {
                 logger.warn("Parts export : No parts found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of parts to database: " + e.getMessage());
             throw new RuntimeException("Error during export of parts to database: " + e.getMessage(), e);
         }finally {
             logger.info("Parts export : FINISHED");
@@ -55,8 +56,7 @@ public class PartExportService {
         try {
             partRepository.save(part);
         } catch (Exception e) {
-            logger.error("Error saving part to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving obstacle to database: " + e.getMessage(), e);
         }
     }
 }

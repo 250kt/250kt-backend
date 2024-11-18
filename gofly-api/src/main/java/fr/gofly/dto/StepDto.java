@@ -1,6 +1,5 @@
 package fr.gofly.dto;
 
-import fr.gofly.model.airfield.Airfield;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

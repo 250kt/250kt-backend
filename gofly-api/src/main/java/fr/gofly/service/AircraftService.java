@@ -1,7 +1,6 @@
 package fr.gofly.service;
 
 import fr.gofly.dto.AircraftDto;
-import fr.gofly.dto.FlightDto;
 import fr.gofly.helper.AircraftHelper;
 import fr.gofly.helper.FlightHelper;
 import fr.gofly.helper.UserHelper;
@@ -94,13 +93,9 @@ public class AircraftService {
     }
 
     public Optional<AircraftDto> getAircraft(Integer aircraftId, User user) {
-        Optional<Aircraft> aircraftOptional = aircraftRepository.findById(aircraftId);
-        if (aircraftOptional.isPresent() && aircraftHelper.isAircraftOwnedByUser(aircraftOptional.get(), user) || userHelper.isAdmin(user)) {
-            if(aircraftOptional.isPresent()){
-                return Optional.of(aircraftMapper.map(aircraftOptional.get()));
-            }
-        }
-        return Optional.empty();
+        return aircraftRepository.findById(aircraftId)
+                .filter(aircraft -> aircraftHelper.isAircraftOwnedByUser(aircraft, user) || userHelper.isAdmin(user))
+                .map(aircraftMapper::map);
     }
 
     public Optional<Set<AircraftDto>> getUserAircrafts(User user) {
@@ -117,7 +112,7 @@ public class AircraftService {
         return Optional.of(aircraftRepository.findAll()
                 .stream()
                 .map(aircraftMapper::map)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     public Optional<AircraftDto> changeFavoriteAircraft(Aircraft aircraft, User user) {

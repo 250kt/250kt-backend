@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTests {
+class UserServiceTests {
 
     @InjectMocks
     private UserService userService;
@@ -59,9 +59,6 @@ public class UserServiceTests {
 
     @Test
     void test_ShouldReturnOptionalEmpty_WhenPutUser(){
-        User user = User.builder()
-                .id("id")
-                .build();
 
         when(userRepository.findById((String) any())).thenReturn(Optional.empty());
 
@@ -70,12 +67,6 @@ public class UserServiceTests {
 
     @Test
     void testUpdateUser_ShouldReturnOptionalUser_WhenEmailDoesntChanged(){
-        User user = User.builder()
-                .id("id")
-                .email("test@250kt.com")
-                .authorities(authorities)
-                .build();
-
         when(userRepository.findById((String) any())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -86,10 +77,7 @@ public class UserServiceTests {
 
     @Test
     void testUpdateUser_ShouldReturnOptionalUser_WhenEmailChangedAlreadyExist(){
-        User user = User.builder()
-                .id("idTest")
-                .email("test@250kt.com")
-                .build();
+        user.setId("id");
 
         when(userRepository.findById((String) any())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new User()));
@@ -99,11 +87,6 @@ public class UserServiceTests {
 
     @Test
     void test_ShouldReturnUser_WhenPutUser_AndEmailDoesNotExistInDatabase(){
-        User user = User.builder()
-                .id("id")
-                .email("test@250kt.com")
-                .authorities(authorities)
-                .build();
 
         when(userRepository.findById((String) any())).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(any())).thenReturn(Optional.empty());

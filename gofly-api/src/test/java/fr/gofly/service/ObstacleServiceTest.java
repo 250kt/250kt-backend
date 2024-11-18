@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ObstacleServiceTest {
+class ObstacleServiceTest {
 
     @Mock
     private ObstacleRepository obstacleRepository;

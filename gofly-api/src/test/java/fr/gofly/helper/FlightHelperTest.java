@@ -18,14 +18,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class FlightHelperTest {
+class FlightHelperTest {
 
     @InjectMocks
     private FlightHelper flightHelper;
 
     private static Airfield airfield1;
     private static Airfield airfield2;
-    private static final double baseFactor = 0.6;
+    private static final double BASE_FACTOR = 0.6;
 
     @BeforeAll
     static void setUp() {
@@ -40,9 +40,8 @@ public class FlightHelperTest {
 
     @Test
     void testCalculateMetricsBetweenTwoPoints() {
-        double baseFactor = 0.6;
 
-        StepMetrics result = flightHelper.calculateMetricsBetweenTwoPoints(airfield1.getLatitude(), airfield1.getLongitude(), airfield2.getLatitude(), airfield2.getLongitude(),  baseFactor);
+        StepMetrics result = flightHelper.calculateMetricsBetweenTwoPoints(airfield1.getLatitude(), airfield1.getLongitude(), airfield2.getLatitude(), airfield2.getLongitude(),  BASE_FACTOR);
 
         assertEquals(325, result.direction());
         assertEquals(84, result.distance());
@@ -65,7 +64,7 @@ public class FlightHelperTest {
         steps.add(step2);
 
         Aircraft aircraft = new Aircraft();
-        aircraft.setBaseFactor(baseFactor);
+        aircraft.setBaseFactor(BASE_FACTOR);
 
         Flight currentFlight = new Flight();
         currentFlight.setAircraft(aircraft);

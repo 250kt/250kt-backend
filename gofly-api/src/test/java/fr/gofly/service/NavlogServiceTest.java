@@ -1,7 +1,6 @@
 package fr.gofly.service;
 
 import fr.gofly.helper.NavlogHelper;
-import fr.gofly.helper.UserHelper;
 import fr.gofly.model.*;
 import fr.gofly.repository.NavlogRepository;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class NavlogServiceTest {
+class NavlogServiceTest {
     @InjectMocks
     private NavlogService navlogService;
 
@@ -27,9 +26,6 @@ public class NavlogServiceTest {
 
     @Mock
     private NavlogHelper navlogHelper;
-
-    @Mock
-    private UserHelper userHelper;
 
     @Test
     void testCreateNavlog_ShouldReturnOptionalEmpty_WhenIsMissingMandatoryFields(){

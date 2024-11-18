@@ -1,4 +1,4 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.model.SiaExport;
@@ -6,17 +6,19 @@ import fr.gofly.model.airfield.AirfieldType;
 import fr.gofly.repository.AirfieldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
 public class AirfieldExportService {
-    @Autowired
-    private AirfieldRepository airfieldRepository;
+    private final AirfieldRepository airfieldRepository;
 
     private final Logger logger = LoggerFactory.getLogger(AirfieldExportService.class);
+
+    public AirfieldExportService(AirfieldRepository airfieldRepository) {
+        this.airfieldRepository = airfieldRepository;
+    }
 
     /**
      * Exports airfields to the database based on the parsed XML data.
@@ -26,14 +28,14 @@ public class AirfieldExportService {
         try{
             logger.info("Airfields export : STARTED");
             if (siaExport != null && siaExport.getAirfields() != null) {
-                logger.info("Airfields export : " + siaExport.getAirfields().size() + " airfields found");
+                logger.info("Airfields export : {} airfields found", siaExport.getAirfields().size());
 
                 for (Airfield airfield: siaExport.getAirfields()) {
                     airfield.setType(determineAirfieldType(airfield));
                     saveAirfieldToDatabase(airfield);
                 }
 
-                logger.info("Airfields export : " + airfieldRepository.countBy() + " airfields inserted");
+                logger.info("Airfields export : {} airfields inserted", airfieldRepository.countBy());
                 if(siaExport.getAirfields().size() != airfieldRepository.countBy()){
                     logger.warn("Airfields export : Not all airfields have been exported to the database");
                 }
@@ -41,7 +43,6 @@ public class AirfieldExportService {
                 logger.warn("Airfields export : No airfields found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of airfield to database: " + e.getMessage());
             throw new RuntimeException("Error during export of airfield to database: " + e.getMessage(), e);
         }finally {
             logger.info("Airfields export : FINISHED");
@@ -88,8 +89,7 @@ public class AirfieldExportService {
             if(respectConditions(airfield))
                 airfieldRepository.save(airfield);
         } catch (Exception e) {
-            logger.error("Error saving airfield to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving airfield to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving airfield to database: " + e.getMessage(), e);
         }
     }
 

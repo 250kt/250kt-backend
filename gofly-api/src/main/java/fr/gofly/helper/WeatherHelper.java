@@ -1,6 +1,5 @@
 package fr.gofly.helper;
 
-import fr.gofly.model.Taf;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,19 +1,21 @@
-package fr.gofly.xmlParser.export;
+package fr.gofly.xmlparser.export;
 
 import fr.gofly.model.Border;
 import fr.gofly.model.SiaExport;
 import fr.gofly.repository.BorderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BorderExportService {
-    @Autowired
-    private BorderRepository borderRepository;
+    private final BorderRepository borderRepository;
 
     private final Logger logger = LoggerFactory.getLogger(BorderExportService.class);
+
+    public BorderExportService(BorderRepository borderRepository) {
+        this.borderRepository = borderRepository;
+    }
 
     /**
      * Exports borders to the database based on the parsed XML data.
@@ -23,13 +25,13 @@ public class BorderExportService {
         try{
             logger.info("Borders export : STARTED");
             if (siaExport != null && siaExport.getBorders() != null) {
-                logger.info("Borders export : " + siaExport.getBorders().size() + " borders found");
+                logger.info("Borders export : {} borders found", siaExport.getBorders().size());
 
                 for (Border border: siaExport.getBorders()) {
                     saveBorderToDatabase(border);
                 }
 
-                logger.info("Borders export : " + borderRepository.countBy() + " borders inserted");
+                logger.info("Borders export : {} borders inserted", borderRepository.countBy());
                 if(siaExport.getBorders().size() != borderRepository.countBy()){
                     logger.warn("Borders export : Not all borders have been exported to the database");
                 }
@@ -37,7 +39,6 @@ public class BorderExportService {
                 logger.warn("Borders export : No borders found in the XML file");
             }
         }catch (Exception e){
-            logger.error("Error during export of border to database: " + e.getMessage());
             throw new RuntimeException("Error during export of border to database: " + e.getMessage(), e);
         }finally {
             logger.info("Borders export : FINISHED");
@@ -55,8 +56,7 @@ public class BorderExportService {
         try {
             borderRepository.save(border);
         } catch (Exception e) {
-            logger.error("Error saving border to database: " + e.getMessage());
-            //throw new RuntimeException("Error saving border to database: " + e.getMessage(), e);
+            throw new RuntimeException("Error saving border to database: " + e.getMessage(), e);
         }
     }
 }

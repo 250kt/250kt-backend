@@ -1,6 +1,5 @@
 package fr.gofly.helper;
 
-import fr.gofly.dto.AircraftDto;
 import fr.gofly.model.Aircraft;
 import fr.gofly.model.User;
 import org.springframework.stereotype.Component;

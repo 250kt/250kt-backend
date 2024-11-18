@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AirfieldServiceTest {
+class AirfieldServiceTest {
 
     @Mock
     private AirfieldRepository airfieldRepository;

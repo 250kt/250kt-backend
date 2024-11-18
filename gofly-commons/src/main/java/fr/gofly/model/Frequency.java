@@ -28,11 +28,6 @@ public class Frequency {
     @XmlElement(name = "HorCode")
     private String operatingHourCode;
 
-    /*@Column(name = "frequency_operating_hour_text",
-            nullable = true)
-    @XmlElement(name = "HorTxt")
-    private String frequencyOperatingHourText;*/
-
     @Column(name = "frequency_remark",
             length = 1000)
     @XmlElement(name = "Remarque")
