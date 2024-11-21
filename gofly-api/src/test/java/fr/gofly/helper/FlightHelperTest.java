@@ -1,7 +1,9 @@
 package fr.gofly.helper;
 
 import fr.gofly.model.Aircraft;
+import fr.gofly.model.Territory;
 import fr.gofly.model.airfield.Airfield;
+import fr.gofly.model.airfield.AirfieldType;
 import fr.gofly.model.flight.Flight;
 import fr.gofly.model.flight.FuelMetrics;
 import fr.gofly.model.flight.Step;
@@ -29,13 +31,38 @@ class FlightHelperTest {
 
     @BeforeAll
     static void setUp() {
-        airfield1 = new Airfield();
-        airfield1.setLatitude(49.816944f);
-        airfield1.setLongitude(3.206667f);
+        airfield1 = new Airfield(
+                1001,
+                new Territory(),
+                "OW",
+                "Active",
+                "Test",
+                "Test",
+                "Test",
+                "000",
+                true,
+                200,
+                49.816944f,
+                3.206667f,
+                AirfieldType.PRIVATE
+        );
 
-        airfield2 = new Airfield();
-        airfield2.setLatitude(50.960934f);
-        airfield2.setLongitude(1.951433f);
+
+        airfield2 = new Airfield(
+                1001,
+                new Territory(),
+                "OW",
+                "Active",
+                "Test",
+                "Test",
+                "Test",
+                "000",
+                true,
+                200,
+                50.960934f,
+                1.951433f,
+                AirfieldType.PRIVATE
+        );
     }
 
     @Test

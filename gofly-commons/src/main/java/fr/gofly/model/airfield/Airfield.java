@@ -3,6 +3,7 @@ package fr.gofly.model.airfield;
 import fr.gofly.model.Territory;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @XmlRootElement(name = "Ad")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Getter
+@AllArgsConstructor
 public class Airfield {
     @Id
     @Column(name = "airfield_id",
@@ -78,14 +80,6 @@ public class Airfield {
 
     public void setType(AirfieldType type) {
         this.type = type;
-    }
-
-    public void setLatitude(Float latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(Float longitude) {
-        this.longitude = longitude;
     }
 
 }
