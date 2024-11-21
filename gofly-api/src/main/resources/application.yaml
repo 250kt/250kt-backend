@@ -47,6 +47,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/gofly
     username: ${DB_USERNAME}
     password: ${DB_USERNAME}
+ # sql:
+  #  init:
+   #   data-locations: file:sql/initial-data.sql
 
 ---
 spring:
