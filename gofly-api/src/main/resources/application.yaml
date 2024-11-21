@@ -40,6 +40,11 @@ spring:
 
 ---
 spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   config:
     activate:
       on-profile: local
@@ -47,9 +52,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/gofly
     username: ${DB_USERNAME}
     password: ${DB_USERNAME}
- # sql:
-  #  init:
-   #   data-locations: file:sql/initial-data.sql
+  sql:
+    init:
+      data-locations: classpath:data.sql
+      mode: always
+      platform: postgresql
 
 ---
 spring:
