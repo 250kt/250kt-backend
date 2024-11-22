@@ -10,5 +10,7 @@ public enum AirfieldType {
     MILITARY_CIVIL_UNPAVED,
     PRIVATE,
     ABANDONED,
+    HOSPITAL,
+    UNKNOWN
 
 }

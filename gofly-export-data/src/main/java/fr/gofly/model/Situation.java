@@ -44,6 +44,8 @@ public class Situation {
     @XmlElement(name = "PhareS")
     private LighthouseWrapper lighthouses;
 
+    @XmlElement(name = "RwyS")
+    private RunwayWrapper runways;
 
     public AirfieldWrapper getAirfields() {
         return airfields;
@@ -87,5 +89,9 @@ public class Situation {
 
     public LighthouseWrapper getLighthouses() {
         return lighthouses;
+    }
+
+    public RunwayWrapper getRunways(){
+        return runways;
     }
 }

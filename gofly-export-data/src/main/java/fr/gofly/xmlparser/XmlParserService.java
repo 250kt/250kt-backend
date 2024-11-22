@@ -31,6 +31,7 @@ public class XmlParserService {
     private final BorderExportService borderExportService;
     private final PartExportService partExportService;
     private final LighthouseExportService lighthouseExportService;
+    private final RunwayExportService runwayExportService;
 
     /**
      * Parses the XML file and exports objects to the database.
@@ -53,6 +54,8 @@ public class XmlParserService {
             airspaceExportService.exportAirspacesToDatabase(siaExport);
             partExportService.exportPartsToDatabase(siaExport);
             airfieldExportService.exportAirfieldsToDatabase(siaExport);
+            runwayExportService.exportRunwaysToDatabase(siaExport);
+            airfieldExportService.updateAirfieldsType();
             obstacleExportService.exportObstaclesToDatabase(siaExport);
             lighthouseExportService.exportLighthousesToDatabase(siaExport);
             helipadExportService.exportHelipadsToDatabase(siaExport);
