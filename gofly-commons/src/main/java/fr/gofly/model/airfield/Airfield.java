@@ -1,6 +1,7 @@
 package fr.gofly.model.airfield;
 
 import fr.gofly.model.Territory;
+import fr.gofly.model.runway.Runway;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.AllArgsConstructor;
@@ -69,6 +70,10 @@ public class Airfield {
     @Enumerated(EnumType.STRING)
     private AirfieldType type;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "main_runway_id", referencedColumnName = "runway_id")
+    private Runway mainRunway;
+
     @XmlElement(name = "TfcVfr")
     public String getAcceptVfrString() {
         return isAcceptVfr ? "oui" : "non";
@@ -82,4 +87,7 @@ public class Airfield {
         this.type = type;
     }
 
+    public void setMainRunway(Runway runway) {
+        this.mainRunway = runway;
+    }
 }

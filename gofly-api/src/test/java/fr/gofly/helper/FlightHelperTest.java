@@ -8,6 +8,7 @@ import fr.gofly.model.flight.Flight;
 import fr.gofly.model.flight.FuelMetrics;
 import fr.gofly.model.flight.Step;
 import fr.gofly.model.flight.StepMetrics;
+import fr.gofly.model.runway.Runway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,8 @@ class FlightHelperTest {
                 200,
                 49.816944f,
                 3.206667f,
-                AirfieldType.PRIVATE
+                AirfieldType.PRIVATE,
+                new Runway()
         );
 
 
@@ -61,7 +63,8 @@ class FlightHelperTest {
                 200,
                 50.960934f,
                 1.951433f,
-                AirfieldType.PRIVATE
+                AirfieldType.PRIVATE,
+                new Runway()
         );
     }
 

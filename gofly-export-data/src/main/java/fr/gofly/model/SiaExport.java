@@ -2,6 +2,7 @@ package fr.gofly.model;
 
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.model.obstacle.Obstacle;
+import fr.gofly.model.runway.Runway;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -58,5 +59,9 @@ public class SiaExport {
 
     public List<Lighthouse> getLighthouses(){
         return situation.getLighthouses().getLighthouses();
+    }
+
+    public List<Runway> getRunways(){
+        return situation.getRunways().getRunways();
     }
 }

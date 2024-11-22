@@ -1,9 +1,8 @@
 name: Build app
 
 on:
-  push:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize, reopened]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
