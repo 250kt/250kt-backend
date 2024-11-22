@@ -22,5 +22,6 @@ public class AirfieldDto {
     private Territory territory;
     private String status;
     private AirfieldType type;
+    private RunwayDto runway;
 
 }

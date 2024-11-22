@@ -27,7 +27,7 @@ public class AirfieldController {
 
     @GetMapping("/all")
     public ResponseEntity<List<AirfieldDto>> retrieveAllAirfields() {
-        Optional<List<AirfieldDto>> airfieldsDto = airfieldService.getAllAirfields();
+        Optional<List<AirfieldDto>> airfieldsDto = airfieldService.getAllAirfieldsAcceptVfr();
         return airfieldsDto.map(airfield -> new ResponseEntity<>(airfield, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 

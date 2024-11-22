@@ -11,6 +11,6 @@ import java.util.Set;
 public interface AirfieldRepository extends JpaRepository<Airfield, Long> {
     long countBy();
 
-    @Query("SELECT a FROM Airfield a INNER JOIN Territory t on t.id = a.territory.id WHERE a.isAcceptVfr = true ORDER BY a.code")
+    @Query("SELECT a FROM Airfield a INNER JOIN Territory t on t.id = a.territory.id WHERE a.isAcceptVfr = true and a.mainRunway is not null ORDER BY a.code")
     Set<Airfield> findAllByAcceptVfrIsTrue();
 }
