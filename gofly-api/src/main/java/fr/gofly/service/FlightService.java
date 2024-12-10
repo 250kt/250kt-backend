@@ -8,6 +8,7 @@ import fr.gofly.model.flight.*;
 import fr.gofly.model.User;
 import fr.gofly.model.airfield.Airfield;
 import fr.gofly.repository.AircraftRepository;
+import fr.gofly.repository.AirfieldRepository;
 import fr.gofly.repository.FlightRepository;
 import fr.gofly.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class FlightService {
     private final FlightToFlightDto flightMapper;
     private final AircraftRepository aircraftRepository;
     private final StepRepository stepRepository;
+    private final AirfieldRepository airfieldRepository;
 
     public Optional<FlightDto> createFlight(User user) {
 
@@ -105,6 +107,10 @@ public class FlightService {
     }
 
     public Optional<FlightDto> setAirfieldStep(Airfield airfield, Long idStep, User user) {
+        Optional<Airfield> airfieldOptional = airfieldRepository.findById(Long.valueOf(airfield.getId()));
+        if(airfieldOptional.isEmpty()) {
+            return Optional.empty();
+        }
         Optional<Flight> currentFlightOptional = flightRepository.findFirstByUserAndIsCurrentEdit(user, true);
         if(currentFlightOptional.isEmpty()) {
             return Optional.empty();
@@ -113,7 +119,7 @@ public class FlightService {
         List<Step> steps = stepRepository.findAllByFlightOrderByOrder(currentFlight);
         steps.forEach(s -> {
             if(s.getId().equals(idStep)){
-                s.setAirfield(airfield);
+                s.setAirfield(airfieldOptional.get());
             }
         });
 
