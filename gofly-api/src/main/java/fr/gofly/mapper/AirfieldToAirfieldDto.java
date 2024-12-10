@@ -14,7 +14,6 @@ public class AirfieldToAirfieldDto {
     private final RunwayToRunwayDto runwayMapper;
 
     public AirfieldDto map(Airfield airfield) {
-        log.info(airfield.getCode());
         return AirfieldDto.builder()
                 .id(airfield.getId())
                 .fullName(airfield.getFullName())
